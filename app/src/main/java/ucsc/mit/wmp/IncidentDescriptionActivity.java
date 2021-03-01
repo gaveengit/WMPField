@@ -65,7 +65,7 @@ public class IncidentDescriptionActivity extends AppCompatActivity {
         String trap = sharedpreferences.getString("TrapId", "defaultValue");
         String phones = sharedpreferences.getString("Phone", "defaultValue");
         String emails = sharedpreferences.getString("Email", "defaultValue");
-        Log.d("trap",trap);
+        Log.d("trap id",trap);
         Log.d("phone",phones);
         Log.d("Email",emails);
     }
