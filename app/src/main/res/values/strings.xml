@@ -1,0 +1,13 @@
+<resources>
+    <string name="app_name">WMP</string>
+    <string name="title_activity_maps">Map</string>
+    <string-array name="array_runs">
+        <item>OV_NDCU</item>
+        <item>OV_Nug1</item>
+        <item>OV_Cmc1</item>
+    </string-array>
+    <string-array name="release_types">
+        <item>Public</item>
+        <item>Residential</item>
+    </string-array>
+</resources>

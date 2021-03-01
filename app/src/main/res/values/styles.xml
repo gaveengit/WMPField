@@ -1,0 +1,16 @@
+<resources>
+    <style name="mySpinnerItemStyle" parent="@android:style/Widget.Holo.DropDownItem.Spinner">
+        <item name="android:textSize">@dimen/_11sp</item>
+        <item name="android:spinnerDropDownItemStyle">@style/SpinnerDropDownItem</item>
+        <item name="android:spinnerItemStyle">@style/SpinnerItem</item>
+    </style>
+    <style name="SpinnerDropDownItem">
+        <item name="android:gravity">left</item>
+        <item name="android:paddingLeft">0dp</item>
+    </style>
+    <style name="SpinnerItem">
+        <item name="android:gravity">left</item>
+        <item name="android:paddingLeft">0dp</item>
+    </style>
+    <dimen name="_11sp">15sp</dimen>
+</resources>

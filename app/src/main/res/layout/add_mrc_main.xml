@@ -1,0 +1,169 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:background="@drawable/wallpaper"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="#0000FF"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:text="Edit"
+                android:textColor="#ffffff"
+                android:visibility="gone" />
+        </RelativeLayout>
+
+        <TextView
+            android:id="@+id/textViewId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:text="MRC Identifier"
+            android:textColor="#000000"
+            android:textSize="17dp" />
+
+        <EditText
+            android:id="@+id/editTextTrapId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textViewStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:text="Mrc Status"
+            android:textColor="#000000"
+            android:textSize="17dp" />
+
+        <RadioGroup
+            android:id="@+id/radioGroup"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radioButton"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginTop="4dp"
+                android:checked="false"
+                android:text="Proposed"
+                android:textSize="17dp" />
+
+            <RadioButton
+                android:id="@+id/radioButton2"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginTop="4dp"
+                android:checked="false"
+                android:text="Deployed"
+                android:textSize="17dp" />
+        </RadioGroup>
+
+        <TextView
+            android:id="@+id/textViewPosition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:text="Release Type"
+            android:textColor="#000000"
+            android:textSize="17dp" />
+
+        <Spinner
+            android:id="@+id/spinnerType"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/release_types"
+            android:paddingTop="13dp"
+            android:spinnerMode="dialog"
+            android:theme="@style/mySpinnerItemStyle" />
+
+        <TextView
+            android:id="@+id/textViewRespondentName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:text="Respondent Name"
+            android:textColor="#000000"
+            android:textSize="17dp" />
+
+        <EditText
+            android:id="@+id/editTextRespondentName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName" />
+
+        <TextView
+            android:id="@+id/textViewLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:text="Location Coordinates"
+            android:textColor="#000000"
+            android:textSize="17dp" />
+
+        <EditText
+            android:id="@+id/editTextLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="textPersonName" />
+
+        <RelativeLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp">
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:background="#FF0000"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:text="Back"
+                android:textColor="#ffffff"
+                app:backgroundTint="@color/red" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:background="#008000"
+                android:onClick="goAdditionalMrc"
+                android:paddingLeft="50dp"
+                android:paddingRight="50dp"
+                android:text="Next"
+                android:textColor="#ffffff"
+                app:backgroundTint="@color/green" />
+        </RelativeLayout>
+    </LinearLayout>
+</ScrollView>

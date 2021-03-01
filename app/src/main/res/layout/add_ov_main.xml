@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/wallpaper"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="#0000FF"
+            android:text="Edit"
+            android:visibility="gone"
+            android:textColor="#ffffff"
+            android:paddingRight="50dp"
+            android:paddingLeft="50dp"
+            />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/textViewId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:text="OV Trap Id"
+        android:textColor="#000000"
+        android:textSize="17dp" />
+
+    <EditText
+        android:id="@+id/editTextTrapId"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName" />
+
+    <TextView
+        android:id="@+id/textViewStatus"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:text="Trap Status"
+        android:textColor="#000000"
+        android:textSize="17dp" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radioButton"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:checked="false"
+            android:layout_marginTop="4dp"
+            android:text="Proposed"
+            android:textSize="17dp"
+            />
+
+        <RadioButton
+            android:id="@+id/radioButton2"
+            android:layout_width="wrap_content"
+            android:layout_height="25dp"
+            android:checked="false"
+            android:layout_marginTop="4dp"
+            android:text="Set"
+            android:textSize="17dp"
+            />
+    </RadioGroup>
+    <TextView
+        android:id="@+id/textViewPosition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:text="Trap Position"
+        android:textColor="#000000"
+        android:textSize="17dp" />
+
+    <EditText
+        android:id="@+id/editTextTrapPosition"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName" />
+    <TextView
+        android:id="@+id/textViewRespondentName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:text="Respondent Name"
+        android:textColor="#000000"
+        android:textSize="17dp" />
+
+    <EditText
+        android:id="@+id/editTextRespondentName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName" />
+    <TextView
+        android:id="@+id/textViewLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:text="Location Coordinates"
+        android:textColor="#000000"
+        android:textSize="17dp" />
+
+    <EditText
+        android:id="@+id/editTextLocation"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        >
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:background="#FF0000"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:text="Back"
+            android:textColor="#ffffff"
+            app:backgroundTint="@color/red" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:background="#008000"
+            android:onClick="goAdditionalOv"
+            android:paddingLeft="50dp"
+            android:paddingRight="50dp"
+            android:text="Next"
+            android:textColor="#ffffff"
+            app:backgroundTint="@color/green" />
+    </RelativeLayout>
+
+</LinearLayout>
