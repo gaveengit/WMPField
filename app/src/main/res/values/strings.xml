@@ -10,4 +10,16 @@
         <item>Public</item>
         <item>Residential</item>
     </string-array>
+    <string-array name="incident_types">
+        <item>Select from here</item>
+        <item>Community Complaint</item>
+        <item>Community Enquiry</item>
+        <item>Operational Incident</item>
+    </string-array>
+    <string-array name="incident_priorities">
+        <item>Select from here</item>
+        <item>High</item>
+        <item>Medium</item>
+        <item>Low</item>
+    </string-array>
 </resources>

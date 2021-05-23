@@ -33,28 +33,32 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Incident Type"
+            android:text="Incident Type (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
         <Spinner
             android:id="@+id/spinnerIncidentType"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:entries="@array/incident_types"
+            />
         <TextView
             android:id="@+id/textViewEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Incident Priority"
+            android:text="Incident Priority (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
         <Spinner
             android:id="@+id/spinnerPriority"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:entries="@array/incident_priorities"
+            />
 
         <TextView
             android:id="@+id/textViewPhone"
@@ -62,7 +66,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Description"
+            android:text="Description (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
@@ -78,12 +82,12 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Date of Incident"
+            android:text="Date of Incident (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
         <CalendarView
-            android:id="@+id/time"
+            android:id="@+id/calender"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -93,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Time of Incident"
+            android:text="Time of Incident (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
@@ -101,6 +105,16 @@
             android:id="@+id/timePicker1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
+
+        <TextView
+            android:id="@+id/errorContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:textColor="#FF0000"
+            android:visibility="gone"
+            android:textSize="17dp" />
 
         <RelativeLayout
             android:layout_width="fill_parent"

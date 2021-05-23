@@ -4,16 +4,53 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 
 public class MainMenuActivity extends AppCompatActivity {
     final Context context = this;
+    public static final String stakeholderName = "stakeholderName";
+    public static final String email = "email";
+    public static final String phone = "phone";
+    public static final String incidentDetails = "incidents" ;
+
+    public static final String Incident_type = "incident_type";
+    public static final String Incident_priority = "incident_priority";
+    public static final String Description = "description";
+    public static final String Incident_date = "incident_date";
+    public static final String Incident_time_hour = "incident_time_hour";
+    public static final String Incident_time_minute = "incident_time_minute";
+
+    public static final String Coordinates = "coordinates";
+    public static final String Address = "address";
+    public static final String LocationDescription = "location_description";
+    public static final String Gnd = "gnd";
+    public static final String Trapcode = "trapcode";
+
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main_menu);
+        sharedpreferences = getSharedPreferences(incidentDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(stakeholderName,"");
+        editor.putString(email, "");
+        editor.putString(phone, "");
+        editor.putString(Incident_type, "");
+        editor.putString(Incident_priority, "");
+        editor.putString(Description, "");
+        editor.putString(Incident_date, "");
+        editor.putString(Incident_time_hour, "");
+        editor.putString(Incident_time_minute, "");
+        editor.putString(Coordinates, "");
+        editor.putString(Address, "");
+        editor.putString(LocationDescription, "");
+        editor.putString(Gnd, "");
+        editor.putString(Trapcode, "");
+        editor.apply();
     }
     public void goOvListView(View pView) {
         Intent intent = new Intent(context, OvListActivity.class);

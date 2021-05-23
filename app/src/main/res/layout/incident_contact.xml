@@ -28,17 +28,17 @@
         </LinearLayout>
 
         <TextView
-            android:id="@+id/textViewId"
+            android:id="@+id/textViewName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Community Member or Stakeholder"
+            android:text="Community Member or Stakeholder (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
         <EditText
-            android:id="@+id/editTextTrapId"
+            android:id="@+id/editTextStakeholderName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName" />
@@ -64,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Phone"
+            android:text="Phone (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
@@ -74,7 +74,15 @@
             android:layout_height="wrap_content"
             android:inputType="number" />
 
-
+        <TextView
+            android:id="@+id/errorContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:textColor="#FF0000"
+            android:visibility="gone"
+            android:textSize="17dp" />
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -92,6 +100,7 @@
                 android:background="#FF0000"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
+                android:onClick="goMainMenu"
                 android:text="Back"
                 android:textColor="#ffffff"
                 app:backgroundTint="@color/red" />
