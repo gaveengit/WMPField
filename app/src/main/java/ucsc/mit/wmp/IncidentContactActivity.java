@@ -27,19 +27,25 @@ public class IncidentContactActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.incident_contact);
-    }
-    public void goIncidentDescription(View pView) {
         stakeholderNameInput = (EditText) findViewById(R.id.editTextStakeholderName);
         emailInput = (EditText) findViewById(R.id.editTextEmail);
         phoneInput = (EditText) findViewById(R.id.editTextPhone);
         errorText = (TextView) findViewById(R.id.errorContainer);
+        sharedpreferences = getSharedPreferences(incidentDetails, Context.MODE_PRIVATE);
+        String stakeholderName = sharedpreferences.getString("stakeholderName", "");
+        String email = sharedpreferences.getString("email", "");
+        String phone = sharedpreferences.getString("phone", "");
+        stakeholderNameInput.setText(stakeholderName);
+        emailInput.setText(email);
+        phoneInput.setText(phone);
+    }
+    public void goIncidentDescription(View pView) {
         if((stakeholderNameInput.getText().toString().length()==0) || (phoneInput.getText().toString().length()==0)){
             errorText.setVisibility(View.VISIBLE);
             errorText.setText("Please fill all required fields.");
         }
         else {
             errorText.setVisibility(View.INVISIBLE);
-            sharedpreferences = getSharedPreferences(incidentDetails, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString(stakeholderName, stakeholderNameInput.getText().toString());
             editor.putString(email, emailInput.getText().toString());

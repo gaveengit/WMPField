@@ -64,6 +64,21 @@ public class IncidentLocationActivity extends AppCompatActivity {
         txtEdit_trapCode = (EditText) findViewById(R.id.editTextTrapCode);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
+        String pre_coordinates = sharedpreferences.getString("coordinates", "");
+        String pre_address = sharedpreferences.getString("address", "");
+        String pre_location_description = sharedpreferences.getString("location_description", "");
+        String pre_gnd = sharedpreferences.getString("gnd", "");
+        String pre_trapcode = sharedpreferences.getString("trapcode", "");
+
+        if(pre_address.length()!=0)
+        {
+            txtEdit_Coordinates.setText(pre_coordinates);
+            txtEdit_Address.setText(pre_address);
+            txtEdit_locationDescription.setText(pre_location_description);
+            txtEdit_Gnd.setText(pre_gnd);
+            txtEdit_trapCode.setText(pre_trapcode);
+        }
+
     }
 
     public void viewCoordinates(View pView) {
@@ -116,12 +131,20 @@ public class IncidentLocationActivity extends AppCompatActivity {
     public void goIncidentDescription(View pView) {
         Intent intent = new Intent(context, IncidentDescriptionActivity.class);
         startActivity(intent);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(Coordinates, txtEdit_Coordinates.getText().toString());
+        editor.putString(Address, txtEdit_Address.getText().toString());
+        editor.putString(LocationDescription, txtEdit_locationDescription.getText().toString());
+        editor.putString(Gnd, txtEdit_Gnd.getText().toString());
+        editor.putString(Trapcode, txtEdit_trapCode.getText().toString());
+        editor.apply();
     }
 
     public void submitIncident(View pView) {
         if (txtEdit_Address.getText().toString().length() == 0) {
             errorText.setVisibility(View.VISIBLE);
             errorText.setText("Please fill all required fields.");
+
         } else {
             errorText.setVisibility(View.INVISIBLE);
             SharedPreferences.Editor editor = sharedpreferences.edit();
