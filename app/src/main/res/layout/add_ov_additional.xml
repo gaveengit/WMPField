@@ -85,6 +85,7 @@
             android:paddingRight="50dp"
             android:text="Back"
             android:textColor="#ffffff"
+            android:onClick="goOvMain"
             app:backgroundTint="@color/red" />
 
         <Button

@@ -63,6 +63,11 @@ public class OvListActivity extends AppCompatActivity {
             startActivity(intent);
         }
     }
+    public void goMainMenu(View v)
+    {
+        Intent intent = new Intent(context, MainMenuActivity.class);
+        startActivity(intent);
+    }
 
     /*
 

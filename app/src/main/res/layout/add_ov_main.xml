@@ -35,7 +35,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@android:color/transparent"
-        android:text="OV Trap Id"
+        android:text="OVI Trap Id"
         android:textColor="#000000"
         android:textSize="17dp" />
 
@@ -124,7 +124,8 @@
         android:id="@+id/editTextLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName" />
+        android:inputType="textPersonName"
+        android:onClick="viewCoordinates"/>
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -144,6 +145,7 @@
             android:paddingLeft="50dp"
             android:paddingRight="50dp"
             android:text="Back"
+            android:onClick="goListView"
             android:textColor="#ffffff"
             app:backgroundTint="@color/red" />
 

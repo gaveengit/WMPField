@@ -15,5 +15,10 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_bg_additional);
     }
+    public void goBgMain(View v)
+    {
+        Intent intent = new Intent(context, AddBgMainActivity.class);
+        startActivity(intent);
+    }
 }
 

@@ -15,4 +15,9 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_mrc_additional);
     }
+    public void goMrcMain(View v)
+    {
+        Intent intent = new Intent(context, AddMrcMainActivity.class);
+        startActivity(intent);
+    }
 }

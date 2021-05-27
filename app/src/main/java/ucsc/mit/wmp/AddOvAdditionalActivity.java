@@ -15,4 +15,9 @@ public class AddOvAdditionalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_ov_additional);
     }
+    public void goOvMain(View v)
+    {
+        Intent intent = new Intent(context, AddOvMainActivity.class);
+        startActivity(intent);
+    }
 }
