@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -35,7 +40,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@android:color/transparent"
-        android:text="OVI Trap Id"
+        android:text="OVI Trap Id (*)"
         android:textColor="#000000"
         android:textSize="17dp" />
 
@@ -51,17 +56,17 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@android:color/transparent"
-        android:text="Trap Status"
+        android:text="Trap Status (*)"
         android:textColor="#000000"
         android:textSize="17dp" />
 
     <RadioGroup
-        android:id="@+id/radioGroup"
+        android:id="@+id/trapStatus"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content">
 
         <RadioButton
-            android:id="@+id/radioButton"
+            android:id="@+id/radioProposed"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:checked="false"
@@ -71,7 +76,7 @@
             />
 
         <RadioButton
-            android:id="@+id/radioButton2"
+            android:id="@+id/radioSet"
             android:layout_width="wrap_content"
             android:layout_height="25dp"
             android:checked="false"
@@ -86,7 +91,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@android:color/transparent"
-        android:text="Trap Position"
+        android:text="Trap Position (*)"
         android:textColor="#000000"
         android:textSize="17dp" />
 
@@ -101,7 +106,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@android:color/transparent"
-        android:text="Respondent Name"
+        android:text="Respondent Name (*)"
         android:textColor="#000000"
         android:textSize="17dp" />
 
@@ -116,7 +121,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:background="@android:color/transparent"
-        android:text="Location Coordinates"
+        android:text="Location Coordinates (*)"
         android:textColor="#000000"
         android:textSize="17dp" />
 
@@ -126,6 +131,16 @@
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
         android:onClick="viewCoordinates"/>
+    <TextView
+        android:id="@+id/errorContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:textColor="#FF0000"
+        android:visibility="gone"
+        android:textSize="17dp" />
+
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -163,3 +178,4 @@
     </RelativeLayout>
 
 </LinearLayout>
+</ScrollView>
