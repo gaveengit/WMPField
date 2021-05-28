@@ -16,6 +16,7 @@ public class OvListActivity extends AppCompatActivity {
     final Context context = this;
     private String field_type;
     public static final String OviTrapId = "OviTrapId";
+    public static final String BgTrapId = "BgTrapId";
     public static final String TrapStatus = "TrapStatus";
     public static final String TrapPosition = "TrapPosition";
     public static final String RespondName = "RespondName";
@@ -25,6 +26,11 @@ public class OvListActivity extends AppCompatActivity {
     public static final String AddressLine2 = "AddressLine2";
     public static final String LocationDescription = "LocationDescription";
     public static final String OviDetails = "OviDetails";
+    public static final String BgDetails = "BgDetails";
+    public static final String MrcDetails = "MrcDetails";
+    public static final String MrcId = "MrcId";
+    public static final String MrcStatus = "MrcStatus";
+
     SharedPreferences sharedpreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,29 @@ public class OvListActivity extends AppCompatActivity {
         editor.putString(AddressLine2, "");
         editor.putString(LocationDescription, "");
         editor.apply();
+        sharedpreferences = getSharedPreferences(BgDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editorBg = sharedpreferences.edit();
+        editorBg.putString(BgTrapId,"");
+        editorBg.putString(TrapStatus, "");
+        editorBg.putString(TrapPosition, "");
+        editorBg.putString(RespondName, "");
+        editorBg.putString(LocationCoordinates, "");
+        editorBg.putString(Phone, "");
+        editorBg.putString(AddressLine1, "");
+        editorBg.putString(AddressLine2, "");
+        editorBg.putString(LocationDescription, "");
+        editorBg.apply();
+        sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editorMrc = sharedpreferences.edit();
+        editorMrc.putString(MrcId,"");
+        editorMrc.putString(MrcStatus, "");
+        editorMrc.putString(RespondName, "");
+        editorMrc.putString(LocationCoordinates, "");
+        editorMrc.putString(Phone, "");
+        editorMrc.putString(AddressLine1, "");
+        editorMrc.putString(AddressLine2, "");
+        editorMrc.putString(LocationDescription, "");
+        editorMrc.apply();
     }
 
     public void goMapView(View pView) {

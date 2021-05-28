@@ -1,4 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -66,6 +71,15 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName" />
+    <TextView
+        android:id="@+id/errorContainer"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:textColor="#FF0000"
+        android:visibility="gone"
+        android:textSize="17dp" />
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
@@ -97,7 +111,8 @@
             android:paddingRight="50dp"
             android:text="Done"
             android:textColor="#ffffff"
-            app:backgroundTint="@color/green" />
+            app:backgroundTint="@color/green"
+            android:onClick="submitBg"/>
     </RelativeLayout>
-
 </LinearLayout>
+</ScrollView>

@@ -38,7 +38,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="MRC Identifier"
+            android:text="MRC Identifier (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
@@ -54,17 +54,17 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Mrc Status"
+            android:text="Mrc Status (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
         <RadioGroup
-            android:id="@+id/radioGroup"
+            android:id="@+id/trapStatus"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
             <RadioButton
-                android:id="@+id/radioButton"
+                android:id="@+id/radioProposed"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:layout_marginTop="4dp"
@@ -73,7 +73,7 @@
                 android:textSize="17dp" />
 
             <RadioButton
-                android:id="@+id/radioButton2"
+                android:id="@+id/radioSet"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:layout_marginTop="4dp"
@@ -81,25 +81,6 @@
                 android:text="Deployed"
                 android:textSize="17dp" />
         </RadioGroup>
-
-        <TextView
-            android:id="@+id/textViewPosition"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/transparent"
-            android:text="Release Type"
-            android:textColor="#000000"
-            android:textSize="17dp" />
-
-        <Spinner
-            android:id="@+id/spinnerType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/release_types"
-            android:paddingTop="13dp"
-            android:spinnerMode="dialog"
-            android:theme="@style/mySpinnerItemStyle" />
 
         <TextView
             android:id="@+id/textViewRespondentName"
@@ -133,6 +114,15 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
             android:onClick="viewCoordinates" />
+        <TextView
+            android:id="@+id/errorContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:textColor="#FF0000"
+            android:visibility="gone"
+            android:textSize="17dp" />
 
         <RelativeLayout
             android:layout_width="fill_parent"

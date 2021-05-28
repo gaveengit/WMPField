@@ -85,7 +85,7 @@ public class AddOvMainActivity extends AppCompatActivity {
         EditTextRespondName = (EditText) findViewById(R.id.editTextRespondentName);
         EditTextLocationCoordinates = (EditText) findViewById(R.id.editTextLocation);
         errorText = (TextView) findViewById(R.id.errorContainer);
-        //radioProposed.setChecked(true);
+        RadioProposed.setChecked(true);
         sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
         String ovi_trap_id = sharedpreferences.getString(OviTrapId, "");
         String trap_status = sharedpreferences.getString(TrapStatus, "");

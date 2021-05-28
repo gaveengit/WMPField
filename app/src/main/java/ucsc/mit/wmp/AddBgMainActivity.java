@@ -29,6 +29,8 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
@@ -42,20 +44,57 @@ import java.util.Locale;
 
 public class AddBgMainActivity extends AppCompatActivity {
     final Context context = this;
-    EditText txtEdit_TrapId;
-    EditText GeoLocation;
     private static final int PRIORITY_HIGH_ACCURACY = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
+    public static final String BgTrapId = "BgTrapId";
+    public static final String TrapStatus = "TrapStatus";
+    public static final String TrapPosition = "TrapPosition";
+    public static final String RespondName = "RespondName";
+    public static final String LocationCoordinates = "LocationCoordinates";
+    public static final String BgDetails = "BgDetails";
+    EditText EditTextTrapId;
+    RadioGroup RadioGroupTrapStatus;
+    RadioButton RadioProposed;
+    RadioButton RadioSet;
+    EditText EditTextTrapPosition;
+    EditText EditTextRespondName;
+    EditText EditTextLocationCoordinates;
+    TextView errorText;
+    SharedPreferences sharedpreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_bg_main);
-        String bg_id = getIntent().getStringExtra("TrapId");
-        txtEdit_TrapId = (EditText) findViewById(R.id.editTextTrapId);
-        txtEdit_TrapId.setText(bg_id);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        GeoLocation = (EditText) findViewById(R.id.editTextLocation);
+        EditTextTrapId = (EditText) findViewById(R.id.editTextTrapId);
+        //trapId.setText(ov_id);
+        RadioGroupTrapStatus = (RadioGroup) findViewById(R.id.trapStatus);
+        RadioProposed = (RadioButton) findViewById(R.id.radioProposed);
+        RadioSet = (RadioButton) findViewById(R.id.radioSet);
+        EditTextTrapPosition = (EditText) findViewById(R.id.editTextTrapPosition);
+        EditTextRespondName = (EditText) findViewById(R.id.editTextRespondentName);
+        EditTextLocationCoordinates = (EditText) findViewById(R.id.editTextLocation);
+        errorText = (TextView) findViewById(R.id.errorContainer);
+        RadioProposed.setChecked(true);
+        sharedpreferences = getSharedPreferences(BgDetails, Context.MODE_PRIVATE);
+        String ovi_trap_id = sharedpreferences.getString(BgTrapId, "");
+        String trap_status = sharedpreferences.getString(TrapStatus, "");
+        String trap_position = sharedpreferences.getString(TrapPosition, "");
+        String respond_name = sharedpreferences.getString(RespondName, "");
+        String location_coordinates = sharedpreferences.getString(LocationCoordinates, "");
+        if(respond_name.length()!=0) {
+            EditTextTrapId.setText(ovi_trap_id);
+            if (trap_status == "proposed") {
+                RadioProposed.setChecked(true);
+            }
+            if (trap_status == "set") {
+                RadioSet.setChecked(true);
+            }
+            EditTextTrapPosition.setText(trap_position);
+            EditTextRespondName.setText(respond_name);
+            EditTextLocationCoordinates.setText(location_coordinates);
+        }
     }
     public void viewCoordinates(View pView) {
         if (ActivityCompat.checkSelfPermission(AddBgMainActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
@@ -94,7 +133,7 @@ public class AddBgMainActivity extends AppCompatActivity {
                     Log.d("lat", String.valueOf(lat));
                     Log.d("lon", String.valueOf(lon));
                     String coords = String.valueOf(lat) + "," + String.valueOf(lon);
-                    GeoLocation.setText(coords);
+                    EditTextLocationCoordinates.setText(coords);
                 } else {
                     Log.d("lat", "null");
                     Log.d("lon", "null");
@@ -104,8 +143,35 @@ public class AddBgMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalBg(View pView) {
-        Intent intent = new Intent(context, AddBgAdditionalActivity.class);
-        startActivity(intent);
+        if (EditTextTrapId.getText().toString().length() == 0 || EditTextTrapPosition.getText().toString().length()
+                ==0 || EditTextRespondName.getText().toString().length() == 0 || EditTextLocationCoordinates.
+                getText().toString().length()==0) {
+            errorText.setVisibility(View.VISIBLE);
+            errorText.setText("Please fill all required fields.");
+        }
+        else {
+            errorText.setVisibility(View.GONE);
+            sharedpreferences = getSharedPreferences(BgDetails, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(BgTrapId,EditTextTrapId.getText().toString());
+
+            if(RadioProposed.isChecked())
+            {
+                editor.putString(TrapStatus,"proposed");
+            }
+            if(RadioSet.isChecked())
+            {
+                editor.putString(TrapStatus,"set");
+            }
+
+            editor.putString(TrapPosition, EditTextTrapPosition.getText().toString());
+            editor.putString(RespondName, EditTextRespondName.getText().toString());
+            editor.putString(LocationCoordinates, EditTextLocationCoordinates.getText().toString());
+            editor.apply();
+            Intent intent = new Intent(context, AddBgAdditionalActivity.class);
+            startActivity(intent);
+        }
+
     }
     public void goListView(View pView)
     {
