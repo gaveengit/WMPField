@@ -18,7 +18,7 @@ public class OvListActivity extends AppCompatActivity {
     public static final String OviTrapId = "OviTrapId";
     public static final String TrapStatus = "TrapStatus";
     public static final String TrapPosition = "TrapPosition";
-    public static final String RespondName = "TrapPosition";
+    public static final String RespondName = "RespondName";
     public static final String LocationCoordinates = "LocationCoordinates";
     public static final String Phone = "Phone";
     public static final String AddressLine1 = "AddressLine1";

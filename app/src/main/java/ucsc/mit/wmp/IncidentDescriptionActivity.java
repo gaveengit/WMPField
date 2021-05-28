@@ -64,12 +64,12 @@ public class IncidentDescriptionActivity extends AppCompatActivity {
     public static final String IncidentDetails = "incidents";
 
     SharedPreferences sharedpreferences;
-    CalendarView calender;
-    TimePicker picker;
-    Spinner incidentType;
-    Spinner incidentPriority;
+    CalendarView CalendarViewCalender;
+    TimePicker TimePickerPicker;
+    Spinner SpinnerIncidentType;
+    Spinner SpinnerIncidentPriority;
+    EditText EditTextDescription;
     TextView errorText;
-    EditText txtEdit_Description;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -78,12 +78,12 @@ public class IncidentDescriptionActivity extends AppCompatActivity {
         setContentView(R.layout.incident_description);
         errorText = (TextView) findViewById(R.id.errorContainer);
         sharedpreferences = getSharedPreferences(IncidentDetails, Context.MODE_PRIVATE);
-        picker = (TimePicker) findViewById(R.id.timePicker1);
-        picker.setIs24HourView(true);
-        calender = (CalendarView) findViewById(R.id.calender);
-        incidentType = (Spinner) findViewById(R.id.spinnerIncidentType);
-        incidentPriority = (Spinner) findViewById(R.id.spinnerPriority);
-        txtEdit_Description = (EditText) findViewById(R.id.editTextDescription);
+        TimePickerPicker = (TimePicker) findViewById(R.id.timePicker1);
+        TimePickerPicker.setIs24HourView(true);
+        CalendarViewCalender = (CalendarView) findViewById(R.id.calender);
+        SpinnerIncidentType = (Spinner) findViewById(R.id.spinnerIncidentType);
+        SpinnerIncidentPriority = (Spinner) findViewById(R.id.spinnerPriority);
+        EditTextDescription = (EditText) findViewById(R.id.editTextDescription);
 
         String incident_type = sharedpreferences.getString("incident_type", "");
         String incident_priority = sharedpreferences.getString("incident_priority", "");
@@ -94,19 +94,19 @@ public class IncidentDescriptionActivity extends AppCompatActivity {
         if(incident_type.length()!=0 && incident_priority.length()!=0 && description.length()!=0 &&
                 incident_date.length()!=0 && incident_time_hour.length()!=0 && incident_time_minute
                 .length()!=0) {
-            for (int i = 0; i < incidentType.getCount(); i++) {
-                if (incidentType.getItemAtPosition(i).equals(incident_type)) {
-                    incidentType.setSelection(i);
+            for (int i = 0; i < SpinnerIncidentType.getCount(); i++) {
+                if (SpinnerIncidentType.getItemAtPosition(i).equals(incident_type)) {
+                    SpinnerIncidentType.setSelection(i);
                     break;
                 }
             }
-            for (int i = 0; i < incidentPriority.getCount(); i++) {
-                if (incidentPriority.getItemAtPosition(i).equals(incident_priority)) {
-                    incidentPriority.setSelection(i);
+            for (int i = 0; i < SpinnerIncidentPriority.getCount(); i++) {
+                if (SpinnerIncidentPriority.getItemAtPosition(i).equals(incident_priority)) {
+                    SpinnerIncidentPriority.setSelection(i);
                     break;
                 }
             }
-            txtEdit_Description.setText(description);
+            EditTextDescription.setText(description);
             String parts[] = incident_date.split("/");
             int year = Integer.parseInt(parts[0]);
             int month = Integer.parseInt(parts[1]);
@@ -116,37 +116,37 @@ public class IncidentDescriptionActivity extends AppCompatActivity {
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.DAY_OF_MONTH, day);
             long milliTime = calendar.getTimeInMillis();
-            calender.setDate (milliTime, true, true);
+            CalendarViewCalender.setDate (milliTime, true, true);
 
-            picker.setHour(Integer.valueOf(incident_time_hour));
-            picker.setMinute(Integer.valueOf(incident_time_minute));
+            TimePickerPicker.setHour(Integer.valueOf(incident_time_hour));
+            TimePickerPicker.setMinute(Integer.valueOf(incident_time_minute));
 
         }
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void goIncidentLocation(View pView) {
-        if ((incidentType.getSelectedItemPosition() == 0) || (incidentPriority.
-                getSelectedItemPosition() == 0) || txtEdit_Description.getText()
+        if ((SpinnerIncidentType.getSelectedItemPosition() == 0) || (SpinnerIncidentPriority.
+                getSelectedItemPosition() == 0) || EditTextDescription.getText()
                 .toString().length() == 0) {
             errorText.setVisibility(View.VISIBLE);
             errorText.setText("Please fill all required fields.");
         } else {
             errorText.setVisibility(View.INVISIBLE);
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
-            String selectedDate = sdf.format(new Date(calender.getDate()));
-            int hour = picker.getHour();
-            int minute = picker.getMinute();
+            String selectedDate = sdf.format(new Date(CalendarViewCalender.getDate()));
+            int hour = TimePickerPicker.getHour();
+            int minute = TimePickerPicker.getMinute();
             Log.d("date", selectedDate);
             Log.d("hour", String.valueOf(hour));
             Log.d("minute", String.valueOf(minute));
-            Log.d("incidenttype", incidentType.getSelectedItem().toString());
-            Log.d("incidentpriority", incidentPriority.getSelectedItem().toString());
+            Log.d("incidenttype", SpinnerIncidentType.getSelectedItem().toString());
+            Log.d("incidentpriority", SpinnerIncidentPriority.getSelectedItem().toString());
             SharedPreferences.Editor editor = sharedpreferences.edit();
 
-            editor.putString(Incident_type, incidentType.getSelectedItem().toString());
-            editor.putString(Incident_priority, incidentPriority.getSelectedItem().toString());
-            editor.putString(Description, txtEdit_Description.getText().toString());
+            editor.putString(Incident_type, SpinnerIncidentType.getSelectedItem().toString());
+            editor.putString(Incident_priority, SpinnerIncidentPriority.getSelectedItem().toString());
+            editor.putString(Description, EditTextDescription.getText().toString());
             editor.putString(Incident_date, selectedDate);
             editor.putString(Incident_time_hour, String.valueOf(hour));
             editor.putString(Incident_time_minute, String.valueOf(minute));

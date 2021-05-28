@@ -18,38 +18,39 @@ public class IncidentContactActivity extends AppCompatActivity {
     public static final String phone = "phone";
     public static final String incidentDetails = "incidents" ;
     SharedPreferences sharedpreferences;
-    EditText stakeholderNameInput;
-    EditText emailInput;
-    EditText phoneInput;
+    EditText EditTextStakeholderNameInput;
+    EditText EditTextEmailInput;
+    EditText EditTextPhoneInput;
     TextView errorText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.incident_contact);
-        stakeholderNameInput = (EditText) findViewById(R.id.editTextStakeholderName);
-        emailInput = (EditText) findViewById(R.id.editTextEmail);
-        phoneInput = (EditText) findViewById(R.id.editTextPhone);
+        EditTextStakeholderNameInput = (EditText) findViewById(R.id.editTextStakeholderName);
+        EditTextEmailInput = (EditText) findViewById(R.id.editTextEmail);
+        EditTextPhoneInput = (EditText) findViewById(R.id.editTextPhone);
         errorText = (TextView) findViewById(R.id.errorContainer);
         sharedpreferences = getSharedPreferences(incidentDetails, Context.MODE_PRIVATE);
         String stakeholderName = sharedpreferences.getString("stakeholderName", "");
         String email = sharedpreferences.getString("email", "");
         String phone = sharedpreferences.getString("phone", "");
-        stakeholderNameInput.setText(stakeholderName);
-        emailInput.setText(email);
-        phoneInput.setText(phone);
+        EditTextStakeholderNameInput.setText(stakeholderName);
+        EditTextEmailInput.setText(email);
+        EditTextPhoneInput.setText(phone);
     }
     public void goIncidentDescription(View pView) {
-        if((stakeholderNameInput.getText().toString().length()==0) || (phoneInput.getText().toString().length()==0)){
+        if((EditTextStakeholderNameInput.getText().toString().length()==0) || (EditTextPhoneInput.
+                getText().toString().length()==0)){
             errorText.setVisibility(View.VISIBLE);
             errorText.setText("Please fill all required fields.");
         }
         else {
             errorText.setVisibility(View.INVISIBLE);
             SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(stakeholderName, stakeholderNameInput.getText().toString());
-            editor.putString(email, emailInput.getText().toString());
-            editor.putString(phone, phoneInput.getText().toString());
+            editor.putString(stakeholderName, EditTextStakeholderNameInput.getText().toString());
+            editor.putString(email, EditTextEmailInput.getText().toString());
+            editor.putString(phone, EditTextPhoneInput.getText().toString());
             editor.apply();
             Intent intent = new Intent(context, IncidentDescriptionActivity.class);
             startActivity(intent);

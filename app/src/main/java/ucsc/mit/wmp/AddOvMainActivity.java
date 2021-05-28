@@ -58,35 +58,52 @@ public class AddOvMainActivity extends AppCompatActivity {
     public static final String OviTrapId = "OviTrapId";
     public static final String TrapStatus = "TrapStatus";
     public static final String TrapPosition = "TrapPosition";
-    public static final String RespondName = "TrapPosition";
+    public static final String RespondName = "RespondName";
     public static final String LocationCoordinates = "LocationCoordinates";
     public static final String OviDetails = "OviDetails";
-    EditText trapId;
-    RadioGroup trapStatus;
-    RadioButton radioProposed;
-    RadioButton radioSet;
-    EditText trapPosition;
-    EditText respondName;
-    EditText locationCoordinates;
+    EditText EditTextTrapId;
+    RadioGroup RadioGroupTrapStatus;
+    RadioButton RadioProposed;
+    RadioButton RadioSet;
+    EditText EditTextTrapPosition;
+    EditText EditTextRespondName;
+    EditText EditTextLocationCoordinates;
     TextView errorText;
+    SharedPreferences sharedpreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_ov_main);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        locationCoordinates = (EditText) findViewById(R.id.editTextLocation);
         String ov_id = getIntent().getStringExtra("TrapId");
-        trapId = (EditText) findViewById(R.id.editTextTrapId);
-        trapId.setText(ov_id);
-        trapStatus = (RadioGroup) findViewById(R.id.trapStatus);
-        radioProposed = (RadioButton) findViewById(R.id.radioProposed);
-        radioSet = (RadioButton) findViewById(R.id.radioSet);
-        trapPosition = (EditText) findViewById(R.id.editTextTrapPosition);
-        respondName = (EditText) findViewById(R.id.editTextRespondentName);
-        locationCoordinates = (EditText) findViewById(R.id.editTextLocation);
+        EditTextTrapId = (EditText) findViewById(R.id.editTextTrapId);
+        //trapId.setText(ov_id);
+        RadioGroupTrapStatus = (RadioGroup) findViewById(R.id.trapStatus);
+        RadioProposed = (RadioButton) findViewById(R.id.radioProposed);
+        RadioSet = (RadioButton) findViewById(R.id.radioSet);
+        EditTextTrapPosition = (EditText) findViewById(R.id.editTextTrapPosition);
+        EditTextRespondName = (EditText) findViewById(R.id.editTextRespondentName);
+        EditTextLocationCoordinates = (EditText) findViewById(R.id.editTextLocation);
         errorText = (TextView) findViewById(R.id.errorContainer);
-        radioProposed.setChecked(true);
-
+        //radioProposed.setChecked(true);
+        sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
+        String ovi_trap_id = sharedpreferences.getString(OviTrapId, "");
+        String trap_status = sharedpreferences.getString(TrapStatus, "");
+        String trap_position = sharedpreferences.getString(TrapPosition, "");
+        String respond_name = sharedpreferences.getString(RespondName, "");
+        String location_coordinates = sharedpreferences.getString(LocationCoordinates, "");
+        if(respond_name.length()!=0) {
+            EditTextTrapId.setText(ovi_trap_id);
+            if (trap_status == "proposed") {
+                RadioProposed.setChecked(true);
+            }
+            if (trap_status == "set") {
+                RadioSet.setChecked(true);
+            }
+            EditTextTrapPosition.setText(trap_position);
+            EditTextRespondName.setText(respond_name);
+            EditTextLocationCoordinates.setText(location_coordinates);
+        }
     }
 
     public void viewCoordinates(View pView) {
@@ -127,7 +144,7 @@ public class AddOvMainActivity extends AppCompatActivity {
                     Log.d("lat", String.valueOf(lat));
                     Log.d("lon", String.valueOf(lon));
                     String coords = String.valueOf(lat) + "," + String.valueOf(lon);
-                    locationCoordinates.setText(coords);
+                    EditTextLocationCoordinates.setText(coords);
                 } else {
                     Log.d("lat", "null");
                     Log.d("lon", "null");
@@ -143,14 +160,31 @@ public class AddOvMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalOv(View pView) {
-        if (trapId.getText().toString().length() == 0 || trapPosition.getText().toString().length()
-                ==0 || respondName.getText().toString().length() == 0 || locationCoordinates.
+        if (EditTextTrapId.getText().toString().length() == 0 || EditTextTrapPosition.getText().toString().length()
+                ==0 || EditTextRespondName.getText().toString().length() == 0 || EditTextLocationCoordinates.
                 getText().toString().length()==0) {
             errorText.setVisibility(View.VISIBLE);
             errorText.setText("Please fill all required fields.");
         }
         else {
-            errorText.setVisibility(View.INVISIBLE);
+            errorText.setVisibility(View.GONE);
+            sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(OviTrapId,EditTextTrapId.getText().toString());
+
+            if(RadioProposed.isChecked())
+            {
+                editor.putString(TrapStatus,"proposed");
+            }
+            if(RadioSet.isChecked())
+            {
+                editor.putString(TrapStatus,"set");
+            }
+
+            editor.putString(TrapPosition, EditTextTrapPosition.getText().toString());
+            editor.putString(RespondName, EditTextRespondName.getText().toString());
+            editor.putString(LocationCoordinates, EditTextLocationCoordinates.getText().toString());
+            editor.apply();
             Intent intent = new Intent(context, AddOvAdditionalActivity.class);
             startActivity(intent);
         }

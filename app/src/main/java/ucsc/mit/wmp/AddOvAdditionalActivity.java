@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -16,36 +17,60 @@ public class AddOvAdditionalActivity extends AppCompatActivity {
     public static final String AddressLine2 = "AddressLine2";
     public static final String LocationDescription = "LocationDescription";
     public static final String OviDetails = "OviDetails";
-    EditText phone;
-    EditText addressLine1;
-    EditText addressLine2;
-    EditText locationDescription;
+    EditText EditTextPhone;
+    EditText EditTextAddressLine1;
+    EditText EditTextAddressLine2;
+    EditText EditTextLocationDescription;
     TextView errorText;
+    SharedPreferences sharedpreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_ov_additional);
-        phone = (EditText) findViewById(R.id.editTextPhone);
-        addressLine1 = (EditText) findViewById(R.id.editTextAdd1);
-        addressLine2 = (EditText) findViewById(R.id.editTextAdd2);
-        locationDescription = (EditText) findViewById(R.id.editTextLocationDescription);
+        EditTextPhone = (EditText) findViewById(R.id.editTextPhone);
+        EditTextAddressLine1 = (EditText) findViewById(R.id.editTextAdd1);
+        EditTextAddressLine2 = (EditText) findViewById(R.id.editTextAdd2);
+        EditTextLocationDescription = (EditText) findViewById(R.id.editTextLocationDescription);
         errorText = (TextView) findViewById(R.id.errorContainer);
+        sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
+        String phone = sharedpreferences.getString(Phone, "");
+        String address_line1 = sharedpreferences.getString(AddressLine1, "");
+        String address_line2 = sharedpreferences.getString(AddressLine2, "");
+        String location_description = sharedpreferences.getString(LocationDescription, "");
+        EditTextPhone.setText(phone);
+        EditTextAddressLine1.setText(address_line1);
+        EditTextAddressLine2.setText(address_line2);
+        EditTextLocationDescription.setText(location_description);
     }
     public void goOvMain(View v)
     {
+        sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(Phone, EditTextPhone.getText().toString());
+        editor.putString(AddressLine1, EditTextAddressLine1.getText().toString());
+        editor.putString(AddressLine2, EditTextAddressLine2.getText().toString());
+        editor.putString(LocationDescription, EditTextLocationDescription.getText().toString());
+        editor.apply();
         Intent intent = new Intent(context, AddOvMainActivity.class);
         startActivity(intent);
     }
     public void submitOv(View v)
     {
-        if (addressLine1.getText().toString().length() == 0 || addressLine2.getText().toString().
+        if (EditTextAddressLine1.getText().toString().length() == 0 || EditTextAddressLine2.getText().toString().
                 length()
                 ==0 ) {
             errorText.setVisibility(View.VISIBLE);
             errorText.setText("Please fill all required fields.");
         }
         else {
-            errorText.setVisibility(View.INVISIBLE);
+            errorText.setVisibility(View.GONE);
+            sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(Phone, EditTextPhone.getText().toString());
+            editor.putString(AddressLine1, EditTextAddressLine1.getText().toString());
+            editor.putString(AddressLine2, EditTextAddressLine2.getText().toString());
+            editor.putString(LocationDescription, EditTextLocationDescription.getText().toString());
+            editor.apply();
         }
     }
 }

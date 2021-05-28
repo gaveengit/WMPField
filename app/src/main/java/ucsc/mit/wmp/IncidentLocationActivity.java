@@ -36,11 +36,11 @@ public class IncidentLocationActivity extends AppCompatActivity {
     final Context context = this;
     private static final int PRIORITY_HIGH_ACCURACY = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
-    EditText txtEdit_Coordinates;
-    EditText txtEdit_Address;
-    EditText txtEdit_locationDescription;
-    EditText txtEdit_Gnd;
-    EditText txtEdit_trapCode;
+    EditText EditTextCoordinates;
+    EditText EditTextAddress;
+    EditText EditTextLocationDescription;
+    EditText EditTextGnd;
+    EditText EditTextTrapCode;
     TextView errorText;
 
     public static final String Coordinates = "coordinates";
@@ -57,11 +57,11 @@ public class IncidentLocationActivity extends AppCompatActivity {
         setContentView(R.layout.incident_location);
         errorText = (TextView) findViewById(R.id.errorContainer);
         sharedpreferences = getSharedPreferences(IncidentDetails, Context.MODE_PRIVATE);
-        txtEdit_Coordinates = (EditText) findViewById(R.id.editTextCoordinates);
-        txtEdit_Address = (EditText) findViewById(R.id.editTextAddress);
-        txtEdit_locationDescription = (EditText) findViewById(R.id.editTextLocationDescription);
-        txtEdit_Gnd = (EditText) findViewById(R.id.editTextGn);
-        txtEdit_trapCode = (EditText) findViewById(R.id.editTextTrapCode);
+        EditTextCoordinates= (EditText) findViewById(R.id.editTextCoordinates);
+        EditTextAddress= (EditText) findViewById(R.id.editTextAddress);
+        EditTextLocationDescription= (EditText) findViewById(R.id.editTextLocationDescription);
+        EditTextGnd= (EditText) findViewById(R.id.editTextGn);
+        EditTextTrapCode= (EditText) findViewById(R.id.editTextTrapCode);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
 
         String pre_coordinates = sharedpreferences.getString("coordinates", "");
@@ -72,11 +72,11 @@ public class IncidentLocationActivity extends AppCompatActivity {
 
         if(pre_address.length()!=0)
         {
-            txtEdit_Coordinates.setText(pre_coordinates);
-            txtEdit_Address.setText(pre_address);
-            txtEdit_locationDescription.setText(pre_location_description);
-            txtEdit_Gnd.setText(pre_gnd);
-            txtEdit_trapCode.setText(pre_trapcode);
+            EditTextCoordinates.setText(pre_coordinates);
+            EditTextAddress.setText(pre_address);
+            EditTextLocationDescription.setText(pre_location_description);
+            EditTextGnd.setText(pre_gnd);
+            EditTextTrapCode.setText(pre_trapcode);
         }
 
     }
@@ -119,7 +119,7 @@ public class IncidentLocationActivity extends AppCompatActivity {
                     Log.d("lat", String.valueOf(lat));
                     Log.d("lon", String.valueOf(lon));
                     String coords = String.valueOf(lat) + "," + String.valueOf(lon);
-                    txtEdit_Coordinates.setText(coords);
+                    EditTextCoordinates.setText(coords);
                 } else {
                     Log.d("lat", "null");
                     Log.d("lon", "null");
@@ -132,27 +132,27 @@ public class IncidentLocationActivity extends AppCompatActivity {
         Intent intent = new Intent(context, IncidentDescriptionActivity.class);
         startActivity(intent);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString(Coordinates, txtEdit_Coordinates.getText().toString());
-        editor.putString(Address, txtEdit_Address.getText().toString());
-        editor.putString(LocationDescription, txtEdit_locationDescription.getText().toString());
-        editor.putString(Gnd, txtEdit_Gnd.getText().toString());
-        editor.putString(Trapcode, txtEdit_trapCode.getText().toString());
+        editor.putString(Coordinates, EditTextCoordinates.getText().toString());
+        editor.putString(Address, EditTextAddress.getText().toString());
+        editor.putString(LocationDescription, EditTextLocationDescription.getText().toString());
+        editor.putString(Gnd, EditTextGnd.getText().toString());
+        editor.putString(Trapcode, EditTextTrapCode.getText().toString());
         editor.apply();
     }
 
     public void submitIncident(View pView) {
-        if (txtEdit_Address.getText().toString().length() == 0) {
+        if (EditTextAddress.getText().toString().length() == 0) {
             errorText.setVisibility(View.VISIBLE);
             errorText.setText("Please fill all required fields.");
 
         } else {
             errorText.setVisibility(View.INVISIBLE);
             SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(Coordinates, txtEdit_Coordinates.getText().toString());
-            editor.putString(Address, txtEdit_Address.getText().toString());
-            editor.putString(LocationDescription, txtEdit_locationDescription.getText().toString());
-            editor.putString(Gnd, txtEdit_Gnd.getText().toString());
-            editor.putString(Trapcode, txtEdit_trapCode.getText().toString());
+            editor.putString(Coordinates, EditTextCoordinates.getText().toString());
+            editor.putString(Address, EditTextAddress.getText().toString());
+            editor.putString(LocationDescription, EditTextLocationDescription.getText().toString());
+            editor.putString(Gnd, EditTextGnd.getText().toString());
+            editor.putString(Trapcode, EditTextTrapCode.getText().toString());
             editor.apply();
 
             String stakeholderName = sharedpreferences.getString("stakeholderName", "");
