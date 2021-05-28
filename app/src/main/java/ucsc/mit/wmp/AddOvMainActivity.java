@@ -61,6 +61,7 @@ public class AddOvMainActivity extends AppCompatActivity {
     public static final String RespondName = "RespondName";
     public static final String LocationCoordinates = "LocationCoordinates";
     public static final String OviDetails = "OviDetails";
+    public static final String OviRunId = "OviRunId";
     EditText EditTextTrapId;
     RadioGroup RadioGroupTrapStatus;
     RadioButton RadioProposed;
@@ -92,6 +93,8 @@ public class AddOvMainActivity extends AppCompatActivity {
         String trap_position = sharedpreferences.getString(TrapPosition, "");
         String respond_name = sharedpreferences.getString(RespondName, "");
         String location_coordinates = sharedpreferences.getString(LocationCoordinates, "");
+        String ovi_run_id = sharedpreferences.getString(OviRunId, "");
+        Log.d("ovi_run",ovi_run_id);
         if(respond_name.length()!=0) {
             EditTextTrapId.setText(ovi_trap_id);
             if (trap_status == "proposed") {

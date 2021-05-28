@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Spinner;
 
 public class OvListActivity extends AppCompatActivity {
     final Context context = this;
@@ -30,13 +31,17 @@ public class OvListActivity extends AppCompatActivity {
     public static final String MrcDetails = "MrcDetails";
     public static final String MrcId = "MrcId";
     public static final String MrcStatus = "MrcStatus";
-
+    public static final String OviRunId = "OviRunId";
+    public static final String BgRunId = "BgRunId";
+    public static final String MrcRunId = "MrcRunId";
+    Spinner spinnerRuns;
     SharedPreferences sharedpreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.localeggs_listview);
         field_type = getIntent().getStringExtra("type");
+        spinnerRuns = (Spinner) findViewById(R.id.spinnerRuns);
         Log.d("field_type", field_type);
         sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
@@ -49,6 +54,7 @@ public class OvListActivity extends AppCompatActivity {
         editor.putString(AddressLine1, "");
         editor.putString(AddressLine2, "");
         editor.putString(LocationDescription, "");
+        editor.putString(OviRunId, "");
         editor.apply();
         sharedpreferences = getSharedPreferences(BgDetails, Context.MODE_PRIVATE);
         SharedPreferences.Editor editorBg = sharedpreferences.edit();
@@ -61,6 +67,7 @@ public class OvListActivity extends AppCompatActivity {
         editorBg.putString(AddressLine1, "");
         editorBg.putString(AddressLine2, "");
         editorBg.putString(LocationDescription, "");
+        editor.putString(BgRunId, "");
         editorBg.apply();
         sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
         SharedPreferences.Editor editorMrc = sharedpreferences.edit();
@@ -72,6 +79,7 @@ public class OvListActivity extends AppCompatActivity {
         editorMrc.putString(AddressLine1, "");
         editorMrc.putString(AddressLine2, "");
         editorMrc.putString(LocationDescription, "");
+        editor.putString(MrcRunId, "");
         editorMrc.apply();
     }
 
@@ -82,14 +90,26 @@ public class OvListActivity extends AppCompatActivity {
 
     public void goNewOv(View pView) {
         if (field_type.equals("bg")) {
+            sharedpreferences = getSharedPreferences(BgDetails, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editorBg = sharedpreferences.edit();
+            editorBg.putString(BgRunId,spinnerRuns.getSelectedItem().toString());
+            editorBg.apply();
             Intent intent = new Intent(context, AddBgMainActivity.class);
             startActivity(intent);
         }
         if (field_type.equals("ov")) {
+            sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editorOvi = sharedpreferences.edit();
+            editorOvi.putString(OviRunId,spinnerRuns.getSelectedItem().toString());
+            editorOvi.apply();
             Intent intent = new Intent(context, AddOvMainActivity.class);
             startActivity(intent);
         }
         if (field_type.equals("mrc")) {
+            sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editorMrc = sharedpreferences.edit();
+            editorMrc.putString(MrcRunId,spinnerRuns.getSelectedItem().toString());
+            editorMrc.apply();
             Intent intent = new Intent(context, AddMrcMainActivity.class);
             startActivity(intent);
         }

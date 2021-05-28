@@ -54,7 +54,7 @@ public class AddMrcMainActivity extends AppCompatActivity {
     public static final String RespondName = "RespondName";
     public static final String LocationCoordinates = "LocationCoordinates";
     public static final String MrcDetails = "MrcDetails";
-
+    public static final String MrcRunId = "MrcRunId";
     EditText EditTextMrcId;
     RadioGroup RadioGroupMrcStatus;
     RadioButton RadioProposed;
@@ -83,6 +83,8 @@ public class AddMrcMainActivity extends AppCompatActivity {
         String trap_status = sharedpreferences.getString(MrcStatus, "");
         String respond_name = sharedpreferences.getString(RespondName, "");
         String location_coordinates = sharedpreferences.getString(LocationCoordinates, "");
+        String mrc_run_id = sharedpreferences.getString(MrcRunId, "");
+        Log.d("mrc_run",mrc_run_id);
         if (respond_name.length() != 0) {
             EditTextMrcId.setText(ovi_trap_id);
             if (trap_status == "proposed") {

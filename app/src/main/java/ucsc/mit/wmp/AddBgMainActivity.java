@@ -52,6 +52,7 @@ public class AddBgMainActivity extends AppCompatActivity {
     public static final String RespondName = "RespondName";
     public static final String LocationCoordinates = "LocationCoordinates";
     public static final String BgDetails = "BgDetails";
+    public static final String BgRunId = "BgRunId";
     EditText EditTextTrapId;
     RadioGroup RadioGroupTrapStatus;
     RadioButton RadioProposed;
@@ -83,6 +84,8 @@ public class AddBgMainActivity extends AppCompatActivity {
         String trap_position = sharedpreferences.getString(TrapPosition, "");
         String respond_name = sharedpreferences.getString(RespondName, "");
         String location_coordinates = sharedpreferences.getString(LocationCoordinates, "");
+        String bg_run_id = sharedpreferences.getString(BgRunId, "");
+        Log.d("bg_run",bg_run_id);
         if(respond_name.length()!=0) {
             EditTextTrapId.setText(ovi_trap_id);
             if (trap_status == "proposed") {
