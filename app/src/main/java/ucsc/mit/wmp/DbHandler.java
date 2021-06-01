@@ -13,12 +13,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DbHandler extends SQLiteOpenHelper {
-    private static final int VERSION = 1;
-    private static final String DB_NAME = "FieldDb";
+    private static final int VERSION = 2;
+    private static final String DB_NAME = "FieldDatabase";
     // table and column names for person table
     private static final String TABLE_PERSON = "person";
     private static final String PERSON_ID = "person_id";
     private static final String PERSON_NAME = "person_name";
+    private static final String PERSON_PHONE = "person_phone";
     private static final String EXIST_IN_REMOTE_SERVER = "exist_in_remote_server";
 
     // table and column names for address table
@@ -32,8 +33,8 @@ public class DbHandler extends SQLiteOpenHelper {
     private static final String TABLE_MRC = "mrc";
     private static final String IDENTIFIER = "identifier";
     private static final String MRC_STATUS = "mrc_status";
-    private static final String RELEASE_TYPE = "release_type";
     private static final String RUN_NAME = "run_name";
+    private static final String MRC_COORDINATES = "mrc_coordinates";
 
     // table and column names for Mrc_Release table
     private static final String TABLE_MRC_RELEASE = "mrc_release";
@@ -47,6 +48,7 @@ public class DbHandler extends SQLiteOpenHelper {
     private static final String BG_TRAP_ID = "bg_trap_id";
     private static final String BG_TRAP_STATUS = "bg_trap_status";
     private static final String BG_POSITION = "bg_position";
+    private static final String BG_COORDINATES = "bg_coordinates";
 
     // table and column names for Bg_Collection table
     private static final String TABLE_BG_COLLECTION = "bg_collection";
@@ -61,6 +63,7 @@ public class DbHandler extends SQLiteOpenHelper {
     private static final String OV_TRAP_ID = "ov_trap_id";
     private static final String OV_TRAP_STATUS = "ov_trap_status";
     private static final String OV_POSITION = "ov_position";
+    private static final String OV_COORDINATES = "ov_coordinates";
 
     private static final String TABLE_OV_COLLECTION = "ov_collection";
 
@@ -72,7 +75,7 @@ public class DbHandler extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String TABLE_CREATE_QUERY_PERSON = "CREATE TABLE " + TABLE_PERSON + " " + "(" + PERSON_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + PERSON_NAME
-                + " TEXT," + EXIST_IN_REMOTE_SERVER + " TEXT" + ");";
+                + " TEXT," + PERSON_PHONE +" INTEGER,"+ EXIST_IN_REMOTE_SERVER + " TEXT" + ");";
         sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_PERSON);
 
         String TABLE_CREATE_QUERY_ADDRESS = "CREATE TABLE " + TABLE_ADDRESS + " " + "(" + ADDRESS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + ADDRESS_LINE1
@@ -80,15 +83,15 @@ public class DbHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_ADDRESS);
 
         String TABLE_CREATE_QUERY_MRC = "CREATE TABLE " + TABLE_MRC + " " + "(" + IDENTIFIER + " TEXT," + MRC_STATUS
-                + " TEXT," + RELEASE_TYPE + " TEXT," + RUN_NAME + " TEXT," + PERSON_ID + " INTEGER," + ADDRESS_ID + " INTEGER," + EXIST_IN_REMOTE_SERVER + " TEXT," + "primary key " + "(" + IDENTIFIER + ")," + "foreign key (person_id) references person(person_id)," + "foreign key (address_id) references address(address_id)" + ");";
+                + " TEXT," + RUN_NAME + " TEXT," + PERSON_ID + " INTEGER," + ADDRESS_ID + " INTEGER," + MRC_COORDINATES + " TEXT," + EXIST_IN_REMOTE_SERVER + " TEXT," + "primary key " + "(" + IDENTIFIER + ")," + "foreign key (person_id) references person(person_id)," + "foreign key (address_id) references address(address_id)" + ");";
         sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_MRC);
 
         String TABLE_CREATE_QUERY_MRC_RELEASE = "CREATE TABLE " + TABLE_MRC_RELEASE + " " + "(" + RELEASE_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + RELEASE_DATE
-                + " TEXT," + RELEASE_TIME + " TEXT," + RELEASE_STATUS + " TEXT," + IDENTIFIER + " TEXT," + "primary key " + "(" + RELEASE_ID + ")," + "foreign key (identifier) references mrc(identifier)" + ");";
+                + " TEXT," + RELEASE_TIME + " TEXT," + RELEASE_STATUS + " TEXT," + IDENTIFIER + " TEXT," + "foreign key (identifier) references mrc(identifier)" + ");";
         sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_MRC_RELEASE);
 
         String TABLE_CREATE_QUERY_BG_TRAP = "CREATE TABLE " + TABLE_BG_TRAP + " " + "(" + BG_TRAP_ID + " TEXT," + BG_TRAP_STATUS
-                + " TEXT," + BG_POSITION + " TEXT," + RUN_NAME + " TEXT," + PERSON_ID + " INTEGER," + ADDRESS_ID + " INTEGER," + EXIST_IN_REMOTE_SERVER + " TEXT," + "primary key " + "(" + BG_TRAP_ID + ")," + "foreign key (person_id) references person(person_id)," + "foreign key (address_id) references address(address_id)" + ");";
+                + " TEXT," + BG_POSITION + " TEXT," + RUN_NAME + " TEXT," + PERSON_ID + " INTEGER," + ADDRESS_ID + " INTEGER," +  BG_COORDINATES + " TEXT,"+ EXIST_IN_REMOTE_SERVER + " TEXT," + "primary key " + "(" + BG_TRAP_ID + ")," + "foreign key (person_id) references person(person_id)," + "foreign key (address_id) references address(address_id)" + ");";
         sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_BG_TRAP);
 
         String TABLE_CREATE_QUERY_BG_COLLECTION = "CREATE TABLE " + TABLE_BG_COLLECTION + " " + "(" + COLLECTION_ID + " TEXT," + COLLECTION_DATE
@@ -96,7 +99,7 @@ public class DbHandler extends SQLiteOpenHelper {
         sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_BG_COLLECTION);
 
         String TABLE_CREATE_QUERY_OV_TRAP = "CREATE TABLE " + TABLE_OV_TRAP + " " + "(" + OV_TRAP_ID + " TEXT," + OV_TRAP_STATUS
-                + " TEXT," + OV_POSITION + " TEXT," + RUN_NAME + " TEXT," + PERSON_ID + " INTEGER," + ADDRESS_ID + " INTEGER," + EXIST_IN_REMOTE_SERVER + " TEXT," + "primary key " + "(" + OV_TRAP_ID + ")," + "foreign key (person_id) references person(person_id)," + "foreign key (address_id) references address(address_id)" + ");";
+                + " TEXT," + OV_POSITION + " TEXT," + RUN_NAME + " TEXT," + PERSON_ID + " INTEGER," + ADDRESS_ID + " INTEGER," + OV_COORDINATES + " TEXT,"+EXIST_IN_REMOTE_SERVER + " TEXT," + "primary key " + "(" + OV_TRAP_ID + ")," + "foreign key (person_id) references person(person_id)," + "foreign key (address_id) references address(address_id)" + ");";
         sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_OV_TRAP);
 
         String TABLE_CREATE_QUERY_OV_COLLECTION = "CREATE TABLE " + TABLE_OV_COLLECTION + " " + "(" + COLLECTION_ID + " TEXT," + COLLECTION_DATE
@@ -129,6 +132,7 @@ public class DbHandler extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(PERSON_NAME, personObj.getPerson_name());
+        contentValues.put(PERSON_PHONE, personObj.getPhone());
         contentValues.put(EXIST_IN_REMOTE_SERVER, personObj.getExist_in_remote_server());
         // save to table
         sqLiteDatabase.insert(TABLE_PERSON, null, contentValues);
@@ -154,10 +158,11 @@ public class DbHandler extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(IDENTIFIER, mrcObj.getIdentifier());
         contentValues.put(MRC_STATUS, mrcObj.getMrc_status());
-        contentValues.put(RELEASE_TYPE, mrcObj.getRelease_type());
         contentValues.put(RUN_NAME, mrcObj.getRun_name());
         contentValues.put(PERSON_ID, mrcObj.getPerson_id());
         contentValues.put(ADDRESS_ID, mrcObj.getAddress_id());
+        contentValues.put(MRC_COORDINATES, mrcObj.getCoordinates());
+        contentValues.put(EXIST_IN_REMOTE_SERVER, mrcObj.getExist_in_remote_server());
         // save to table
         sqLiteDatabase.insert(TABLE_MRC, null, contentValues);
         // close connection
@@ -187,6 +192,7 @@ public class DbHandler extends SQLiteOpenHelper {
         contentValues.put(RUN_NAME, bgTrapObj.getRun_name());
         contentValues.put(PERSON_ID, bgTrapObj.getPerson_id());
         contentValues.put(ADDRESS_ID, bgTrapObj.getAddress_id());
+        contentValues.put(BG_COORDINATES, bgTrapObj.getAddress_id());
         contentValues.put(EXIST_IN_REMOTE_SERVER, bgTrapObj.getExist_in_remote_server());
         // save to table
         sqLiteDatabase.insert(TABLE_BG_TRAP, null, contentValues);
@@ -218,6 +224,7 @@ public class DbHandler extends SQLiteOpenHelper {
         contentValues.put(RUN_NAME, ovTrapObj.getRun_name());
         contentValues.put(PERSON_ID, ovTrapObj.getPerson_id());
         contentValues.put(ADDRESS_ID, ovTrapObj.getAddress_id());
+        contentValues.put(OV_COORDINATES, ovTrapObj.getCoordinates());
         contentValues.put(EXIST_IN_REMOTE_SERVER, ovTrapObj.getExist_in_remote_server());
         // save to table
         sqLiteDatabase.insert(TABLE_OV_TRAP, null, contentValues);
@@ -258,6 +265,23 @@ public class DbHandler extends SQLiteOpenHelper {
         db.close();
         return persons;
     }
+
+    public List<PersonModel> getLastPerson() {
+        List<PersonModel> persons = new ArrayList();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select max(person_id) as max_person_id from " + TABLE_PERSON + ";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                PersonModel person = new PersonModel();
+                person.setPerson_id(cursor.getInt(0));
+                persons.add(person);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return persons;
+    }
+
 
     public List<PersonModel> getSinglePersons(Integer selected_id) {
         List<PersonModel> persons = new ArrayList();
@@ -306,6 +330,23 @@ public class DbHandler extends SQLiteOpenHelper {
         return addresses;
     }
 
+    public List<AddressModel> getLastAddresses() {
+        List<AddressModel> addresses = new ArrayList();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select max(address_id) from " + TABLE_ADDRESS + ";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                AddressModel address = new AddressModel();
+                address.setAddress_id(cursor.getInt(0));
+                addresses.add(address);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return addresses;
+    }
+
+
     public List<AddressModel> getSingleAddresses(Integer selected_id) {
         List<AddressModel> addresses = new ArrayList();
         SQLiteDatabase db = getReadableDatabase();
@@ -332,7 +373,8 @@ public class DbHandler extends SQLiteOpenHelper {
         contentValues.put(ADDRESS_LINE1, addressInstance.getAddress_line1());
         contentValues.put(ADDRESS_LINE2, addressInstance.getAddress_line2());
         contentValues.put(LOCATION_DESCRIPTION, addressInstance.getLocation_description());
-        int status = sqLiteDatabase.update(TABLE_ADDRESS, contentValues, "address_id=?", new String[]{String.valueOf(addressInstance.getAddress_id())});
+        int status = sqLiteDatabase.update(TABLE_ADDRESS, contentValues, "address_id=?",
+                new String[]{String.valueOf(addressInstance.getAddress_id())});
         return status;
     }
 
@@ -346,11 +388,10 @@ public class DbHandler extends SQLiteOpenHelper {
                 MrcModel mrc = new MrcModel();
                 mrc.setIdentifier(cursor.getString(0));
                 mrc.setMrc_status(cursor.getString(1));
-                mrc.setRelease_type(cursor.getString(2));
-                mrc.setRun_name(cursor.getString(3));
-                mrc.setPerson_id(cursor.getString(4));
-                mrc.setAddress_id(cursor.getString(5));
-                mrc.setExist_in_remote_server(cursor.getString(6));
+                mrc.setRun_name(cursor.getString(2));
+                mrc.setPerson_id(cursor.getInt(3));
+                mrc.setAddress_id(cursor.getInt(4));
+                mrc.setExist_in_remote_server(cursor.getString(5));
                 mrcs.add(mrc);
             } while (cursor.moveToNext());
         }
@@ -368,11 +409,10 @@ public class DbHandler extends SQLiteOpenHelper {
                 MrcModel mrc = new MrcModel();
                 mrc.setIdentifier(cursor.getString(0));
                 mrc.setMrc_status(cursor.getString(1));
-                mrc.setRelease_type(cursor.getString(2));
-                mrc.setRun_name(cursor.getString(3));
-                mrc.setPerson_id(cursor.getString(4));
-                mrc.setAddress_id(cursor.getString(5));
-                mrc.setExist_in_remote_server(cursor.getString(6));
+                mrc.setRun_name(cursor.getString(2));
+                mrc.setPerson_id(cursor.getInt(3));
+                mrc.setAddress_id(cursor.getInt(4));
+                mrc.setExist_in_remote_server(cursor.getString(5));
                 mrcs.add(mrc);
             } while (cursor.moveToNext());
         }
@@ -384,9 +424,9 @@ public class DbHandler extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(MRC_STATUS, mrcInstance.getMrc_status());
-        contentValues.put(RELEASE_TYPE, mrcInstance.getRelease_type());
         contentValues.put(RUN_NAME, mrcInstance.getRun_name());
-        int status = sqLiteDatabase.update(TABLE_MRC, contentValues, "identifier=?", new String[]{String.valueOf(mrcInstance.getIdentifier())});
+        int status = sqLiteDatabase.update(TABLE_MRC, contentValues, "identifier=?",
+                new String[]{String.valueOf(mrcInstance.getIdentifier())});
         return status;
     }
 
@@ -432,7 +472,8 @@ public class DbHandler extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(RELEASE_STATUS, mrcReleaseInstance.getRelease_status());
-        int status = sqLiteDatabase.update(TABLE_MRC_RELEASE, contentValues, "release_id=?", new String[]{String.valueOf(mrcReleaseInstance.getRelease_id())});
+        int status = sqLiteDatabase.update(TABLE_MRC_RELEASE, contentValues,
+                "release_id=?", new String[]{String.valueOf(mrcReleaseInstance.getRelease_id())});
         return status;
     }
 
@@ -485,7 +526,8 @@ public class DbHandler extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(BG_TRAP_STATUS, bgTrapInstance.getTrap_status());
         contentValues.put(BG_POSITION, bgTrapInstance.getPosition());
-        int status = sqLiteDatabase.update(TABLE_BG_TRAP, contentValues, "bg_trap_id=?", new String[]{String.valueOf(bgTrapInstance.getBg_trap_id())});
+        int status = sqLiteDatabase.update(TABLE_BG_TRAP, contentValues, "bg_trap_id=?",
+                new String[]{String.valueOf(bgTrapInstance.getBg_trap_id())});
         return status;
     }
 
@@ -535,7 +577,8 @@ public class DbHandler extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLLECTION_STATUS, bgCollectionInstance.getCollection_status());
         contentValues.put(TRAP_CONDITION, bgCollectionInstance.getTrap_condition());
-        int status = sqLiteDatabase.update(TABLE_BG_COLLECTION, contentValues, "collection_id=?", new String[]{String.valueOf(bgCollectionInstance.getCollection_id())});
+        int status = sqLiteDatabase.update(TABLE_BG_COLLECTION, contentValues,
+                "collection_id=?", new String[]{String.valueOf(bgCollectionInstance.getCollection_id())});
         return status;
     }
 
@@ -588,7 +631,8 @@ public class DbHandler extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(OV_TRAP_STATUS, ovTrapInstance.getTrap_status());
         contentValues.put(OV_POSITION, ovTrapInstance.getPosition());
-        int status = sqLiteDatabase.update(TABLE_OV_TRAP, contentValues, "ov_trap_id=?", new String[]{String.valueOf(ovTrapInstance.getOv_trap_id())});
+        int status = sqLiteDatabase.update(TABLE_OV_TRAP, contentValues,
+                "ov_trap_id=?", new String[]{String.valueOf(ovTrapInstance.getOv_trap_id())});
         return status;
     }
 
@@ -637,7 +681,8 @@ public class DbHandler extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(COLLECTION_STATUS, ovCollectionInstance.getCollection_status());
         contentValues.put(TRAP_CONDITION, ovCollectionInstance.getTrap_condition());
-        int status = sqLiteDatabase.update(TABLE_OV_COLLECTION, contentValues, "collection_id=?", new String[]{String.valueOf(ovCollectionInstance.getCollection_id())});
+        int status = sqLiteDatabase.update(TABLE_OV_COLLECTION, contentValues,
+                "collection_id=?", new String[]{String.valueOf(ovCollectionInstance.getCollection_id())});
         return status;
     }
 }

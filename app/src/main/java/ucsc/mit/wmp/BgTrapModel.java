@@ -7,19 +7,21 @@ public class BgTrapModel {
     public String run_name;
     public int person_id;
     public int address_id;
+    public String coordinates;
     public String exist_in_remote_server;
 
     public BgTrapModel(){
 
     }
 
-    public BgTrapModel(String bg_trap_id, String trap_status, String position, String run_name, int person_id, int address_id, String exist_in_remote_server) {
+    public BgTrapModel(String bg_trap_id, String trap_status, String position, String run_name, int person_id, int address_id, String coordinates, String exist_in_remote_server) {
         this.bg_trap_id = bg_trap_id;
         this.trap_status = trap_status;
         this.position = position;
         this.run_name = run_name;
         this.person_id = person_id;
         this.address_id = address_id;
+        this.coordinates = coordinates;
         this.exist_in_remote_server = exist_in_remote_server;
     }
 
@@ -45,6 +47,10 @@ public class BgTrapModel {
 
     public void setAddress_id(int address_id) {
         this.address_id = address_id;
+    }
+
+    public void setCoordinates(String coordinates) {
+        this.coordinates = coordinates;
     }
 
     public void setExist_in_remote_server(String exist_in_remote_server) {
@@ -73,6 +79,10 @@ public class BgTrapModel {
 
     public int getAddress_id() {
         return address_id;
+    }
+
+    public String getCoordinates() {
+        return coordinates;
     }
 
     public String getExist_in_remote_server() {

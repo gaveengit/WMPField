@@ -7,19 +7,21 @@ public class OvTrapModel {
     public String run_name;
     public int person_id;
     public int address_id;
+    public String coordinates;
     public String exist_in_remote_server;
 
     public OvTrapModel(){
 
     }
 
-    public OvTrapModel(String ov_trap_id, String trap_status, String position, String run_name, int person_id, int address_id, String exist_in_remote_server) {
+    public OvTrapModel(String ov_trap_id, String trap_status, String position, String run_name, int person_id, int address_id,String coordinates,String exist_in_remote_server) {
         this.ov_trap_id = ov_trap_id;
         this.trap_status = trap_status;
         this.position = position;
         this.run_name = run_name;
         this.person_id = person_id;
         this.address_id = address_id;
+        this.coordinates = coordinates;
         this.exist_in_remote_server = exist_in_remote_server;
     }
 
@@ -45,6 +47,10 @@ public class OvTrapModel {
 
     public void setAddress_id(int address_id) {
         this.address_id = address_id;
+    }
+
+    public void setCoordinates(String coordinates) {
+        this.coordinates = coordinates;
     }
 
     public void setExist_in_remote_server(String exist_in_remote_server) {
@@ -73,6 +79,10 @@ public class OvTrapModel {
 
     public int getAddress_id() {
         return address_id;
+    }
+
+    public String getCoordinates() {
+        return coordinates;
     }
 
     public String getExist_in_remote_server() {
