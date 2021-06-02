@@ -98,5 +98,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(givenLocation, zoomLevel));
         //mMap.moveCamera(center);
     }
+    public void goListView(View pView) {
+        Intent intent = new Intent(context, OvListActivity.class);
+        intent.putExtra("type", "ov");
+        startActivity(intent);
+    }
 
 }
