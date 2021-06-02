@@ -13,7 +13,7 @@ public class MrcModel {
 
     }
 
-    public MrcModel(String identifier, String mrc_status, String release_type, String run_name, int person_id, int address_id,String coordinates, String exist_in_remote_server) {
+    public MrcModel(String identifier, String mrc_status, String run_name, int person_id, int address_id,String coordinates, String exist_in_remote_server) {
         this.identifier = identifier;
         this.mrc_status = mrc_status;
         this.run_name = run_name;

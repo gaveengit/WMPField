@@ -110,7 +110,7 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
             dbHandler.insertDataAddress(addressModel);
             addressList = dbHandler.getLastAddresses();
             int lastAddressId = addressList.get(0).address_id;
-            MrcModel mrcModel = new MrcModel(mrc_id, mrc_status, mrc_position,
+            MrcModel mrcModel = new MrcModel(mrc_id, mrc_status,
                     mrc_run_id, lastPersonId, lastAddressId, location_coordinates,
                     "no");
             dbHandler.insertDataMrc(mrcModel);

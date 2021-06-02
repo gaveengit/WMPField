@@ -76,7 +76,6 @@ public class AddOvMainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_ov_main);
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
-        String ov_id = getIntent().getStringExtra("TrapId");
         EditTextTrapId = (EditText) findViewById(R.id.editTextTrapId);
         //trapId.setText(ov_id);
         RadioGroupTrapStatus = (RadioGroup) findViewById(R.id.trapStatus);
@@ -189,6 +188,7 @@ public class AddOvMainActivity extends AppCompatActivity {
             editor.putString(LocationCoordinates, EditTextLocationCoordinates.getText().toString());
             editor.apply();
             Intent intent = new Intent(context, AddOvAdditionalActivity.class);
+
             startActivity(intent);
         }
     }
