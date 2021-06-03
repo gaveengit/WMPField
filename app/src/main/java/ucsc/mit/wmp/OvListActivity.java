@@ -45,11 +45,15 @@ public class OvListActivity extends AppCompatActivity {
     public static final String BgRunId = "BgRunId";
     public static final String MrcRunId = "MrcRunId";
     private List<OvTrapModel> ovModelList;
+    private List<OvPersonAddressModel> ovPersonAddressModelList;
+    private List<BgPersonAddressModel> bgPersonAddressModelList;
+    private List<MrcPersonAddressModel> mrcPersonAddressModelList;
     private List<String> ovList;
     private List<BgTrapModel> bgModelList;
     private List<String> bgList;
     private List<MrcModel> mrcModelList;
     private List<String> mrcList;
+
 
     Spinner spinnerRuns;
     SharedPreferences sharedpreferences;
@@ -329,6 +333,7 @@ public class OvListActivity extends AppCompatActivity {
             editorBg.putString(BgRunId,spinnerRuns.getSelectedItem().toString());
             editorBg.apply();
             Intent intent = new Intent(context, AddBgMainActivity.class);
+            intent.putExtra("form-type","new");
             startActivity(intent);
         }
         if (field_type.equals("ov")) {
@@ -337,6 +342,7 @@ public class OvListActivity extends AppCompatActivity {
             editorOvi.putString(OviRunId,spinnerRuns.getSelectedItem().toString());
             editorOvi.apply();
             Intent intent = new Intent(context, AddOvMainActivity.class);
+            intent.putExtra("form-type","new");
             startActivity(intent);
         }
         if (field_type.equals("mrc")) {
@@ -345,6 +351,7 @@ public class OvListActivity extends AppCompatActivity {
             editorMrc.putString(MrcRunId,spinnerRuns.getSelectedItem().toString());
             editorMrc.apply();
             Intent intent = new Intent(context, AddMrcMainActivity.class);
+            intent.putExtra("form-type","new");
             startActivity(intent);
         }
     }
@@ -352,19 +359,70 @@ public class OvListActivity extends AppCompatActivity {
     public void goIndividualOv(View v) {
 
         if (field_type.equals("ov")) {
-            Intent intent = new Intent(context, AddOvMainActivity.class);
-            intent.putExtra("TrapId", v.getTag().toString());
-            startActivity(intent);
-        }
+            dbHandler = new DbHandler(context);
+            ovPersonAddressModelList = new ArrayList<>();
+            ovPersonAddressModelList = dbHandler.getSingleOvTrap(v.getTag().toString());
+                sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(OviTrapId,ovPersonAddressModelList.get(0).ov_trap_id.toString());
+                editor.putString(TrapStatus, ovPersonAddressModelList.get(0).trap_status.toString());
+                editor.putString(TrapPosition, ovPersonAddressModelList.get(0).position.toString());
+                editor.putString(RespondName, ovPersonAddressModelList.get(0).person_name);
+                editor.putString(LocationCoordinates, ovPersonAddressModelList.get(0).coordinates);
+                editor.putString(Phone, String.valueOf(ovPersonAddressModelList.get(0).phone));
+                editor.putString(AddressLine1, ovPersonAddressModelList.get(0).address_line1);
+                editor.putString(AddressLine2, ovPersonAddressModelList.get(0).address_line2);
+                editor.putString(LocationDescription, ovPersonAddressModelList.get(0).location_description);
+                editor.putString(OviRunId, ovPersonAddressModelList.get(0).run_name);
+                editor.apply();
 
+                Intent intent = new Intent(context, AddOvMainActivity.class);
+                intent.putExtra("TrapId", v.getTag().toString());
+                intent.putExtra("form-type", "edit-new");
+                startActivity(intent);
+        }
         if (field_type.equals("bg")) {
+            dbHandler = new DbHandler(context);
+            bgPersonAddressModelList = new ArrayList<>();
+            bgPersonAddressModelList = dbHandler.getSingleBgTrap(v.getTag().toString());
+            sharedpreferences = getSharedPreferences(BgDetails, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(BgTrapId,bgPersonAddressModelList.get(0).bg_trap_id.toString());
+            editor.putString(TrapStatus, bgPersonAddressModelList.get(0).trap_status.toString());
+            editor.putString(TrapPosition, bgPersonAddressModelList.get(0).position.toString());
+            editor.putString(RespondName, bgPersonAddressModelList.get(0).person_name);
+            editor.putString(LocationCoordinates, bgPersonAddressModelList.get(0).coordinates);
+            editor.putString(Phone, String.valueOf(bgPersonAddressModelList.get(0).phone));
+            editor.putString(AddressLine1, bgPersonAddressModelList.get(0).address_line1);
+            editor.putString(AddressLine2, bgPersonAddressModelList.get(0).address_line2);
+            editor.putString(LocationDescription, bgPersonAddressModelList.get(0).location_description);
+            editor.putString(BgRunId, bgPersonAddressModelList.get(0).run_name);
+            editor.apply();
+
             Intent intent = new Intent(context, AddBgMainActivity.class);
             intent.putExtra("TrapId", v.getTag().toString());
+            intent.putExtra("form-type","edit-new");
             startActivity(intent);
         }
         if (field_type.equals("mrc")) {
+            dbHandler = new DbHandler(context);
+            mrcPersonAddressModelList = new ArrayList<>();
+            mrcPersonAddressModelList = dbHandler.getSingleMrcPersonAddress(v.getTag().toString());
+            sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(MrcId,mrcPersonAddressModelList.get(0).identifier.toString());
+            editor.putString(MrcStatus, mrcPersonAddressModelList.get(0).mrc_status.toString());
+            editor.putString(RespondName, mrcPersonAddressModelList.get(0).person_name);
+            editor.putString(LocationCoordinates, mrcPersonAddressModelList.get(0).coordinates);
+            editor.putString(Phone, String.valueOf(mrcPersonAddressModelList.get(0).phone));
+            editor.putString(AddressLine1, mrcPersonAddressModelList.get(0).address_line1);
+            editor.putString(AddressLine2, mrcPersonAddressModelList.get(0).address_line2);
+            editor.putString(LocationDescription, mrcPersonAddressModelList.get(0).location_description);
+            editor.putString(MrcRunId, mrcPersonAddressModelList.get(0).run_name);
+            editor.apply();
             Intent intent = new Intent(context, AddMrcMainActivity.class);
             intent.putExtra("TrapId", v.getTag().toString());
+            intent.putExtra("form-type","edit-new");
             startActivity(intent);
         }
     }
