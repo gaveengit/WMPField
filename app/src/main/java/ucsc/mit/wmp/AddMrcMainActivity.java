@@ -64,11 +64,12 @@ public class AddMrcMainActivity extends AppCompatActivity {
     EditText EditTextLocationCoordinates;
     TextView errorText;
     SharedPreferences sharedpreferences;
-
+    String form_type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_mrc_main);
+        form_type = getIntent().getStringExtra("form-type");
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         EditTextMrcId = (EditText) findViewById(R.id.editTextTrapId);
         RadioGroupMrcStatus = (RadioGroup) findViewById(R.id.trapStatus);
@@ -85,12 +86,14 @@ public class AddMrcMainActivity extends AppCompatActivity {
         String location_coordinates = sharedpreferences.getString(LocationCoordinates, "");
         String mrc_run_id = sharedpreferences.getString(MrcRunId, "");
         Log.d("mrc_run",mrc_run_id);
+        Log.d("trap_status",trap_status);
+        Log.d("respond_name",respond_name);
         if (respond_name.length() != 0) {
             EditTextMrcId.setText(ovi_trap_id);
-            if (trap_status == "proposed") {
+            if (trap_status.equals("proposed")) {
                 RadioProposed.setChecked(true);
             }
-            if (trap_status == "set") {
+            if (trap_status.equals("set")) {
                 RadioSet.setChecked(true);
             }
             EditTextRespondName.setText(respond_name);
@@ -167,6 +170,12 @@ public class AddMrcMainActivity extends AppCompatActivity {
             editor.putString(LocationCoordinates, EditTextLocationCoordinates.getText().toString());
             editor.apply();
             Intent intent = new Intent(context, AddMrcAdditionalActivity.class);
+            if(form_type.equals("edit-new")) {
+                intent.putExtra("form-type", "edit-new");
+            }
+            else{
+                intent.putExtra("form-type", "new");
+            }
             startActivity(intent);
         }
     }

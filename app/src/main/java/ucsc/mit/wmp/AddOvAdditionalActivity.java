@@ -28,6 +28,8 @@ public class AddOvAdditionalActivity extends AppCompatActivity {
     public static final String AddressLine2 = "AddressLine2";
     public static final String LocationDescription = "LocationDescription";
     public static final String OviDetails = "OviDetails";
+    public static final String PersonId = "PersonId";
+    public static final String AddressId = "AddressId";
     EditText EditTextPhone;
     EditText EditTextAddressLine1;
     EditText EditTextAddressLine2;
@@ -38,11 +40,15 @@ public class AddOvAdditionalActivity extends AppCompatActivity {
     private List<AddressModel> addressList;
     private List<String> personListLast;
     private List<String> addressListLast;
+    private List<OvPersonAddressModel> ovPersonAddressModelList;
+    String form_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_ov_additional);
+        form_type = getIntent().getStringExtra("form-type");
+        Log.d("form-type",form_type);
         personList = new ArrayList<>();
         addressList = new ArrayList<>();
         EditTextPhone = (EditText) findViewById(R.id.editTextPhone);
@@ -70,6 +76,7 @@ public class AddOvAdditionalActivity extends AppCompatActivity {
         editor.putString(LocationDescription, EditTextLocationDescription.getText().toString());
         editor.apply();
         Intent intent = new Intent(context, AddOvMainActivity.class);
+        intent.putExtra("form-type", form_type);
         startActivity(intent);
     }
 
@@ -100,24 +107,53 @@ public class AddOvAdditionalActivity extends AppCompatActivity {
             String address_line1 = sharedpreferences.getString(AddressLine1, "");
             String address_line2 = sharedpreferences.getString(AddressLine2, "");
             String location_description = sharedpreferences.getString(LocationDescription, "");
-
-            PersonModel personModel = new PersonModel(respond_name, Integer.parseInt(phone), "no");
-            dbHandler.insertDataPerson(personModel);
-            personList = dbHandler.getLastPerson();
-            int lastPersonId = personList.get(0).person_id;
-            AddressModel addressModel = new AddressModel(address_line1, address_line2, location_description, "no");
-            dbHandler.insertDataAddress(addressModel);
-            addressList = dbHandler.getLastAddresses();
-            int lastAddressId = addressList.get(0).address_id;
-            OvTrapModel ovTrapModel = new OvTrapModel(ovi_trap_id, trap_status, trap_position,
-                    ovi_run_id, lastPersonId, lastAddressId, location_coordinates,
-                    "no");
-            dbHandler.insertDataOvTrap(ovTrapModel);
-            Log.d("lastPersonId",Integer.toString(lastPersonId));
-            Log.d("lastAddressId",Integer.toString(lastAddressId));
-            Intent intent = new Intent(context, OvListActivity.class);
-            intent.putExtra("type", "ov");
-            startActivity(intent);
+            int person_id = sharedpreferences.getInt(PersonId, 0);
+            int address_id = sharedpreferences.getInt(AddressId, 0);
+            if(form_type.equals("edit-new")){
+                PersonModel personModel = new PersonModel(respond_name, Integer.parseInt(phone), "no");
+                personModel.setPerson_id(person_id);
+                dbHandler.updateSinglePerson(personModel);
+                AddressModel addressModel = new AddressModel(address_line1, address_line2, location_description, "no");
+                addressModel.setAddress_id(address_id);
+                dbHandler.updateSingleAddress(addressModel);
+                OvTrapModel ovTrapModel = new OvTrapModel(ovi_trap_id, trap_status, trap_position,
+                        ovi_run_id, 0, 0, location_coordinates,
+                        "no");
+                int flag = dbHandler.updateSingleOvTrap(ovTrapModel);
+                Log.d("flag",String.valueOf(flag));
+                Intent intent = new Intent(context, OvListActivity.class);
+                intent.putExtra("type", "ov");
+                startActivity(intent);
+            }
+            else
+            {
+                dbHandler = new DbHandler(context);
+                ovPersonAddressModelList = new ArrayList<>();
+                ovPersonAddressModelList = dbHandler.getSingleOvTrap(ovi_trap_id);
+                if(ovPersonAddressModelList.size() > 0){
+                    errorText.setVisibility(View.VISIBLE);
+                    errorText.setText("Ov trap id is already existing.");
+                }
+                else {
+                    PersonModel personModel = new PersonModel(respond_name, Integer.parseInt(phone), "no");
+                    dbHandler.insertDataPerson(personModel);
+                    personList = dbHandler.getLastPerson();
+                    int lastPersonId = personList.get(0).person_id;
+                    AddressModel addressModel = new AddressModel(address_line1, address_line2, location_description, "no");
+                    dbHandler.insertDataAddress(addressModel);
+                    addressList = dbHandler.getLastAddresses();
+                    int lastAddressId = addressList.get(0).address_id;
+                    OvTrapModel ovTrapModel = new OvTrapModel(ovi_trap_id, trap_status, trap_position,
+                            ovi_run_id, lastPersonId, lastAddressId, location_coordinates,
+                            "no");
+                    dbHandler.insertDataOvTrap(ovTrapModel);
+                    Log.d("lastPersonId", Integer.toString(lastPersonId));
+                    Log.d("lastAddressId", Integer.toString(lastAddressId));
+                    Intent intent = new Intent(context, OvListActivity.class);
+                    intent.putExtra("type", "ov");
+                    startActivity(intent);
+                }
+            }
         }
     }
 }

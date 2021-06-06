@@ -62,11 +62,12 @@ public class AddBgMainActivity extends AppCompatActivity {
     EditText EditTextLocationCoordinates;
     TextView errorText;
     SharedPreferences sharedpreferences;
-
+    String form_type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_bg_main);
+        form_type = getIntent().getStringExtra("form-type");
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(this);
         EditTextTrapId = (EditText) findViewById(R.id.editTextTrapId);
         //trapId.setText(ov_id);
@@ -88,10 +89,10 @@ public class AddBgMainActivity extends AppCompatActivity {
         Log.d("bg_run",bg_run_id);
         if(respond_name.length()!=0) {
             EditTextTrapId.setText(ovi_trap_id);
-            if (trap_status == "proposed") {
+            if (trap_status.equals("proposed")) {
                 RadioProposed.setChecked(true);
             }
-            if (trap_status == "set") {
+            if (trap_status.equals("set")) {
                 RadioSet.setChecked(true);
             }
             EditTextTrapPosition.setText(trap_position);
@@ -172,6 +173,12 @@ public class AddBgMainActivity extends AppCompatActivity {
             editor.putString(LocationCoordinates, EditTextLocationCoordinates.getText().toString());
             editor.apply();
             Intent intent = new Intent(context, AddBgAdditionalActivity.class);
+            if(form_type.equals("edit-new")) {
+                intent.putExtra("form-type", "edit-new");
+            }
+            else{
+                intent.putExtra("form-type", "new");
+            }
             startActivity(intent);
         }
 

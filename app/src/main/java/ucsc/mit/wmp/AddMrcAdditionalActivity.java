@@ -28,6 +28,8 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
     public static final String AddressLine2 = "AddressLine2";
     public static final String LocationDescription = "LocationDescription";
     public static final String MrcDetails = "MrcDetails";
+    public static final String PersonId = "PersonId";
+    public static final String AddressId = "AddressId";
     EditText EditTextPhone;
     EditText EditTextAddressLine1;
     EditText EditTextAddressLine2;
@@ -38,10 +40,13 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
     private List<AddressModel> addressList;
     private List<String> personListLast;
     private List<String> addressListLast;
+    private List<MrcPersonAddressModel> mrcPersonAddressModelList;
+    String form_type;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_mrc_additional);
+        form_type = getIntent().getStringExtra("form-type");
         personList = new ArrayList<>();
         addressList = new ArrayList<>();
         EditTextPhone = (EditText) findViewById(R.id.editTextPhone);
@@ -69,6 +74,7 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
         editor.putString(LocationDescription, EditTextLocationDescription.getText().toString());
         editor.apply();
         Intent intent = new Intent(context, AddMrcMainActivity.class);
+        intent.putExtra("form-type", form_type);
         startActivity(intent);
     }
     public void SubmitMrc(View v)
@@ -101,24 +107,51 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
             String address_line1 = sharedpreferences.getString(AddressLine1, "");
             String address_line2 = sharedpreferences.getString(AddressLine2, "");
             String location_description = sharedpreferences.getString(LocationDescription, "");
-
-            PersonModel personModel = new PersonModel(respond_name, Integer.parseInt(phone), "no");
-            dbHandler.insertDataPerson(personModel);
-            personList = dbHandler.getLastPerson();
-            int lastPersonId = personList.get(0).person_id;
-            AddressModel addressModel = new AddressModel(address_line1, address_line2, location_description, "no");
-            dbHandler.insertDataAddress(addressModel);
-            addressList = dbHandler.getLastAddresses();
-            int lastAddressId = addressList.get(0).address_id;
-            MrcModel mrcModel = new MrcModel(mrc_id, mrc_status,
-                    mrc_run_id, lastPersonId, lastAddressId, location_coordinates,
-                    "no");
-            dbHandler.insertDataMrc(mrcModel);
-            Log.d("lastPersonId",Integer.toString(lastPersonId));
-            Log.d("lastAddressId",Integer.toString(lastAddressId));
-            Intent intent = new Intent(context, OvListActivity.class);
-            intent.putExtra("type", "mrc");
-            startActivity(intent);
+            int person_id = sharedpreferences.getInt(PersonId, 0);
+            int address_id = sharedpreferences.getInt(AddressId, 0);
+            if(form_type.equals("edit-new")){
+                PersonModel personModel = new PersonModel(respond_name, Integer.parseInt(phone), "no");
+                personModel.setPerson_id(person_id);
+                dbHandler.updateSinglePerson(personModel);
+                AddressModel addressModel = new AddressModel(address_line1, address_line2, location_description, "no");
+                addressModel.setAddress_id(address_id);
+                dbHandler.updateSingleAddress(addressModel);
+                MrcModel mrcModel = new MrcModel(mrc_id, mrc_status,
+                        mrc_run_id, 0, 0, location_coordinates,
+                        "no");
+                int flag = dbHandler.updateSingleMrc(mrcModel);
+                Log.d("flag",String.valueOf(flag));
+                Intent intent = new Intent(context, OvListActivity.class);
+                intent.putExtra("type", "mrc");
+                startActivity(intent);
+            }
+            else {
+                dbHandler = new DbHandler(context);
+                mrcPersonAddressModelList = new ArrayList<>();
+                mrcPersonAddressModelList = dbHandler.getSingleMrcPersonAddress(mrc_id);
+                if (mrcPersonAddressModelList.size() > 0) {
+                    errorText.setVisibility(View.VISIBLE);
+                    errorText.setText("MRC id is already existing.");
+                } else {
+                    PersonModel personModel = new PersonModel(respond_name, Integer.parseInt(phone), "no");
+                    dbHandler.insertDataPerson(personModel);
+                    personList = dbHandler.getLastPerson();
+                    int lastPersonId = personList.get(0).person_id;
+                    AddressModel addressModel = new AddressModel(address_line1, address_line2, location_description, "no");
+                    dbHandler.insertDataAddress(addressModel);
+                    addressList = dbHandler.getLastAddresses();
+                    int lastAddressId = addressList.get(0).address_id;
+                    MrcModel mrcModel = new MrcModel(mrc_id, mrc_status,
+                            mrc_run_id, lastPersonId, lastAddressId, location_coordinates,
+                            "no");
+                    dbHandler.insertDataMrc(mrcModel);
+                    Log.d("lastPersonId", Integer.toString(lastPersonId));
+                    Log.d("lastAddressId", Integer.toString(lastAddressId));
+                    Intent intent = new Intent(context, OvListActivity.class);
+                    intent.putExtra("type", "mrc");
+                    startActivity(intent);
+                }
+            }
         }
     }
 }

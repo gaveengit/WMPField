@@ -306,6 +306,7 @@ public class DbHandler extends SQLiteOpenHelper {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(PERSON_NAME, personInstance.getPerson_name());
+        contentValues.put(PERSON_PHONE, personInstance.getPhone());
         int status = sqLiteDatabase.update(TABLE_PERSON, contentValues, "person_id=?", new String[]{String.valueOf(personInstance.getPerson_id())});
         return status;
     }
@@ -446,6 +447,7 @@ public class DbHandler extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(MRC_STATUS, mrcInstance.getMrc_status());
         contentValues.put(RUN_NAME, mrcInstance.getRun_name());
+        contentValues.put(MRC_COORDINATES, mrcInstance.getCoordinates());
         int status = sqLiteDatabase.update(TABLE_MRC, contentValues, "identifier=?",
                 new String[]{String.valueOf(mrcInstance.getIdentifier())});
         return status;
@@ -594,6 +596,7 @@ public class DbHandler extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(BG_TRAP_STATUS, bgTrapInstance.getTrap_status());
         contentValues.put(BG_POSITION, bgTrapInstance.getPosition());
+        contentValues.put(BG_COORDINATES, bgTrapInstance.getCoordinates());
         int status = sqLiteDatabase.update(TABLE_BG_TRAP, contentValues, "bg_trap_id=?",
                 new String[]{String.valueOf(bgTrapInstance.getBg_trap_id())});
         return status;
@@ -734,6 +737,7 @@ public class DbHandler extends SQLiteOpenHelper {
         ContentValues contentValues = new ContentValues();
         contentValues.put(OV_TRAP_STATUS, ovTrapInstance.getTrap_status());
         contentValues.put(OV_POSITION, ovTrapInstance.getPosition());
+        contentValues.put(OV_COORDINATES, ovTrapInstance.getCoordinates());
         int status = sqLiteDatabase.update(TABLE_OV_TRAP, contentValues,
                 "ov_trap_id=?", new String[]{String.valueOf(ovTrapInstance.getOv_trap_id())});
         return status;

@@ -28,6 +28,8 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
     public static final String AddressLine2 = "AddressLine2";
     public static final String LocationDescription = "LocationDescription";
     public static final String BgDetails = "BgDetails";
+    public static final String PersonId = "PersonId";
+    public static final String AddressId = "AddressId";
     EditText EditTextPhone;
     EditText EditTextAddressLine1;
     EditText EditTextAddressLine2;
@@ -38,11 +40,14 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
     private List<AddressModel> addressList;
     private List<String> personListLast;
     private List<String> addressListLast;
+    private List<BgPersonAddressModel> bgPersonAddressModelList;
+    String form_type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_bg_additional);
+        form_type = getIntent().getStringExtra("form-type");
         personList = new ArrayList<>();
         addressList = new ArrayList<>();
         EditTextPhone = (EditText) findViewById(R.id.editTextPhone);
@@ -70,6 +75,7 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
         editor.putString(LocationDescription, EditTextLocationDescription.getText().toString());
         editor.apply();
         Intent intent = new Intent(context, AddBgMainActivity.class);
+        intent.putExtra("form-type", form_type);
         startActivity(intent);
     }
 
@@ -101,24 +107,52 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
             String address_line1 = sharedpreferences.getString(AddressLine1, "");
             String address_line2 = sharedpreferences.getString(AddressLine2, "");
             String location_description = sharedpreferences.getString(LocationDescription, "");
+            int person_id = sharedpreferences.getInt(PersonId, 0);
+            int address_id = sharedpreferences.getInt(AddressId, 0);
+            if (form_type.equals("edit-new")) {
+                PersonModel personModel = new PersonModel(respond_name, Integer.parseInt(phone), "no");
+                personModel.setPerson_id(person_id);
+                dbHandler.updateSinglePerson(personModel);
+                AddressModel addressModel = new AddressModel(address_line1, address_line2, location_description, "no");
+                addressModel.setAddress_id(address_id);
+                dbHandler.updateSingleAddress(addressModel);
+                BgTrapModel bgTrapModel = new BgTrapModel(bg_trap_id, trap_status, trap_position,
+                        bg_run_id, 0, 0, location_coordinates,
+                        "no");
+                int flag = dbHandler.updateSingleBgTrap(bgTrapModel);
+                Log.d("flag", String.valueOf(flag));
+                Intent intent = new Intent(context, OvListActivity.class);
+                intent.putExtra("type", "bg");
+                intent.putExtra("form-type", form_type);
+                startActivity(intent);
 
-            PersonModel personModel = new PersonModel(respond_name, Integer.parseInt(phone), "no");
-            dbHandler.insertDataPerson(personModel);
-            personList = dbHandler.getLastPerson();
-            int lastPersonId = personList.get(0).person_id;
-            AddressModel addressModel = new AddressModel(address_line1, address_line2, location_description, "no");
-            dbHandler.insertDataAddress(addressModel);
-            addressList = dbHandler.getLastAddresses();
-            int lastAddressId = addressList.get(0).address_id;
-            BgTrapModel bgTrapModel = new BgTrapModel(bg_trap_id, trap_status, trap_position,
-                    bg_run_id, lastPersonId, lastAddressId, location_coordinates,
-                    "no");
-            dbHandler.insertDataBgTrap(bgTrapModel);
-            Log.d("lastPersonId",Integer.toString(lastPersonId));
-            Log.d("lastAddressId",Integer.toString(lastAddressId));
-            Intent intent = new Intent(context, OvListActivity.class);
-            intent.putExtra("type", "bg");
-            startActivity(intent);
+            } else {
+                dbHandler = new DbHandler(context);
+                bgPersonAddressModelList = new ArrayList<>();
+                bgPersonAddressModelList = dbHandler.getSingleBgTrap(bg_trap_id);
+                if (bgPersonAddressModelList.size() > 0) {
+                    errorText.setVisibility(View.VISIBLE);
+                    errorText.setText("BG trap id is already existing.");
+                } else {
+                    PersonModel personModel = new PersonModel(respond_name, Integer.parseInt(phone), "no");
+                    dbHandler.insertDataPerson(personModel);
+                    personList = dbHandler.getLastPerson();
+                    int lastPersonId = personList.get(0).person_id;
+                    AddressModel addressModel = new AddressModel(address_line1, address_line2, location_description, "no");
+                    dbHandler.insertDataAddress(addressModel);
+                    addressList = dbHandler.getLastAddresses();
+                    int lastAddressId = addressList.get(0).address_id;
+                    BgTrapModel bgTrapModel = new BgTrapModel(bg_trap_id, trap_status, trap_position,
+                            bg_run_id, lastPersonId, lastAddressId, location_coordinates,
+                            "no");
+                    dbHandler.insertDataBgTrap(bgTrapModel);
+                    Log.d("lastPersonId", Integer.toString(lastPersonId));
+                    Log.d("lastAddressId", Integer.toString(lastAddressId));
+                    Intent intent = new Intent(context, OvListActivity.class);
+                    intent.putExtra("type", "bg");
+                    startActivity(intent);
+                }
+            }
         }
     }
 }

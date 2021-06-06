@@ -16,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 
 import java.util.ArrayList;
@@ -44,6 +43,8 @@ public class OvListActivity extends AppCompatActivity {
     public static final String OviRunId = "OviRunId";
     public static final String BgRunId = "BgRunId";
     public static final String MrcRunId = "MrcRunId";
+    public static final String PersonId = "PersonId";
+    public static final String AddressId = "AddressId";
     private List<OvTrapModel> ovModelList;
     private List<OvPersonAddressModel> ovPersonAddressModelList;
     private List<BgPersonAddressModel> bgPersonAddressModelList;
@@ -322,7 +323,10 @@ public class OvListActivity extends AppCompatActivity {
     }
 
     public void goMapView(View pView) {
+        String run_name = spinnerRuns.getSelectedItem().toString();
         Intent intent = new Intent(context, MapsActivity.class);
+        intent.putExtra("run_name",run_name);
+        intent.putExtra("field_type",field_type);
         startActivity(intent);
     }
 
@@ -374,6 +378,8 @@ public class OvListActivity extends AppCompatActivity {
                 editor.putString(AddressLine2, ovPersonAddressModelList.get(0).address_line2);
                 editor.putString(LocationDescription, ovPersonAddressModelList.get(0).location_description);
                 editor.putString(OviRunId, ovPersonAddressModelList.get(0).run_name);
+                editor.putInt(PersonId, ovPersonAddressModelList.get(0).person_id);
+                editor.putInt(AddressId, ovPersonAddressModelList.get(0).address_id);
                 editor.apply();
 
                 Intent intent = new Intent(context, AddOvMainActivity.class);
@@ -397,6 +403,8 @@ public class OvListActivity extends AppCompatActivity {
             editor.putString(AddressLine2, bgPersonAddressModelList.get(0).address_line2);
             editor.putString(LocationDescription, bgPersonAddressModelList.get(0).location_description);
             editor.putString(BgRunId, bgPersonAddressModelList.get(0).run_name);
+            editor.putInt(PersonId, bgPersonAddressModelList.get(0).person_id);
+            editor.putInt(AddressId, bgPersonAddressModelList.get(0).address_id);
             editor.apply();
 
             Intent intent = new Intent(context, AddBgMainActivity.class);
@@ -419,6 +427,8 @@ public class OvListActivity extends AppCompatActivity {
             editor.putString(AddressLine2, mrcPersonAddressModelList.get(0).address_line2);
             editor.putString(LocationDescription, mrcPersonAddressModelList.get(0).location_description);
             editor.putString(MrcRunId, mrcPersonAddressModelList.get(0).run_name);
+            editor.putInt(PersonId, mrcPersonAddressModelList.get(0).person_id);
+            editor.putInt(AddressId, mrcPersonAddressModelList.get(0).address_id);
             editor.apply();
             Intent intent = new Intent(context, AddMrcMainActivity.class);
             intent.putExtra("TrapId", v.getTag().toString());
