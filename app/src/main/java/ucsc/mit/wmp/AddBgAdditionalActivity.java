@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +121,8 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
                         bg_run_id, 0, 0, location_coordinates,
                         "no");
                 int flag = dbHandler.updateSingleBgTrap(bgTrapModel);
-                Log.d("flag", String.valueOf(flag));
+                Toast.makeText(context, "BG has been updated successfully.",
+                        Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(context, OvListActivity.class);
                 intent.putExtra("type", "bg");
                 intent.putExtra("form-type", form_type);
@@ -146,8 +148,8 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
                             bg_run_id, lastPersonId, lastAddressId, location_coordinates,
                             "no");
                     dbHandler.insertDataBgTrap(bgTrapModel);
-                    Log.d("lastPersonId", Integer.toString(lastPersonId));
-                    Log.d("lastAddressId", Integer.toString(lastAddressId));
+                    Toast.makeText(context, "BG has been added successfully.",
+                            Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(context, OvListActivity.class);
                     intent.putExtra("type", "bg");
                     startActivity(intent);

@@ -46,8 +46,86 @@
             android:id="@+id/editTextTrapId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
             android:inputType="textPersonName" />
+        <TextView
+            android:id="@+id/errorContainerMrcIdentifier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:textColor="#FF0000"
+            android:text="MRC identifier is already existing."
+            android:textSize="17dp" />
 
+        <TextView
+            android:id="@+id/textViewId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:text="Collection Id (*)"
+            android:textColor="#000000"
+            android:textSize="17dp" />
+
+        <EditText
+            android:id="@+id/editTextTrapId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
+            android:inputType="textPersonName" />
+        <TextView
+            android:id="@+id/errorContainerMrcIdentifier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:textColor="#FF0000"
+            android:text="Collection id is already existing."
+            android:textSize="17dp" />
+
+        <TextView
+            android:id="@+id/textViewStatus"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:text="Collection Status (*)"
+            android:textColor="#000000"
+            android:textSize="17dp" />
+
+        <RadioGroup
+            android:id="@+id/serviceStatus"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
+
+            <RadioButton
+                android:id="@+id/radioProposed"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginTop="4dp"
+                android:checked="false"
+                android:text="Collected"
+                android:textSize="17dp" />
+
+            <RadioButton
+                android:id="@+id/radioSet"
+                android:layout_width="wrap_content"
+                android:layout_height="25dp"
+                android:layout_marginTop="4dp"
+                android:checked="false"
+                android:text="Not Collected"
+                android:textSize="17dp" />
+        </RadioGroup>
+        <TextView
+            android:id="@+id/errorContainerMrcIdentifier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:textColor="#FF0000"
+            android:text="Please select collection status."
+            android:textSize="17dp" />
         <TextView
             android:id="@+id/textViewStatus"
             android:layout_width="match_parent"
@@ -88,7 +166,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Respondent Name"
+            android:text="Respondent Name (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
@@ -96,6 +174,7 @@
             android:id="@+id/editTextRespondentName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
             android:inputType="textPersonName" />
 
         <TextView
@@ -104,7 +183,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Location Coordinates"
+            android:text="Location Coordinates (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
@@ -113,7 +192,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="textPersonName"
-            android:onClick="viewCoordinates" />
+            android:onClick="viewCoordinates"/>
         <TextView
             android:id="@+id/errorContainer"
             android:layout_width="match_parent"

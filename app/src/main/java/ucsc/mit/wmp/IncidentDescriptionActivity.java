@@ -144,8 +144,24 @@ public class IncidentDescriptionActivity extends AppCompatActivity {
             Log.d("incidentpriority", SpinnerIncidentPriority.getSelectedItem().toString());
             SharedPreferences.Editor editor = sharedpreferences.edit();
 
-            editor.putString(Incident_type, SpinnerIncidentType.getSelectedItem().toString());
-            editor.putString(Incident_priority, SpinnerIncidentPriority.getSelectedItem().toString());
+            if(SpinnerIncidentType.getSelectedItem().toString().equals("Community Complaint")) {
+                editor.putString(Incident_type, "1");
+            }
+            if(SpinnerIncidentType.getSelectedItem().toString().equals("Community Enquiry")) {
+                editor.putString(Incident_type, "2");
+            }
+            if(SpinnerIncidentType.getSelectedItem().toString().equals("Operational Incident")) {
+                editor.putString(Incident_type, "3");
+            }
+            if(SpinnerIncidentPriority.getSelectedItem().toString().equals("High")) {
+                editor.putString(Incident_priority, "1");
+            }
+            if(SpinnerIncidentPriority.getSelectedItem().toString().equals("Medium")) {
+                editor.putString(Incident_priority, "2");
+            }
+            if(SpinnerIncidentPriority.getSelectedItem().toString().equals("Low")) {
+                editor.putString(Incident_priority, "3");
+            }
             editor.putString(Description, EditTextDescription.getText().toString());
             editor.putString(Incident_date, selectedDate);
             editor.putString(Incident_time_hour, String.valueOf(hour));

@@ -149,13 +149,36 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
+/*
+        // Add geojson layers
+        GeoJsonLayer layer_cmc = null;
+        GeoJsonLayer layer_nug = null;
+        try {
+            layer_cmc = new GeoJsonLayer(mMap, R.raw.cmc84,
+                    getApplicationContext());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        layer_cmc.addLayerToMap();
 
+
+        try {
+            layer_nug = new GeoJsonLayer(mMap, R.raw.nug84,
+                    getApplicationContext());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        layer_nug.addLayerToMap();
+*/
         // below line is to add marker to google maps
         for (int i = 0; i < latLngArrayList.size(); i++) {
 
             // adding marker to each location on google maps
-            mMap.addMarker(new MarkerOptions().position(latLngArrayList.get(i)).title("Marker in " +
-                    locationNameArraylist.get(i)).icon(BitmapDescriptorFactory.defaultMarker
+            mMap.addMarker(new MarkerOptions().position(latLngArrayList.get(i)).zIndex(2.0f).icon(BitmapDescriptorFactory.defaultMarker
                     (BitmapDescriptorFactory.HUE_ROSE))).setTag(locationNameArraylist.get(i));
 
             // below line is use to move camera.
@@ -166,10 +189,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
+                Log.d("testclick","testclick");
+
                 // on marker click we are getting the title of our marker
                 // which is clicked and displaying it in a toast message.
-                //String markerName = marker.getTitle();
-                //Toast.makeText(MapsActivity.this, "Clicked location is " + markerName, Toast.LENGTH_SHORT).show();
+
                 if(field_type.equals("ov")) {
                     dbHandler = new DbHandler(context);
                     ovPersonAddressModelList = new ArrayList<>();
@@ -248,6 +272,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
             }
         });
+
     }
     public void goListView(View pView) {
         Intent intent = new Intent(context, OvListActivity.class);

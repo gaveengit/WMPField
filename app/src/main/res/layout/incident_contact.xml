@@ -56,7 +56,17 @@
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
             android:inputType="textPersonName" />
+        <TextView
+            android:id="@+id/errorContainerEmail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:textColor="#FF0000"
+            android:text="Format of email address is invalid."
+            android:textSize="17dp" />
 
         <TextView
             android:id="@+id/textViewPhone"
@@ -72,16 +82,17 @@
             android:id="@+id/editTextPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
             android:inputType="number" />
 
         <TextView
-            android:id="@+id/errorContainer"
+            android:id="@+id/errorContainerPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
             android:textColor="#FF0000"
-            android:visibility="gone"
+          android:text="Format of phone no is invalid."
             android:textSize="17dp" />
 
         <RelativeLayout
@@ -106,13 +117,14 @@
                 app:backgroundTint="@color/red" />
 
             <Button
+                android:id="@+id/nextbtn"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="#008000"
-                android:onClick="goIncidentDescription"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
+                android:onClick="goIncidentDescription"
                 android:text="Next"
                 android:textColor="#ffffff"
                 app:backgroundTint="@color/green" />

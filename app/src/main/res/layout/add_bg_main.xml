@@ -48,7 +48,17 @@
         android:id="@+id/editTextTrapId"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/red"
         android:inputType="textPersonName" />
+    <TextView
+        android:id="@+id/errorContainerBg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@android:color/transparent"
+        android:textColor="#FF0000"
+        android:text="BG trap id is already existing."
+        android:textSize="17dp" />
 
     <TextView
         android:id="@+id/textViewStatus"
@@ -114,6 +124,7 @@
         android:id="@+id/editTextRespondentName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/red"
         android:inputType="textPersonName" />
     <TextView
         android:id="@+id/textViewLocation"

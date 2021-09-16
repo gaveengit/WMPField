@@ -78,7 +78,7 @@ public class AddMrcMainActivity extends AppCompatActivity {
         EditTextRespondName = (EditText) findViewById(R.id.editTextRespondentName);
         EditTextLocationCoordinates = (EditText) findViewById(R.id.editTextLocation);
         errorText = (TextView) findViewById(R.id.errorContainer);
-        RadioProposed.setChecked(true);
+        //RadioProposed.setChecked(true);
         sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
         String ovi_trap_id = sharedpreferences.getString(MrcId, "");
         String trap_status = sharedpreferences.getString(MrcStatus, "");

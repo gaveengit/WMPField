@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -120,7 +121,8 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
                         mrc_run_id, 0, 0, location_coordinates,
                         "no");
                 int flag = dbHandler.updateSingleMrc(mrcModel);
-                Log.d("flag",String.valueOf(flag));
+                Toast.makeText(context, "OVI collection has been added successfully.",
+                        Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(context, OvListActivity.class);
                 intent.putExtra("type", "mrc");
                 startActivity(intent);
@@ -145,8 +147,8 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
                             mrc_run_id, lastPersonId, lastAddressId, location_coordinates,
                             "no");
                     dbHandler.insertDataMrc(mrcModel);
-                    Log.d("lastPersonId", Integer.toString(lastPersonId));
-                    Log.d("lastAddressId", Integer.toString(lastAddressId));
+                    Toast.makeText(context, "BG service has been added successfully.",
+                            Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(context, OvListActivity.class);
                     intent.putExtra("type", "mrc");
                     startActivity(intent);
