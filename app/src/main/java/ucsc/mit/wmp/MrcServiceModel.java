@@ -1,10 +1,10 @@
 package ucsc.mit.wmp;
 
-public class MrcReleaseModel {
-    public String release_id;
-    public String release_date;
-    public String release_time;
-    public String release_status;
+public class MrcServiceModel {
+    public String service_id;
+    public String service_date;
+    public String service_time;
+    public String service_status;
     public String mrc_run_id;
     public String trap_id;
     public String coordinates;
@@ -14,12 +14,12 @@ public class MrcReleaseModel {
     public String full_name;
     public String contact_number;
 
-    public MrcReleaseModel(){
+    public MrcServiceModel(){
 
     }
 
-    public MrcReleaseModel(String mrc_run_id,String trap_id,String coordinates, String add_line1, String add_line2, String location_description,
-                           String full_name, String contact_number) {
+    public MrcServiceModel(String mrc_run_id,String trap_id,String coordinates, String add_line1, String add_line2, String location_description,
+                          String full_name, String contact_number) {
         this.mrc_run_id = mrc_run_id;
         this.trap_id = trap_id;
         this.coordinates = coordinates;
@@ -30,20 +30,20 @@ public class MrcReleaseModel {
         this.contact_number = contact_number;
     }
 
-    public void setRelease_id(String release_id) {
-        this.release_id = release_id;
+    public void setService_id(String service_id) {
+        this.service_id = service_id;
     }
 
-    public void setDate(String release_date) {
-        this.release_date = release_date;
+    public void setDate(String service_date) {
+        this.service_date = service_date;
     }
 
-    public void setTime(String release_time) {
-        this.release_time = release_time;
+    public void setTime(String service_time) {
+        this.service_time = service_time;
     }
 
-    public void setRelease_status(String release_status) {
-        this.release_status = release_status;
+    public void setService_status(String service_status) {
+        this.service_status = service_status;
     }
 
     public void setMrc_trap_id(String mrc_trap_id) {
@@ -78,20 +78,20 @@ public class MrcReleaseModel {
     }
 
 
-    public String getRelease_id() {
-        return release_id;
+    public String getService_id() {
+        return service_id;
     }
 
     public String getDate() {
-        return release_date;
+        return service_date;
     }
 
     public String getTime() {
-        return release_time;
+        return service_time;
     }
 
-    public String getRelease_status() {
-        return release_status;
+    public String getService_status() {
+        return service_status;
     }
 
     public String getMrc_run_id() {
