@@ -41,7 +41,7 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
     private List<AddressModel> addressList;
     private List<String> personListLast;
     private List<String> addressListLast;
-    private List<BgPersonAddressModel> bgPersonAddressModelList;
+    private List<BgTrapModel> bgPersonAddressModelList;
     String form_type;
 
     @Override
@@ -103,7 +103,7 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
             String trap_position = sharedpreferences.getString(TrapPosition, "");
             String respond_name = sharedpreferences.getString(RespondName, "");
             String location_coordinates = sharedpreferences.getString(LocationCoordinates, "");
-            String bg_run_id = sharedpreferences.getString(BgRunId, "");
+            String bg_run_id = "Dry Run";
             String phone = sharedpreferences.getString(Phone, "");
             String address_line1 = sharedpreferences.getString(AddressLine1, "");
             String address_line2 = sharedpreferences.getString(AddressLine2, "");
@@ -117,10 +117,10 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
                 AddressModel addressModel = new AddressModel(address_line1, address_line2, location_description, "no");
                 addressModel.setAddress_id(address_id);
                 dbHandler.updateSingleAddress(addressModel);
-                BgTrapModel bgTrapModel = new BgTrapModel(bg_trap_id, trap_status, trap_position,
-                        bg_run_id, 0, 0, location_coordinates,
-                        "no");
-                int flag = dbHandler.updateSingleBgTrap(bgTrapModel);
+                //BgTrapModel bgTrapModel = new BgTrapModel(bg_trap_id, trap_status, trap_position,
+                        //, 0, 0, location_coordinates,
+                        //"no");
+                //int flag = dbHandler.updateSingleBgTrap(bgTrapModel);
                 Toast.makeText(context, "BG has been updated successfully.",
                         Toast.LENGTH_LONG).show();
                 Intent intent = new Intent(context, OvListActivity.class);
@@ -135,24 +135,27 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
                 if (bgPersonAddressModelList.size() > 0) {
                     errorText.setVisibility(View.VISIBLE);
                     errorText.setText("BG trap id is already existing.");
-                } else {
-                    PersonModel personModel = new PersonModel(respond_name, Integer.parseInt(phone), "no");
-                    dbHandler.insertDataPerson(personModel);
-                    personList = dbHandler.getLastPerson();
-                    int lastPersonId = personList.get(0).person_id;
-                    AddressModel addressModel = new AddressModel(address_line1, address_line2, location_description, "no");
-                    dbHandler.insertDataAddress(addressModel);
-                    addressList = dbHandler.getLastAddresses();
-                    int lastAddressId = addressList.get(0).address_id;
-                    BgTrapModel bgTrapModel = new BgTrapModel(bg_trap_id, trap_status, trap_position,
-                            bg_run_id, lastPersonId, lastAddressId, location_coordinates,
-                            "no");
-                    dbHandler.insertDataBgTrap(bgTrapModel);
-                    Toast.makeText(context, "BG has been added successfully.",
+                    Toast.makeText(context, "BG trap id is already existing.",
                             Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(context, OvListActivity.class);
-                    intent.putExtra("type", "bg");
-                    startActivity(intent);
+                } else {
+                    BgTrapModel bgTrapModel = new BgTrapModel(bg_trap_id, trap_status, trap_position,
+                            bg_run_id, respond_name,phone, address_line1,address_line2,location_description,location_coordinates);
+                    long flag = dbHandler.insertDataBgTrap(bgTrapModel);
+                    if(flag != -1) {
+                        Toast.makeText(context, "BG trap has been added successfully.",
+                                Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(context, OvListActivity.class);
+                        intent.putExtra("type", "bg");
+                        startActivity(intent);
+                    }
+                    else{
+                        Toast.makeText(context, "Failure in adding BG trap. Please try again..",
+                                Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(context, OvListActivity.class);
+                        intent.putExtra("type", "bg");
+                        startActivity(intent);
+                    }
+
                 }
             }
         }

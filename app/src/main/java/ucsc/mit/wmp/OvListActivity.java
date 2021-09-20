@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
@@ -58,13 +59,19 @@ public class OvListActivity extends AppCompatActivity {
     public static final String PersonId = "PersonId";
     public static final String AddressId = "AddressId";
     private List<OvTrapModel> ovModelList;
-    private List<OvPersonAddressModel> ovPersonAddressModelList;
-    private List<BgPersonAddressModel> bgPersonAddressModelList;
-    private List<MrcPersonAddressModel> mrcPersonAddressModelList;
+    private List<OviServiceModel> ovServiceModelList;
+    private List<OviCollectionModel> ovCollectionModelList;
+    private List<OvTrapModel> ovPersonAddressModelList;
+    private List<BgTrapModel> bgPersonAddressModelList;
+    private List<MrcModel> mrcPersonAddressModelList;
     private List<String> ovList;
     private List<BgTrapModel> bgModelList;
+    private List<BgServiceModel> bgServiceModelList;
+    private List<BgCollectionModel> bgCollectionModelList;
     private List<String> bgList;
     private List<MrcModel> mrcModelList;
+    private List<MrcServiceModel> mrcServiceModelList;
+    private List<MrcReleaseModel> mrcReleaseModelList;
     private List<String> mrcList;
 
 
@@ -121,79 +128,230 @@ public class OvListActivity extends AppCompatActivity {
         editor.putString(MrcRunId, "");
         editorMrc.apply();
 
-        String run_name = spinnerRuns.getSelectedItem().toString();
-        Log.d("field_type", field_type);
-        Log.d("run_name", run_name);
+        String run_name;
+
         if (field_type.equals("ov")) {
             dbHandler = new DbHandler(context);
+            List<String> ovi_runs = dbHandler.getAllOviRuns();
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, ovi_runs);
+            spinnerRuns.setAdapter(dataAdapter);
+
+            if (spinnerRuns.getSelectedItem() == null) {
+                run_name = "";
+            } else {
+                run_name = spinnerRuns.getSelectedItem().toString();
+            }
             ovModelList = new ArrayList<>();
             ovList = new ArrayList<>();
             ovModelList = dbHandler.getSingleOvTrap(run_name, field_type);
             Log.d("size-ov", Integer.toString(ovModelList.size()));
-            for (int i = 0; i < ovModelList.size(); ++i) {
-                Log.d("test-ov_trap_id", ovModelList.get(i).ov_trap_id.toString());
-                Log.d("test-trap_status", ovModelList.get(i).trap_status.toString());
-                Log.d("test-position", ovModelList.get(i).position.toString());
-                Log.d("test-run_name", ovModelList.get(i).run_name.toString());
-                Log.d("test-person_id", Integer.toString(ovModelList.get(i).person_id));
-                Log.d("test-address_id", Integer.toString(ovModelList.get(i).address_id));
-                Log.d("test-coordinates", ovModelList.get(i).coordinates.toString());
-                Log.d("test-exist", ovModelList.get(i).exist_in_remote_server.toString());
-                RelativeLayout rl1 = new RelativeLayout(this);
-                rl1.setId(i);
-                rl1.setLayoutParams(new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.MATCH_PARENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));
-                rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
-                rl1.setPadding(15, 10, 15, 10);
-                rl1.setTag(ovModelList.get(i).ov_trap_id.toString());
-                rl1.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        goIndividualOv(v);
-                    }
-                });
-                l1.addView(rl1);
-                l1.invalidate();
-                LinearLayout l2 = new LinearLayout(this);
-                l2.setLayoutParams(new ViewGroup.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT));
-                l2.setTag(ovModelList.get(i).ov_trap_id.toString());
-                l2.setOrientation(LinearLayout.VERTICAL);
-                l2.setPadding(0, 10, 0, 10);
-                rl1.addView(l2);
-                rl1.invalidate();
-                TextView tv1 = new TextView(this);
-                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.setMargins(5, 0, 0, 0);
-                tv1.setLayoutParams(params);
-                tv1.setBackgroundColor(Color.TRANSPARENT);
-                tv1.setTag(ovModelList.get(i).ov_trap_id.toString());
-                tv1.setText(ovModelList.get(i).ov_trap_id.toString());
-                tv1.setTextColor(Color.BLACK);
-                tv1.setTextSize(20);
-                l2.addView(tv1);
-                l2.invalidate();
-                TextView tv2 = new TextView(this);
-                tv2.setPadding(0, 5, 10, 0);
-                tv2.setLayoutParams(params);
-                tv2.setTag(ovModelList.get(i).ov_trap_id.toString());
-                tv2.setBackgroundColor(Color.TRANSPARENT);
-                tv2.setTextSize(16);
-                //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+            if (ovModelList.size() > 0) {
+                for (int i = 0; i < ovModelList.size(); ++i) {
+                    Log.d("test-ov_trap_id", ovModelList.get(i).ov_trap_id.toString());
+                    Log.d("test-trap_status", ovModelList.get(i).trap_status.toString());
+                    Log.d("test-position", ovModelList.get(i).position.toString());
+                    Log.d("test-run_name", ovModelList.get(i).run_name.toString());
+                    // Log.d("test-person_id", Integer.toString(ovModelList.get(i).person_id));
+                    //Log.d("test-address_id", Integer.toString(ovModelList.get(i).address_id));
+                    Log.d("test-coordinates", ovModelList.get(i).coordinates.toString());
+                    //Log.d("test-exist", ovModelList.get(i).exist_in_remote_server.toString());
+                    RelativeLayout rl1 = new RelativeLayout(this);
+                    rl1.setId(i);
+                    rl1.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.MATCH_PARENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                    rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
+                    rl1.setPadding(15, 10, 15, 10);
+                    rl1.setTag(ovModelList.get(i).ov_trap_id.toString());
+                    rl1.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            goIndividualOv(v);
+                        }
+                    });
+                    l1.addView(rl1);
+                    l1.invalidate();
+                    LinearLayout l2 = new LinearLayout(this);
+                    l2.setLayoutParams(new ViewGroup.LayoutParams(
+                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                    l2.setTag(ovModelList.get(i).ov_trap_id.toString());
+                    l2.setOrientation(LinearLayout.VERTICAL);
+                    l2.setPadding(0, 10, 0, 10);
+                    rl1.addView(l2);
+                    rl1.invalidate();
+                    TextView tv1 = new TextView(this);
+                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.setMargins(5, 0, 0, 0);
+                    tv1.setLayoutParams(params);
+                    tv1.setBackgroundColor(Color.TRANSPARENT);
+                    tv1.setTag(ovModelList.get(i).ov_trap_id.toString());
+                    tv1.setText(ovModelList.get(i).ov_trap_id.toString());
+                    tv1.setTextColor(Color.BLACK);
+                    tv1.setTextSize(20);
+                    l2.addView(tv1);
+                    l2.invalidate();
+                    TextView tv2 = new TextView(this);
+                    tv2.setPadding(0, 5, 10, 0);
+                    tv2.setLayoutParams(params);
+                    tv2.setTag(ovModelList.get(i).ov_trap_id.toString());
+                    tv2.setBackgroundColor(Color.TRANSPARENT);
+                    tv2.setTextSize(16);
+                    //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
+                    //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
 
-                tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
-                rl1.addView(tv2);
-                rl1.invalidate();
-                LayoutParams layoutarams;
-                layoutarams = (LayoutParams) tv2.getLayoutParams();
-                layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                tv2.setLayoutParams(layoutarams);
+                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                    rl1.addView(tv2);
+                    rl1.invalidate();
+                    LayoutParams layoutarams;
+                    layoutarams = (LayoutParams) tv2.getLayoutParams();
+                    layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                    tv2.setLayoutParams(layoutarams);
+                }
+            } else {
+                ovServiceModelList = new ArrayList<>();
+                ovList = new ArrayList<>();
+                ovServiceModelList = dbHandler.getSingleOviService(run_name, field_type);
+                if (ovServiceModelList.size() > 0) {
+                    for (int i = 0; i < ovServiceModelList.size(); ++i) {
+                        Log.d("test-ov_trap_id", ovServiceModelList.get(i).trap_id.toString());
+                        //Log.d("test-trap_status", ovServiceModelList.get(i).service_status.toString());
+                        Log.d("test-position", ovServiceModelList.get(i).trap_position.toString());
+                        Log.d("test-run_name", ovServiceModelList.get(i).ovi_run_id.toString());
+                        Log.d("test-coordinates", ovServiceModelList.get(i).coordinates.toString());
+                        RelativeLayout rl1 = new RelativeLayout(this);
+                        rl1.setId(i);
+                        rl1.setLayoutParams(new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.MATCH_PARENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                        rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
+                        rl1.setPadding(15, 10, 15, 10);
+                        rl1.setTag(ovServiceModelList.get(i).trap_id.toString());
+                        rl1.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                goIndividualOv(v);
+                            }
+                        });
+                        l1.addView(rl1);
+                        l1.invalidate();
+                        LinearLayout l2 = new LinearLayout(this);
+                        l2.setLayoutParams(new ViewGroup.LayoutParams(
+                                ViewGroup.LayoutParams.WRAP_CONTENT,
+                                ViewGroup.LayoutParams.WRAP_CONTENT));
+                        l2.setTag(ovServiceModelList.get(i).trap_id.toString());
+                        l2.setOrientation(LinearLayout.VERTICAL);
+                        l2.setPadding(0, 10, 0, 10);
+                        rl1.addView(l2);
+                        rl1.invalidate();
+                        TextView tv1 = new TextView(this);
+                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                        params.setMargins(5, 0, 0, 0);
+                        tv1.setLayoutParams(params);
+                        tv1.setBackgroundColor(Color.TRANSPARENT);
+                        tv1.setTag(ovServiceModelList.get(i).trap_id.toString());
+                        tv1.setText(ovServiceModelList.get(i).trap_id.toString());
+                        tv1.setTextColor(Color.BLACK);
+                        tv1.setTextSize(20);
+                        l2.addView(tv1);
+                        l2.invalidate();
+                        TextView tv2 = new TextView(this);
+                        tv2.setPadding(0, 5, 10, 0);
+                        tv2.setLayoutParams(params);
+                        tv2.setTag(ovServiceModelList.get(i).trap_id.toString());
+                        tv2.setBackgroundColor(Color.TRANSPARENT);
+                        tv2.setTextSize(16);
+                        //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
+                        //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+
+                        tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                        rl1.addView(tv2);
+                        rl1.invalidate();
+                        LayoutParams layoutarams;
+                        layoutarams = (LayoutParams) tv2.getLayoutParams();
+                        layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                        tv2.setLayoutParams(layoutarams);
+                    }
+                } else {
+                    ovCollectionModelList = new ArrayList<>();
+                    ovList = new ArrayList<>();
+                    ovCollectionModelList = dbHandler.getSingleOviCollection(run_name, field_type);
+                    if (ovCollectionModelList.size() > 0) {
+                        for (int i = 0; i < ovCollectionModelList.size(); ++i) {
+                            Log.d("test-ov_trap_id", ovCollectionModelList.get(i).trap_id.toString());
+                            Log.d("test-trap_status", ovCollectionModelList.get(i).collection_status.toString());
+                            Log.d("test-position", ovCollectionModelList.get(i).trap_position.toString());
+                            Log.d("test-run_name", ovCollectionModelList.get(i).ovi_run_id.toString());
+                            Log.d("test-coordinates", ovCollectionModelList.get(i).coordinates.toString());
+                            RelativeLayout rl1 = new RelativeLayout(this);
+                            rl1.setId(i);
+                            rl1.setLayoutParams(new ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                            rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
+                            rl1.setPadding(15, 10, 15, 10);
+                            rl1.setTag(ovCollectionModelList.get(i).trap_id.toString());
+                            rl1.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    goIndividualOv(v);
+                                }
+                            });
+                            l1.addView(rl1);
+                            l1.invalidate();
+                            LinearLayout l2 = new LinearLayout(this);
+                            l2.setLayoutParams(new ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                            l2.setTag(ovCollectionModelList.get(i).trap_id.toString());
+                            l2.setOrientation(LinearLayout.VERTICAL);
+                            l2.setPadding(0, 10, 0, 10);
+                            rl1.addView(l2);
+                            rl1.invalidate();
+                            TextView tv1 = new TextView(this);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(5, 0, 0, 0);
+                            tv1.setLayoutParams(params);
+                            tv1.setBackgroundColor(Color.TRANSPARENT);
+                            tv1.setTag(ovCollectionModelList.get(i).trap_id.toString());
+                            tv1.setText(ovCollectionModelList.get(i).trap_id.toString());
+                            tv1.setTextColor(Color.BLACK);
+                            tv1.setTextSize(20);
+                            l2.addView(tv1);
+                            l2.invalidate();
+                            TextView tv2 = new TextView(this);
+                            tv2.setPadding(0, 5, 10, 0);
+                            tv2.setLayoutParams(params);
+                            tv2.setTag(ovCollectionModelList.get(i).trap_id.toString());
+                            tv2.setBackgroundColor(Color.TRANSPARENT);
+                            tv2.setTextSize(16);
+                            //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
+                            //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+
+                            tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                            rl1.addView(tv2);
+                            rl1.invalidate();
+                            LayoutParams layoutarams;
+                            layoutarams = (LayoutParams) tv2.getLayoutParams();
+                            layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                            tv2.setLayoutParams(layoutarams);
+                        }
+                    }
+                }
             }
         }
         if (field_type.equals("bg")) {
+            dbHandler = new DbHandler(context);
+            List<String> bg_runs = dbHandler.getAllBgRuns();
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, bg_runs);
+            spinnerRuns.setAdapter(dataAdapter);
+            if (spinnerRuns.getSelectedItem() == null) {
+                run_name = "";
+            } else {
+                run_name = spinnerRuns.getSelectedItem().toString();
+            }
             dbHandler = new DbHandler(context);
             bgModelList = new ArrayList<>();
             bgList = new ArrayList<>();
@@ -204,10 +362,10 @@ public class OvListActivity extends AppCompatActivity {
                 Log.d("test-trap_status", bgModelList.get(i).trap_status.toString());
                 Log.d("test-position", bgModelList.get(i).position.toString());
                 Log.d("test-run_name", bgModelList.get(i).run_name.toString());
-                Log.d("test-person_id", Integer.toString(bgModelList.get(i).person_id));
-                Log.d("test-address_id", Integer.toString(bgModelList.get(i).address_id));
+                //Log.d("test-person_id", Integer.toString(bgModelList.get(i).person_id));
+                // Log.d("test-address_id", Integer.toString(bgModelList.get(i).address_id));
                 Log.d("test-coordinates", bgModelList.get(i).coordinates.toString());
-                Log.d("test-exist", bgModelList.get(i).exist_in_remote_server.toString());
+                //Log.d("test-exist", bgModelList.get(i).exist_in_remote_server.toString());
 
                 RelativeLayout rl1 = new RelativeLayout(this);
                 rl1.setId(i);
@@ -266,6 +424,16 @@ public class OvListActivity extends AppCompatActivity {
 
         if (field_type.equals("mrc")) {
             dbHandler = new DbHandler(context);
+            List<String> mrc_runs = dbHandler.getAllMrcRuns();
+            ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_spinner_item, mrc_runs);
+            spinnerRuns.setAdapter(dataAdapter);
+            if (spinnerRuns.getSelectedItem() == null) {
+                run_name = "";
+            } else {
+                run_name = spinnerRuns.getSelectedItem().toString();
+            }
+            dbHandler = new DbHandler(context);
             mrcModelList = new ArrayList<>();
             mrcList = new ArrayList<>();
             mrcModelList = dbHandler.getSingleMrc(run_name, field_type);
@@ -274,10 +442,10 @@ public class OvListActivity extends AppCompatActivity {
                 Log.d("test-mrc_id", mrcModelList.get(i).identifier.toString());
                 Log.d("test-trap_status", mrcModelList.get(i).mrc_status.toString());
                 Log.d("test-run_name", mrcModelList.get(i).run_name.toString());
-                Log.d("test-person_id", Integer.toString(mrcModelList.get(i).person_id));
-                Log.d("test-address_id", Integer.toString(mrcModelList.get(i).address_id));
+//                Log.d("test-person_id", Integer.toString(mrcModelList.get(i).person_id));
+                //Log.d("test-address_id", Integer.toString(mrcModelList.get(i).address_id));
                 Log.d("test-coordinates", mrcModelList.get(i).coordinates.toString());
-                Log.d("test-exist", mrcModelList.get(i).exist_in_remote_server.toString());
+                // Log.d("test-exist", mrcModelList.get(i).exist_in_remote_server.toString());
 
                 RelativeLayout rl1 = new RelativeLayout(this);
                 rl1.setId(i);
@@ -383,16 +551,16 @@ public class OvListActivity extends AppCompatActivity {
                                 }
                                 if (sync_status != -1) {
                                     //Toast.makeText(context, "Data synchronization has been successfull.",
-                                            //Toast.LENGTH_LONG).show();
+                                    //Toast.LENGTH_LONG).show();
                                     //Intent intent = new Intent(context, OvListActivity.class);
                                     //intent.putExtra("type", "ov");
                                     //startActivity(intent);
                                 } else {
                                     //Toast.makeText(context, "Error in synchronization. Please try again.",
-                                            //Toast.LENGTH_LONG).show();
+                                    //Toast.LENGTH_LONG).show();
                                     //Intent intent = new Intent(context, OvListActivity.class);
                                     //intent.putExtra("type", "ov");
-                                   // startActivity(intent);
+                                    // startActivity(intent);
                                 }
                             } catch (Throwable t) {
 
@@ -508,13 +676,13 @@ public class OvListActivity extends AppCompatActivity {
                                 }
                                 if (sync_status != -1) {
                                     //Toast.makeText(context, "Data synchronization has been successfull.",
-                                            //Toast.LENGTH_LONG).show();
+                                    //Toast.LENGTH_LONG).show();
                                     //Intent intent = new Intent(context, OvListActivity.class);
                                     //intent.putExtra("type", "bg");
                                     //startActivity(intent);
                                 } else {
                                     //Toast.makeText(context, "Error in synchronization. Please try again.",
-                                            //Toast.LENGTH_LONG).show();
+                                    //Toast.LENGTH_LONG).show();
                                     //Intent intent = new Intent(context, OvListActivity.class);
                                     //intent.putExtra("type", "bg");
                                     //startActivity(intent);
@@ -631,13 +799,13 @@ public class OvListActivity extends AppCompatActivity {
                                 }
                                 if (sync_status != -1) {
                                     //Toast.makeText(context, "Data synchronization has been successfull.",
-                                            //Toast.LENGTH_LONG).show();
+                                    //Toast.LENGTH_LONG).show();
                                     //Intent intent = new Intent(context, OvListActivity.class);
                                     //intent.putExtra("type", "mrc");
                                     //startActivity(intent);
                                 } else {
                                     //Toast.makeText(context, "Error in synchronization. Please try again.",
-                                            //Toast.LENGTH_LONG).show();
+                                    //Toast.LENGTH_LONG).show();
                                     //Intent intent = new Intent(context, OvListActivity.class);
                                     //intent.putExtra("type", "mrc");
                                     //startActivity(intent);
@@ -709,7 +877,9 @@ public class OvListActivity extends AppCompatActivity {
                     }.execute();
 
                 }
-            };
+            }
+
+            ;
 
         });
     }
@@ -724,28 +894,16 @@ public class OvListActivity extends AppCompatActivity {
 
     public void goNewOv(View pView) {
         if (field_type.equals("bg")) {
-            sharedpreferences = getSharedPreferences(BgDetails, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editorBg = sharedpreferences.edit();
-            editorBg.putString(BgRunId, spinnerRuns.getSelectedItem().toString());
-            editorBg.apply();
             Intent intent = new Intent(context, AddBgMainActivity.class);
             intent.putExtra("form-type", "new");
             startActivity(intent);
         }
         if (field_type.equals("ov")) {
-            sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editorOvi = sharedpreferences.edit();
-            editorOvi.putString(OviRunId, spinnerRuns.getSelectedItem().toString());
-            editorOvi.apply();
             Intent intent = new Intent(context, AddOvMainActivity.class);
             intent.putExtra("form-type", "new");
             startActivity(intent);
         }
         if (field_type.equals("mrc")) {
-            sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editorMrc = sharedpreferences.edit();
-            editorMrc.putString(MrcRunId, spinnerRuns.getSelectedItem().toString());
-            editorMrc.apply();
             Intent intent = new Intent(context, AddMrcMainActivity.class);
             intent.putExtra("form-type", "new");
             startActivity(intent);
@@ -765,13 +923,13 @@ public class OvListActivity extends AppCompatActivity {
             editor.putString(TrapPosition, ovPersonAddressModelList.get(0).position.toString());
             editor.putString(RespondName, ovPersonAddressModelList.get(0).person_name);
             editor.putString(LocationCoordinates, ovPersonAddressModelList.get(0).coordinates);
-            editor.putString(Phone, String.valueOf(ovPersonAddressModelList.get(0).phone));
+            //editor.putString(Phone, String.valueOf(ovPersonAddressModelList.get(0).phone));
             editor.putString(AddressLine1, ovPersonAddressModelList.get(0).address_line1);
             editor.putString(AddressLine2, ovPersonAddressModelList.get(0).address_line2);
             editor.putString(LocationDescription, ovPersonAddressModelList.get(0).location_description);
             editor.putString(OviRunId, ovPersonAddressModelList.get(0).run_name);
-            editor.putInt(PersonId, ovPersonAddressModelList.get(0).person_id);
-            editor.putInt(AddressId, ovPersonAddressModelList.get(0).address_id);
+            //editor.putInt(PersonId, ovPersonAddressModelList.get(0).person_id);
+            //editor.putInt(AddressId, ovPersonAddressModelList.get(0).address_id);
             editor.apply();
 
             Intent intent = new Intent(context, AddOvMainActivity.class);
@@ -790,13 +948,13 @@ public class OvListActivity extends AppCompatActivity {
             editor.putString(TrapPosition, bgPersonAddressModelList.get(0).position.toString());
             editor.putString(RespondName, bgPersonAddressModelList.get(0).person_name);
             editor.putString(LocationCoordinates, bgPersonAddressModelList.get(0).coordinates);
-            editor.putString(Phone, String.valueOf(bgPersonAddressModelList.get(0).phone));
+            //editor.putString(Phone, String.valueOf(bgPersonAddressModelList.get(0).phone));
             editor.putString(AddressLine1, bgPersonAddressModelList.get(0).address_line1);
             editor.putString(AddressLine2, bgPersonAddressModelList.get(0).address_line2);
             editor.putString(LocationDescription, bgPersonAddressModelList.get(0).location_description);
             editor.putString(BgRunId, bgPersonAddressModelList.get(0).run_name);
-            editor.putInt(PersonId, bgPersonAddressModelList.get(0).person_id);
-            editor.putInt(AddressId, bgPersonAddressModelList.get(0).address_id);
+            //editor.putInt(PersonId, bgPersonAddressModelList.get(0).person_id);
+            //editor.putInt(AddressId, bgPersonAddressModelList.get(0).address_id);
             editor.apply();
 
             Intent intent = new Intent(context, AddBgMainActivity.class);
@@ -814,13 +972,13 @@ public class OvListActivity extends AppCompatActivity {
             editor.putString(MrcStatus, mrcPersonAddressModelList.get(0).mrc_status.toString());
             editor.putString(RespondName, mrcPersonAddressModelList.get(0).person_name);
             editor.putString(LocationCoordinates, mrcPersonAddressModelList.get(0).coordinates);
-            editor.putString(Phone, String.valueOf(mrcPersonAddressModelList.get(0).phone));
+            // editor.putString(Phone, String.valueOf(mrcPersonAddressModelList.get(0).phone));
             editor.putString(AddressLine1, mrcPersonAddressModelList.get(0).address_line1);
             editor.putString(AddressLine2, mrcPersonAddressModelList.get(0).address_line2);
             editor.putString(LocationDescription, mrcPersonAddressModelList.get(0).location_description);
             editor.putString(MrcRunId, mrcPersonAddressModelList.get(0).run_name);
-            editor.putInt(PersonId, mrcPersonAddressModelList.get(0).person_id);
-            editor.putInt(AddressId, mrcPersonAddressModelList.get(0).address_id);
+            //editor.putInt(PersonId, mrcPersonAddressModelList.get(0).person_id);
+            //editor.putInt(AddressId, mrcPersonAddressModelList.get(0).address_id);
             editor.apply();
             Intent intent = new Intent(context, AddMrcMainActivity.class);
             intent.putExtra("TrapId", v.getTag().toString());

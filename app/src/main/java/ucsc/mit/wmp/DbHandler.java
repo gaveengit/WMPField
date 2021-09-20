@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DbHandler extends SQLiteOpenHelper {
-    private static final int VERSION = 15;
+    private static final int VERSION = 21;
     private static final String DB_NAME = "FieldDatabase";
     // table and column names for person table
     private static final String TABLE_PERSON = "person";
@@ -93,26 +93,18 @@ public class DbHandler extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
-        String TABLE_CREATE_QUERY_PERSON = "CREATE TABLE " + TABLE_PERSON + " " + "(" + PERSON_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + PERSON_NAME
-                + " TEXT," + PERSON_PHONE +" INTEGER,"+ EXIST_IN_REMOTE_SERVER + " TEXT" + ");";
-        sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_PERSON);
-
-        String TABLE_CREATE_QUERY_ADDRESS = "CREATE TABLE " + TABLE_ADDRESS + " " + "(" + ADDRESS_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + ADDRESS_LINE1
-                + " TEXT," + ADDRESS_LINE2 + " TEXT," + LOCATION_DESCRIPTION + " TEXT," + EXIST_IN_REMOTE_SERVER + " TEXT" + ");";
-        sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_ADDRESS);
 
         String TABLE_CREATE_QUERY_MRC = "CREATE TABLE " + TABLE_MRC + " " + "(" + IDENTIFIER + " TEXT," + MRC_STATUS
-                + " TEXT," + RUN_NAME + " TEXT," + PERSON_ID + " INTEGER," + ADDRESS_ID + " INTEGER," + MRC_COORDINATES + " TEXT," + EXIST_IN_REMOTE_SERVER + " TEXT," + "primary key " + "(" + IDENTIFIER + ")," + "foreign key (person_id) references person(person_id)," + "foreign key (address_id) references address(address_id)" + ");";
+                + " TEXT," + RUN_NAME + " TEXT," + PERSON_NAME + " TEXT," + PERSON_PHONE +" INTEGER," +  ADDRESS_LINE1 + " TEXT," + ADDRESS_LINE2 + " TEXT," + LOCATION_DESCRIPTION + " TEXT," + MRC_COORDINATES + " TEXT," + "primary key " + "(" + IDENTIFIER + ")"+");";
         sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_MRC);
 
         String TABLE_CREATE_QUERY_BG_TRAP = "CREATE TABLE " + TABLE_BG_TRAP + " " + "(" + BG_TRAP_ID + " TEXT," + BG_TRAP_STATUS
-                + " TEXT," + BG_POSITION + " TEXT," + RUN_NAME + " TEXT," + PERSON_ID + " INTEGER," + ADDRESS_ID + " INTEGER," +  BG_COORDINATES + " TEXT,"+ EXIST_IN_REMOTE_SERVER + " TEXT," + "primary key " + "(" + BG_TRAP_ID + ")," + "foreign key (person_id) references person(person_id)," + "foreign key (address_id) references address(address_id)" + ");";
+                + " TEXT," + BG_POSITION + " TEXT," + RUN_NAME + " TEXT," + PERSON_NAME + " TEXT," + PERSON_PHONE +" INTEGER," +  ADDRESS_LINE1 + " TEXT," + ADDRESS_LINE2 + " TEXT," + LOCATION_DESCRIPTION + " TEXT," +  BG_COORDINATES + " TEXT,"+ "primary key " + "(" + BG_TRAP_ID + ")"+");";
         sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_BG_TRAP);
 
         String TABLE_CREATE_QUERY_OV_TRAP = "CREATE TABLE " + TABLE_OV_TRAP + " " + "(" + OV_TRAP_ID + " TEXT," + OV_TRAP_STATUS
-                + " TEXT," + OV_POSITION + " TEXT," + RUN_NAME + " TEXT," + PERSON_ID + " INTEGER," + ADDRESS_ID + " INTEGER," + OV_COORDINATES + " TEXT,"+EXIST_IN_REMOTE_SERVER + " TEXT," + "primary key " + "(" + OV_TRAP_ID + ")," + "foreign key (person_id) references person(person_id)," + "foreign key (address_id) references address(address_id)" + ");";
+                + " TEXT," + OV_POSITION + " TEXT," + RUN_NAME + " TEXT," + PERSON_NAME + " TEXT," + PERSON_PHONE +" INTEGER," +  ADDRESS_LINE1 + " TEXT," + ADDRESS_LINE2 + " TEXT," + LOCATION_DESCRIPTION + " TEXT," + OV_COORDINATES + " TEXT," + "primary key " + "(" + OV_TRAP_ID + ")"+ ");";
         sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_OV_TRAP);
-
 
         String TABLE_CREATE_QUERY_OVI_SERVICE = "CREATE TABLE " + TABLE_OVI_SERVICE + " " + "(" + OVI_RUN_ID + " TEXT," + TRAP_ID
                 + " TEXT," + TRAP_POSITION + " TEXT," + COORDINATES + " TEXT," + ADD_LINE1 + " TEXT," + ADD_LINE2 + " TEXT," + LOCATION_DESCRIPTION+" TEXT,"+ FULL_NAME + " TEXT," + CONTACT_NUMBER + " TEXT," + SERVICE_ID + " TEXT," + SERVICE_DATE +" TEXT,"+ SERVICE_TIME +" TEXT,"+ SERVICE_STATUS+ " TEXT," +"primary key " + "(" + OVI_RUN_ID +","+ TRAP_ID + ")" + ");";
@@ -141,10 +133,6 @@ public class DbHandler extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase sqLiteDatabase, int i, int i1) {
-        String DROP_TABLE_QUERY_TABLE_PERSON = "DROP TABLE IF EXISTS " + TABLE_PERSON;
-        sqLiteDatabase.execSQL(DROP_TABLE_QUERY_TABLE_PERSON);
-        String DROP_TABLE_QUERY_TABLE_ADDRESS = "DROP TABLE IF EXISTS " + TABLE_ADDRESS;
-        sqLiteDatabase.execSQL(DROP_TABLE_QUERY_TABLE_ADDRESS);
         String DROP_TABLE_QUERY_TABLE_MRC = "DROP TABLE IF EXISTS " + TABLE_MRC;
         sqLiteDatabase.execSQL(DROP_TABLE_QUERY_TABLE_MRC);
         String DROP_TABLE_QUERY_TABLE_MRC_RELEASE = "DROP TABLE IF EXISTS " + TABLE_MRC_RELEASE;
@@ -192,38 +180,46 @@ public class DbHandler extends SQLiteOpenHelper {
         sqLiteDatabase.close();
     }
 
-    public void insertDataMrc(MrcModel mrcObj) {
+    public long insertDataMrc(MrcModel mrcObj) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(IDENTIFIER, mrcObj.getIdentifier());
         contentValues.put(MRC_STATUS, mrcObj.getMrc_status());
         contentValues.put(RUN_NAME, mrcObj.getRun_name());
-        contentValues.put(PERSON_ID, mrcObj.getPerson_id());
-        contentValues.put(ADDRESS_ID, mrcObj.getAddress_id());
+        contentValues.put(PERSON_NAME, mrcObj.getPerson_name());
+        contentValues.put(PERSON_PHONE, mrcObj.getPerson_phone());
+        contentValues.put(ADDRESS_LINE1, mrcObj.getAddress_line1());
+        contentValues.put(ADDRESS_LINE2 ,mrcObj.getAddress_line2());
         contentValues.put(MRC_COORDINATES, mrcObj.getCoordinates());
-        contentValues.put(EXIST_IN_REMOTE_SERVER, mrcObj.getExist_in_remote_server());
+        contentValues.put(LOCATION_DESCRIPTION, mrcObj.getLocation_description());
         // save to table
-        sqLiteDatabase.insert(TABLE_MRC, null, contentValues);
+        long flag = sqLiteDatabase.insert(TABLE_MRC, null, contentValues);
         // close connection
         sqLiteDatabase.close();
+
+        return flag;
     }
 
 
-    public void insertDataBgTrap(BgTrapModel bgTrapObj) {
+    public long insertDataBgTrap(BgTrapModel bgTrapObj) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BG_TRAP_ID, bgTrapObj.getBg_trap_id());
         contentValues.put(BG_TRAP_STATUS, bgTrapObj.getTrap_status());
         contentValues.put(BG_POSITION, bgTrapObj.getPosition());
         contentValues.put(RUN_NAME, bgTrapObj.getRun_name());
-        contentValues.put(PERSON_ID, bgTrapObj.getPerson_id());
-        contentValues.put(ADDRESS_ID, bgTrapObj.getAddress_id());
+        contentValues.put(PERSON_NAME, bgTrapObj.getPerson_name());
+        contentValues.put(PERSON_PHONE, bgTrapObj.getPerson_phone());
+        contentValues.put(ADDRESS_LINE1, bgTrapObj.getAddress_line1());
+        contentValues.put(ADDRESS_LINE2 ,bgTrapObj.getAddress_line2());
         contentValues.put(BG_COORDINATES, bgTrapObj.getCoordinates());
-        contentValues.put(EXIST_IN_REMOTE_SERVER, bgTrapObj.getExist_in_remote_server());
+        contentValues.put(LOCATION_DESCRIPTION, bgTrapObj.getLocation_description());
         // save to table
-        sqLiteDatabase.insert(TABLE_BG_TRAP, null, contentValues);
+        long flag = sqLiteDatabase.insert(TABLE_BG_TRAP, null, contentValues);
         // close connection
         sqLiteDatabase.close();
+
+        return flag;
     }
 
     public long insertDataBgCollection(BgCollectionModel bgCollectionObj) {
@@ -268,21 +264,24 @@ public class DbHandler extends SQLiteOpenHelper {
         return flag;
     }
 
-    public void insertDataOvTrap(OvTrapModel ovTrapObj) {
+    public long insertDataOvTrap(OvTrapModel ovTrapObj) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(OV_TRAP_ID, ovTrapObj.getOv_trap_id());
         contentValues.put(OV_TRAP_STATUS, ovTrapObj.getTrap_status());
         contentValues.put(OV_POSITION, ovTrapObj.getPosition());
         contentValues.put(RUN_NAME, ovTrapObj.getRun_name());
-        contentValues.put(PERSON_ID, ovTrapObj.getPerson_id());
-        contentValues.put(ADDRESS_ID, ovTrapObj.getAddress_id());
+        contentValues.put(PERSON_NAME, ovTrapObj.getPerson_name());
+        contentValues.put(PERSON_PHONE, ovTrapObj.getPerson_phone());
+        contentValues.put(ADDRESS_LINE1, ovTrapObj.getAddress_line1());
+        contentValues.put(ADDRESS_LINE2 ,ovTrapObj.getAddress_line2());
         contentValues.put(OV_COORDINATES, ovTrapObj.getCoordinates());
-        contentValues.put(EXIST_IN_REMOTE_SERVER, ovTrapObj.getExist_in_remote_server());
+        contentValues.put(LOCATION_DESCRIPTION, ovTrapObj.getLocation_description());
         // save to table
-        sqLiteDatabase.insert(TABLE_OV_TRAP, null, contentValues);
+        long flag = sqLiteDatabase.insert(TABLE_OV_TRAP, null, contentValues);
         // close connection
         sqLiteDatabase.close();
+        return flag;
     }
 /*
     public void insertDataOvCollection(OvCollectionModel ovCollectionObj) {
@@ -300,6 +299,45 @@ public class DbHandler extends SQLiteOpenHelper {
         sqLiteDatabase.close();
     }
 */
+public List<String> getAllOviRuns() {
+    List<String> runs = new ArrayList<>();
+    SQLiteDatabase db = getReadableDatabase();
+    String query = "select distinct run_name from ov_trap union all select distinct ovi_run_id from ovi_service union all select distinct ovi_run_id from ovi_collection";
+    Cursor cursor = db.rawQuery(query, null);
+    if (cursor.moveToFirst()) {
+        do {
+            runs.add(cursor.getString(0));
+        } while (cursor.moveToNext());
+    }
+    db.close();
+    return runs;
+}
+    public List<String> getAllBgRuns() {
+        List<String> runs = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select distinct run_name from bg_trap union all select distinct bg_run_id from bg_service union all select distinct bg_run_id from bg_collection";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                runs.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return runs;
+    }
+    public List<String> getAllMrcRuns() {
+        List<String> runs = new ArrayList<>();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select distinct run_name from mrc union all select distinct mrc_run_id from mrc_service union all select distinct mrc_run_id from mrc_release";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                runs.add(cursor.getString(0));
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return runs;
+    }
     public List<PersonModel> getAllPersons() {
         List<PersonModel> persons = new ArrayList();
         SQLiteDatabase db = getReadableDatabase();
@@ -443,9 +481,9 @@ public class DbHandler extends SQLiteOpenHelper {
                 mrc.setIdentifier(cursor.getString(0));
                 mrc.setMrc_status(cursor.getString(1));
                 mrc.setRun_name(cursor.getString(2));
-                mrc.setPerson_id(cursor.getInt(3));
-                mrc.setAddress_id(cursor.getInt(4));
-                mrc.setExist_in_remote_server(cursor.getString(5));
+                //mrc.setPerson_id(cursor.getInt(3));
+                //mrc.setAddress_id(cursor.getInt(4));
+                //mrc.setExist_in_remote_server(cursor.getString(5));
                 mrcs.add(mrc);
             } while (cursor.moveToNext());
         }
@@ -464,9 +502,9 @@ public class DbHandler extends SQLiteOpenHelper {
                 mrc.setIdentifier(cursor.getString(0));
                 mrc.setMrc_status(cursor.getString(1));
                 mrc.setRun_name(cursor.getString(2));
-                mrc.setPerson_id(cursor.getInt(3));
-                mrc.setAddress_id(cursor.getInt(4));
-                mrc.setExist_in_remote_server(cursor.getString(5));
+               // mrc.setPerson_id(cursor.getInt(3));
+                //mrc.setAddress_id(cursor.getInt(4));
+               // mrc.setExist_in_remote_server(cursor.getString(5));
                 mrcs.add(mrc);
             } while (cursor.moveToNext());
         }
@@ -484,15 +522,63 @@ public class DbHandler extends SQLiteOpenHelper {
                 mrc.setIdentifier(cursor.getString(0));
                 mrc.setMrc_status(cursor.getString(1));
                 mrc.setRun_name(cursor.getString(2));
-                mrc.setPerson_id(cursor.getInt(3));
-                mrc.setAddress_id(cursor.getInt(4));
+                //mrc.setPerson_id(cursor.getInt(3));
+                //mrc.setAddress_id(cursor.getInt(4));
                 mrc.setCoordinates(cursor.getString(5));
-                mrc.setExist_in_remote_server(cursor.getString(6));
+                //mrc.setExist_in_remote_server(cursor.getString(6));
                 mrcs.add(mrc);
             } while (cursor.moveToNext());
         }
         db.close();
         return mrcs;
+    }
+
+    public List<MrcServiceModel> getSingleMrcService(String selected_run,String field_type) {
+        List<MrcServiceModel> mrcServices = new ArrayList();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select * from " + TABLE_MRC_SERVICE + " where service_id =" + "\'" + selected_run + "\'" + ";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                MrcServiceModel mrcService = new MrcServiceModel();
+                mrcService.setMrc_run_id(cursor.getString(0));
+                mrcService.setMrc_trap_id(cursor.getString(1));
+                mrcService.setCoordinates(cursor.getString(2));
+                mrcService.setAdd_line1(cursor.getString(3));
+                mrcService.setAdd_line2(cursor.getString(4));
+                mrcService.setLocation_description(cursor.getString(5));
+                mrcService.setFull_name(cursor.getString(6));
+                mrcService.setContact_number(cursor.getString(7));
+                mrcService.setService_id(cursor.getString(8));
+                mrcServices.add(mrcService);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return mrcServices;
+    }
+
+    public List<MrcReleaseModel> getSingleMrcRelease(String selected_run,String field_type) {
+        List<MrcReleaseModel> mrcReleases = new ArrayList();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select * from " + TABLE_MRC_RELEASE + " where mrc_run_id =" + "\'" + selected_run + "\'" + ";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                MrcReleaseModel mrcRelease = new MrcReleaseModel();
+                mrcRelease.setMrc_run_id(cursor.getString(0));
+                mrcRelease.setMrc_trap_id(cursor.getString(1));
+                mrcRelease.setCoordinates(cursor.getString(2));
+                mrcRelease.setAdd_line1(cursor.getString(3));
+                mrcRelease.setAdd_line2(cursor.getString(4));
+                mrcRelease.setLocation_description(cursor.getString(5));
+                mrcRelease.setFull_name(cursor.getString(6));
+                mrcRelease.setContact_number(cursor.getString(7));
+                mrcRelease.setRelease_id(cursor.getString(8));
+                mrcReleases.add(mrcRelease);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return mrcReleases;
     }
 
     public int updateSingleMrc(MrcModel mrcInstance) {
@@ -525,32 +611,24 @@ public class DbHandler extends SQLiteOpenHelper {
         return mrcReleases;
     }
 
-    public List<MrcPersonAddressModel> getSingleMrcPersonAddress(String selected_id) {
-        List<MrcPersonAddressModel> mrcPersonsAddresses = new ArrayList();
+    public List<MrcModel> getSingleMrcPersonAddress(String selected_id) {
+        List<MrcModel> mrcPersonsAddresses = new ArrayList();
         SQLiteDatabase db = getReadableDatabase();
-        String query = "select a.*,b.*,c.* from " + TABLE_MRC + " a,"+TABLE_PERSON + " b,"+
-                TABLE_ADDRESS + " c" +" where a.identifier=" + "\'" + selected_id + "\'" +
-                " and a.person_id = b.person_id and a.address_id = c.address_id"+";";
+        String query = "select a.* from " + TABLE_MRC + " a"+" where a.identifier=" + "\'" + selected_id + "\'" +
+               ";";
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
-                MrcPersonAddressModel mrcPersonAddress = new MrcPersonAddressModel();
+                MrcModel mrcPersonAddress = new MrcModel();
                 mrcPersonAddress.setIdentifier(cursor.getString(0));
                 mrcPersonAddress.setMrc_status(cursor.getString(1));
                 mrcPersonAddress.setRun_name(cursor.getString(2));
-                mrcPersonAddress.setPerson_id(cursor.getInt(3));
-                mrcPersonAddress.setAddress_id(cursor.getInt(4));
-                mrcPersonAddress.setCoordinates(cursor.getString(5));
-                mrcPersonAddress.setExist_in_remote_server(cursor.getString(6));
-                mrcPersonAddress.setPerson_id_dup(cursor.getInt(7));
-                mrcPersonAddress.setPerson_name(cursor.getString(8));
-                mrcPersonAddress.setPhone(cursor.getInt(9));
-                mrcPersonAddress.setExist_in_remote_server_person_dup(cursor.getString(10));
-                mrcPersonAddress.setAddress_id_dup(cursor.getInt(11));
-                mrcPersonAddress.setAddress_line1(cursor.getString(12));
-                mrcPersonAddress.setAddress_line2(cursor.getString(13));
-                mrcPersonAddress.setLocation_description(cursor.getString(14));
-                mrcPersonAddress.setExist_in_remote_server_address_dup(cursor.getString(15));
+                mrcPersonAddress.setCoordinates(cursor.getString(8));
+                mrcPersonAddress.setPerson_name(cursor.getString(3));
+                mrcPersonAddress.setPerson_phone(cursor.getString(4));
+                mrcPersonAddress.setAddress_line1(cursor.getString(5));
+                mrcPersonAddress.setAddress_line2(cursor.getString(6));
+                mrcPersonAddress.setLocation_description(cursor.getString(7));
                 mrcPersonsAddresses.add(mrcPersonAddress);
             } while (cursor.moveToNext());
         }
@@ -579,9 +657,9 @@ public class DbHandler extends SQLiteOpenHelper {
                 bgTrap.setTrap_status(cursor.getString(1));
                 bgTrap.setPosition(cursor.getString(2));
                 bgTrap.setRun_name(cursor.getString(3));
-                bgTrap.setPerson_id(cursor.getInt(4));
-                bgTrap.setAddress_id(cursor.getInt(5));
-                bgTrap.setExist_in_remote_server(cursor.getString(6));
+                //bgTrap.setPerson_id(cursor.getInt(4));
+                //bgTrap.setAddress_id(cursor.getInt(5));
+                //bgTrap.setExist_in_remote_server(cursor.getString(6));
                 bgTraps.add(bgTrap);
             } while (cursor.moveToNext());
         }
@@ -589,33 +667,25 @@ public class DbHandler extends SQLiteOpenHelper {
         return bgTraps;
     }
 
-    public List<BgPersonAddressModel> getSingleBgTrap(String selected_id) {
-        List<BgPersonAddressModel> bgPersonsAddresses = new ArrayList();
+    public List<BgTrapModel> getSingleBgTrap(String selected_id) {
+        List<BgTrapModel> bgPersonsAddresses = new ArrayList();
         SQLiteDatabase db = getReadableDatabase();
-        String query = "select a.*,b.*,c.* from " + TABLE_BG_TRAP + " a,"+TABLE_PERSON + " b,"+
-                TABLE_ADDRESS + " c" +" where a.bg_trap_id=" + "\'" + selected_id + "\'" +
-                " and a.person_id = b.person_id and a.address_id = c.address_id"+";";
+        String query = "select a.* from " + TABLE_BG_TRAP + " a"+" where a.bg_trap_id=" + "\'" + selected_id + "\'" +
+                ";";
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
-                BgPersonAddressModel bgPersonAddress = new BgPersonAddressModel();
+                BgTrapModel bgPersonAddress = new BgTrapModel();
                 bgPersonAddress.setBg_trap_id(cursor.getString(0));
                 bgPersonAddress.setTrap_status(cursor.getString(1));
                 bgPersonAddress.setPosition(cursor.getString(2));
                 bgPersonAddress.setRun_name(cursor.getString(3));
-                bgPersonAddress.setPerson_id(cursor.getInt(4));
-                bgPersonAddress.setAddress_id(cursor.getInt(5));
-                bgPersonAddress.setCoordinates(cursor.getString(6));
-                bgPersonAddress.setExist_in_remote_server(cursor.getString(7));
-                bgPersonAddress.setPerson_id_dup(cursor.getInt(8));
-                bgPersonAddress.setPerson_name(cursor.getString(9));
-                bgPersonAddress.setPhone(cursor.getInt(10));
-                bgPersonAddress.setExist_in_remote_server_person_dup(cursor.getString(11));
-                bgPersonAddress.setAddress_id_dup(cursor.getInt(12));
-                bgPersonAddress.setAddress_line1(cursor.getString(13));
-                bgPersonAddress.setAddress_line2(cursor.getString(14));
-                bgPersonAddress.setLocation_description(cursor.getString(15));
-                bgPersonAddress.setExist_in_remote_server_address_dup(cursor.getString(16));
+                bgPersonAddress.setCoordinates(cursor.getString(9));
+                bgPersonAddress.setPerson_name(cursor.getString(4));
+                bgPersonAddress.setPerson_phone(cursor.getString(5));
+                bgPersonAddress.setAddress_line1(cursor.getString(6));
+                bgPersonAddress.setAddress_line2(cursor.getString(7));
+                bgPersonAddress.setLocation_description(cursor.getString(8));
                 bgPersonsAddresses.add(bgPersonAddress);
             } while (cursor.moveToNext());
         }
@@ -634,15 +704,63 @@ public class DbHandler extends SQLiteOpenHelper {
                 bgTrap.setTrap_status(cursor.getString(1));
                 bgTrap.setPosition(cursor.getString(2));
                 bgTrap.setRun_name(cursor.getString(3));
-                bgTrap.setPerson_id(cursor.getInt(4));
-                bgTrap.setAddress_id(cursor.getInt(5));
+                //bgTrap.setPerson_id(cursor.getInt(4));
+                //bgTrap.setAddress_id(cursor.getInt(5));
                 bgTrap.setCoordinates(cursor.getString(6));
-                bgTrap.setExist_in_remote_server(cursor.getString(7));
+                //bgTrap.setExist_in_remote_server(cursor.getString(7));
                 bgTraps.add(bgTrap);
             } while (cursor.moveToNext());
         }
         db.close();
         return bgTraps;
+    }
+    public List<BgServiceModel> getSingleBgService(String selected_run,String field_type) {
+        List<BgServiceModel> bgServices = new ArrayList();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select * from " + TABLE_BG_SERVICE + " where bg_run_id =" + "\'" + selected_run + "\'" + ";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                BgServiceModel bgService = new BgServiceModel();
+                bgService.setBg_run_id(cursor.getString(0));
+                bgService.setBg_trap_id(cursor.getString(1));
+                bgService.setBg_trap_position(cursor.getString(2));
+                bgService.setCoordinates(cursor.getString(3));
+                bgService.setAdd_line1(cursor.getString(4));
+                bgService.setAdd_line2(cursor.getString(5));
+                bgService.setLocation_description(cursor.getString(6));
+                bgService.setFull_name(cursor.getString(7));
+                bgService.setContact_number(cursor.getString(8));
+                bgService.setService_id(cursor.getString(9));
+                bgServices.add(bgService);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return bgServices;
+    }
+    public List<BgCollectionModel> getSingleBgCollection(String selected_run,String field_type) {
+        List<BgCollectionModel> bgCollections = new ArrayList();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select * from " + TABLE_BG_COLLECTION + " where bg_run_id =" + "\'" + selected_run + "\'" + ";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                BgCollectionModel bgCollection = new BgCollectionModel();
+                bgCollection.setBg_run_id(cursor.getString(0));
+                bgCollection.setBg_trap_id(cursor.getString(1));
+                bgCollection.setBg_trap_position(cursor.getString(2));
+                bgCollection.setCoordinates(cursor.getString(3));
+                bgCollection.setAdd_line1(cursor.getString(4));
+                bgCollection.setAdd_line2(cursor.getString(5));
+                bgCollection.setLocation_description(cursor.getString(6));
+                bgCollection.setFull_name(cursor.getString(7));
+                bgCollection.setContact_number(cursor.getString(8));
+                bgCollection.setCollection_id(cursor.getString(9));
+                bgCollections.add(bgCollection);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return bgCollections;
     }
     public int updateSingleBgTrap(BgTrapModel bgTrapInstance) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
@@ -718,9 +836,9 @@ public class DbHandler extends SQLiteOpenHelper {
                 ovTrap.setTrap_status(cursor.getString(1));
                 ovTrap.setPosition(cursor.getString(2));
                 ovTrap.setRun_name(cursor.getString(3));
-                ovTrap.setPerson_id(cursor.getInt(4));
-                ovTrap.setAddress_id(cursor.getInt(5));
-                ovTrap.setExist_in_remote_server(cursor.getString(6));
+                //ovTrap.setPerson_id(cursor.getInt(4));
+                //ovTrap.setAddress_id(cursor.getInt(5));
+                //ovTrap.setExist_in_remote_server(cursor.getString(6));
                 ovTraps.add(ovTrap);
             } while (cursor.moveToNext());
         }
@@ -728,38 +846,31 @@ public class DbHandler extends SQLiteOpenHelper {
         return ovTraps;
     }
 
-    public List<OvPersonAddressModel> getSingleOvTrap(String selected_id) {
-        List<OvPersonAddressModel> ovPersonsAddresses = new ArrayList();
+    public List<OvTrapModel> getSingleOvTrap(String selected_id) {
+        List<OvTrapModel> oviTrap = new ArrayList();
         SQLiteDatabase db = getReadableDatabase();
-        String query = "select a.*,b.*,c.* from " + TABLE_OV_TRAP + " a,"+TABLE_PERSON + " b,"+
-                TABLE_ADDRESS + " c" +" where a.ov_trap_id=" + "\'" + selected_id + "\'" +
-                " and a.person_id = b.person_id and a.address_id = c.address_id"+";";
+        String query = "select a.* from " + TABLE_OV_TRAP + " a"+
+              " where a.ov_trap_id=" + "\'" + selected_id + "\'" +
+               ";";
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
-                OvPersonAddressModel ovPersonAddress = new OvPersonAddressModel();
-                ovPersonAddress.setOv_trap_id(cursor.getString(0));
-                ovPersonAddress.setTrap_status(cursor.getString(1));
-                ovPersonAddress.setPosition(cursor.getString(2));
-                ovPersonAddress.setRun_name(cursor.getString(3));
-                ovPersonAddress.setPerson_id(cursor.getInt(4));
-                ovPersonAddress.setAddress_id(cursor.getInt(5));
-                ovPersonAddress.setCoordinates(cursor.getString(6));
-                ovPersonAddress.setExist_in_remote_server(cursor.getString(7));
-                ovPersonAddress.setPerson_id_dup(cursor.getInt(8));
-                ovPersonAddress.setPerson_name(cursor.getString(9));
-                ovPersonAddress.setPhone(cursor.getInt(10));
-                ovPersonAddress.setExist_in_remote_server_person_dup(cursor.getString(11));
-                ovPersonAddress.setAddress_id_dup(cursor.getInt(12));
-                ovPersonAddress.setAddress_line1(cursor.getString(13));
-                ovPersonAddress.setAddress_line2(cursor.getString(14));
-                ovPersonAddress.setLocation_description(cursor.getString(15));
-                ovPersonAddress.setExist_in_remote_server_address_dup(cursor.getString(16));
-                ovPersonsAddresses.add(ovPersonAddress);
+                OvTrapModel oviTraps = new OvTrapModel();
+                oviTraps.setOv_trap_id(cursor.getString(0));
+                oviTraps.setTrap_status(cursor.getString(1));
+                oviTraps.setPosition(cursor.getString(2));
+                oviTraps.setRun_name(cursor.getString(3));
+                oviTraps.setCoordinates(cursor.getString(9));
+                oviTraps.setPerson_name(cursor.getString(4));
+                oviTraps.setPerson_phone(cursor.getString(5));
+                oviTraps.setAddress_line1(cursor.getString(6));
+                oviTraps.setAddress_line2(cursor.getString(7));
+                oviTraps.setLocation_description(cursor.getString(8));
+                oviTrap.add(oviTraps);
             } while (cursor.moveToNext());
         }
         db.close();
-        return ovPersonsAddresses;
+        return oviTrap;
     }
 
     public List<OvTrapModel> getSingleOvTrap(String selected_run,String field_type) {
@@ -774,15 +885,65 @@ public class DbHandler extends SQLiteOpenHelper {
                 ovTrap.setTrap_status(cursor.getString(1));
                 ovTrap.setPosition(cursor.getString(2));
                 ovTrap.setRun_name(cursor.getString(3));
-                ovTrap.setPerson_id(cursor.getInt(4));
-                ovTrap.setAddress_id(cursor.getInt(5));
+                //ovTrap.setPerson_id(cursor.getInt(4));
+                //ovTrap.setAddress_id(cursor.getInt(5));
                 ovTrap.setCoordinates(cursor.getString(6));
-                ovTrap.setExist_in_remote_server(cursor.getString(7));
+                //ovTrap.setExist_in_remote_server(cursor.getString(7));
                 ovTraps.add(ovTrap);
             } while (cursor.moveToNext());
         }
         db.close();
         return ovTraps;
+    }
+
+    public List<OviServiceModel> getSingleOviService(String selected_run,String field_type) {
+        List<OviServiceModel> oviServices = new ArrayList();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select * from " + TABLE_OVI_SERVICE + " where ovi_run_id =" + "\'" + selected_run + "\'" + ";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                OviServiceModel oviService = new OviServiceModel();
+                oviService.setOvi_run_id(cursor.getString(0));
+                oviService.setOvi_trap_id(cursor.getString(1));
+                oviService.setOvi_trap_position(cursor.getString(2));
+                oviService.setCoordinates(cursor.getString(3));
+                oviService.setAdd_line1(cursor.getString(4));
+                oviService.setAdd_line2(cursor.getString(5));
+                oviService.setLocation_description(cursor.getString(6));
+                oviService.setFull_name(cursor.getString(7));
+                oviService.setContact_number(cursor.getString(8));
+                oviService.setService_id(cursor.getString(9));
+                oviServices.add(oviService);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return oviServices;
+    }
+
+    public List<OviCollectionModel> getSingleOviCollection(String selected_run,String field_type) {
+        List<OviCollectionModel> oviCollections = new ArrayList();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select * from " + TABLE_OVI_COLLECTION + " where ovi_run_id =" + "\'" + selected_run + "\'" + ";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                OviCollectionModel oviCollection = new OviCollectionModel();
+                oviCollection.setOvi_run_id(cursor.getString(0));
+                oviCollection.setOvi_trap_id(cursor.getString(1));
+                oviCollection.setOvi_trap_position(cursor.getString(2));
+                oviCollection.setCoordinates(cursor.getString(3));
+                oviCollection.setAdd_line1(cursor.getString(4));
+                oviCollection.setAdd_line2(cursor.getString(5));
+                oviCollection.setLocation_description(cursor.getString(6));
+                oviCollection.setFull_name(cursor.getString(7));
+                oviCollection.setContact_number(cursor.getString(8));
+                oviCollection.setCollection_id(cursor.getString(9));
+                oviCollections.add(oviCollection);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return oviCollections;
     }
 
     public int updateSingleOvTrap(OvTrapModel ovTrapInstance) {
@@ -865,7 +1026,7 @@ public class DbHandler extends SQLiteOpenHelper {
         contentValues.put(LOCATION_DESCRIPTION,mrcReleaseObj.location_description);
         contentValues.put(FULL_NAME,mrcReleaseObj.full_name);
         contentValues.put(CONTACT_NUMBER,mrcReleaseObj.contact_number);
-        contentValues.put(SERVICE_STATUS,mrcReleaseObj.release_status);
+        contentValues.put(RELEASE_STATUS,mrcReleaseObj.release_status);
         // save to table
         long status = sqLiteDatabase.insert(TABLE_MRC_RELEASE, null, contentValues);
         // close connection

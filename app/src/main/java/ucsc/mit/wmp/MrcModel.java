@@ -4,23 +4,27 @@ public class MrcModel {
     public String identifier;
     public String mrc_status;
     public String run_name;
-    public int person_id;
-    public int address_id;
+    public String person_name;
+    public String person_phone;
+    public String address_line1;
+    public String address_line2;
+    public String location_description;
     public String coordinates;
-    public String exist_in_remote_server;
 
     public MrcModel(){
 
     }
 
-    public MrcModel(String identifier, String mrc_status, String run_name, int person_id, int address_id,String coordinates, String exist_in_remote_server) {
+    public MrcModel(String identifier, String mrc_status, String run_name, String person_name, String person_phone, String address_line1, String address_line2,String location_description, String coordinates) {
         this.identifier = identifier;
         this.mrc_status = mrc_status;
         this.run_name = run_name;
-        this.person_id = person_id;
-        this.address_id = address_id;
+        this.person_name = person_name;
+        this.person_phone = person_phone;
+        this.address_line1 = address_line1;
+        this.address_line2 = address_line2;
+        this.location_description = location_description;
         this.coordinates = coordinates;
-        this.exist_in_remote_server = exist_in_remote_server;
     }
 
     public void setIdentifier(String identifier) {
@@ -35,20 +39,25 @@ public class MrcModel {
         this.run_name = run_name;
     }
 
-    public void setPerson_id(int person_id) {
-        this.person_id = person_id;
+    public void setPerson_name(String person_name) {
+        this.person_name = person_name;
     }
 
-    public void setAddress_id(int address_id) {
-        this.address_id = address_id;
+    public void setPerson_phone(String person_phone) {
+        this.person_phone = person_phone;
     }
 
+    public void setAddress_line1(String address_line1) {
+        this.address_line1 = address_line1;
+    }
+    public void setAddress_line2(String address_line2) {
+        this.address_line2 = address_line2;
+    }
+    public void setLocation_description(String location_description) {
+        this.location_description = location_description;
+    }
     public void setCoordinates(String coordinates) {
         this.coordinates = coordinates;
-    }
-
-    public void setExist_in_remote_server(String exist_in_remote_server) {
-        this.exist_in_remote_server = exist_in_remote_server;
     }
 
     public String getIdentifier() {
@@ -63,19 +72,27 @@ public class MrcModel {
         return run_name;
     }
 
-    public int getPerson_id() {
-        return person_id;
+    public String getPerson_name() {
+        return person_name;
     }
 
-    public int getAddress_id() {
-        return address_id;
+    public String getPerson_phone() {
+        return person_phone;
+    }
+
+    public String getAddress_line1() {
+        return address_line1;
+    }
+
+    public String getAddress_line2() {
+        return address_line2;
+    }
+
+    public String getLocation_description() {
+        return address_line2;
     }
 
     public String getCoordinates() {
         return coordinates;
-    }
-
-    public String getExist_in_remote_server() {
-        return exist_in_remote_server;
     }
 }

@@ -58,11 +58,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static final String AddressId = "AddressId";
     LatLng givenLocation;
     private List<OvTrapModel> ovModelList;
-    private List<OvPersonAddressModel> ovPersonAddressModelList;
+    private List<OvTrapModel> ovPersonAddressModelList;
     private List<BgTrapModel> bgModelList;
-    private List<BgPersonAddressModel> bgPersonAddressModelList;
+    private List<BgTrapModel> bgPersonAddressModelList;
     private List<MrcModel> mrcModelList;
-    private List<MrcPersonAddressModel> mrcPersonAddressModelList;
+    private List<MrcModel> mrcPersonAddressModelList;
     private ArrayList<LatLng> latLngArrayList;
     private ArrayList<String> locationNameArraylist;
     SharedPreferences sharedpreferences;
@@ -205,13 +205,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     editor.putString(TrapPosition, ovPersonAddressModelList.get(0).position.toString());
                     editor.putString(RespondName, ovPersonAddressModelList.get(0).person_name);
                     editor.putString(LocationCoordinates, ovPersonAddressModelList.get(0).coordinates);
-                    editor.putString(Phone, String.valueOf(ovPersonAddressModelList.get(0).phone));
+                    //editor.putString(Phone, String.valueOf(ovPersonAddressModelList.get(0).phone));
                     editor.putString(AddressLine1, ovPersonAddressModelList.get(0).address_line1);
                     editor.putString(AddressLine2, ovPersonAddressModelList.get(0).address_line2);
                     editor.putString(LocationDescription, ovPersonAddressModelList.get(0).location_description);
                     editor.putString(OviRunId, ovPersonAddressModelList.get(0).run_name);
-                    editor.putInt(PersonId, ovPersonAddressModelList.get(0).person_id);
-                    editor.putInt(AddressId, ovPersonAddressModelList.get(0).address_id);
+                    //editor.putInt(PersonId, ovPersonAddressModelList.get(0).person_id);
+                   // editor.putInt(AddressId, ovPersonAddressModelList.get(0).address_id);
                     editor.apply();
 
                     Intent intent = new Intent(context, AddOvMainActivity.class);
@@ -230,13 +230,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     editor.putString(TrapPosition, bgPersonAddressModelList.get(0).position.toString());
                     editor.putString(RespondName, bgPersonAddressModelList.get(0).person_name);
                     editor.putString(LocationCoordinates, bgPersonAddressModelList.get(0).coordinates);
-                    editor.putString(Phone, String.valueOf(bgPersonAddressModelList.get(0).phone));
+                   // editor.putString(Phone, String.valueOf(bgPersonAddressModelList.get(0).phone));
                     editor.putString(AddressLine1, bgPersonAddressModelList.get(0).address_line1);
                     editor.putString(AddressLine2, bgPersonAddressModelList.get(0).address_line2);
                     editor.putString(LocationDescription, bgPersonAddressModelList.get(0).location_description);
                     editor.putString(BgRunId, bgPersonAddressModelList.get(0).run_name);
-                    editor.putInt(PersonId, bgPersonAddressModelList.get(0).person_id);
-                    editor.putInt(AddressId, bgPersonAddressModelList.get(0).address_id);
+                    //editor.putInt(PersonId, bgPersonAddressModelList.get(0).person_id);
+                    //editor.putInt(AddressId, bgPersonAddressModelList.get(0).address_id);
                     editor.apply();
 
                     Intent intent = new Intent(context, AddBgMainActivity.class);
@@ -254,13 +254,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     editor.putString(TrapStatus, mrcPersonAddressModelList.get(0).mrc_status.toString());
                     editor.putString(RespondName, mrcPersonAddressModelList.get(0).person_name);
                     editor.putString(LocationCoordinates, mrcPersonAddressModelList.get(0).coordinates);
-                    editor.putString(Phone, String.valueOf(mrcPersonAddressModelList.get(0).phone));
+                    //editor.putString(Phone, String.valueOf(mrcPersonAddressModelList.get(0).phone));
                     editor.putString(AddressLine1, mrcPersonAddressModelList.get(0).address_line1);
                     editor.putString(AddressLine2, mrcPersonAddressModelList.get(0).address_line2);
                     editor.putString(LocationDescription, mrcPersonAddressModelList.get(0).location_description);
                     editor.putString(MrcRunId, mrcPersonAddressModelList.get(0).run_name);
-                    editor.putInt(PersonId, mrcPersonAddressModelList.get(0).person_id);
-                    editor.putInt(AddressId, mrcPersonAddressModelList.get(0).address_id);
+                    //editor.putInt(PersonId, mrcPersonAddressModelList.get(0).person_id);
+                    //editor.putInt(AddressId, mrcPersonAddressModelList.get(0).address_id);
                     editor.apply();
 
                     Intent intent = new Intent(context, AddMrcMainActivity.class);
