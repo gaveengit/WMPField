@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -77,6 +78,7 @@ public class OvListActivity extends AppCompatActivity {
 
     Spinner spinnerRuns;
     SharedPreferences sharedpreferences;
+    String run_name;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,7 +130,7 @@ public class OvListActivity extends AppCompatActivity {
         editor.putString(MrcRunId, "");
         editorMrc.apply();
 
-        String run_name;
+
 
         if (field_type.equals("ov")) {
             dbHandler = new DbHandler(context);
@@ -136,210 +138,6 @@ public class OvListActivity extends AppCompatActivity {
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_item, ovi_runs);
             spinnerRuns.setAdapter(dataAdapter);
-
-            if (spinnerRuns.getSelectedItem() == null) {
-                run_name = "";
-            } else {
-                run_name = spinnerRuns.getSelectedItem().toString();
-            }
-            ovModelList = new ArrayList<>();
-            ovList = new ArrayList<>();
-            ovModelList = dbHandler.getSingleOvTrap(run_name, field_type);
-            Log.d("size-ov", Integer.toString(ovModelList.size()));
-            if (ovModelList.size() > 0) {
-                for (int i = 0; i < ovModelList.size(); ++i) {
-                    Log.d("test-ov_trap_id", ovModelList.get(i).ov_trap_id.toString());
-                    Log.d("test-trap_status", ovModelList.get(i).trap_status.toString());
-                    Log.d("test-position", ovModelList.get(i).position.toString());
-                    Log.d("test-run_name", ovModelList.get(i).run_name.toString());
-                    // Log.d("test-person_id", Integer.toString(ovModelList.get(i).person_id));
-                    //Log.d("test-address_id", Integer.toString(ovModelList.get(i).address_id));
-                    Log.d("test-coordinates", ovModelList.get(i).coordinates.toString());
-                    //Log.d("test-exist", ovModelList.get(i).exist_in_remote_server.toString());
-                    RelativeLayout rl1 = new RelativeLayout(this);
-                    rl1.setId(i);
-                    rl1.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
-                    rl1.setPadding(15, 10, 15, 10);
-                    rl1.setTag(ovModelList.get(i).ov_trap_id.toString());
-                    rl1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            goIndividualOv(v);
-                        }
-                    });
-                    l1.addView(rl1);
-                    l1.invalidate();
-                    LinearLayout l2 = new LinearLayout(this);
-                    l2.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    l2.setTag(ovModelList.get(i).ov_trap_id.toString());
-                    l2.setOrientation(LinearLayout.VERTICAL);
-                    l2.setPadding(0, 10, 0, 10);
-                    rl1.addView(l2);
-                    rl1.invalidate();
-                    TextView tv1 = new TextView(this);
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(5, 0, 0, 0);
-                    tv1.setLayoutParams(params);
-                    tv1.setBackgroundColor(Color.TRANSPARENT);
-                    tv1.setTag(ovModelList.get(i).ov_trap_id.toString());
-                    tv1.setText(ovModelList.get(i).ov_trap_id.toString());
-                    tv1.setTextColor(Color.BLACK);
-                    tv1.setTextSize(20);
-                    l2.addView(tv1);
-                    l2.invalidate();
-                    TextView tv2 = new TextView(this);
-                    tv2.setPadding(0, 5, 10, 0);
-                    tv2.setLayoutParams(params);
-                    tv2.setTag(ovModelList.get(i).ov_trap_id.toString());
-                    tv2.setBackgroundColor(Color.TRANSPARENT);
-                    tv2.setTextSize(16);
-                    //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                    //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
-                    rl1.addView(tv2);
-                    rl1.invalidate();
-                    LayoutParams layoutarams;
-                    layoutarams = (LayoutParams) tv2.getLayoutParams();
-                    layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                    tv2.setLayoutParams(layoutarams);
-                }
-            } else {
-                ovServiceModelList = new ArrayList<>();
-                ovList = new ArrayList<>();
-                ovServiceModelList = dbHandler.getSingleOviService(run_name, field_type);
-                if (ovServiceModelList.size() > 0) {
-                    for (int i = 0; i < ovServiceModelList.size(); ++i) {
-                        Log.d("test-ov_trap_id", ovServiceModelList.get(i).trap_id.toString());
-                        //Log.d("test-trap_status", ovServiceModelList.get(i).service_status.toString());
-                        Log.d("test-position", ovServiceModelList.get(i).trap_position.toString());
-                        Log.d("test-run_name", ovServiceModelList.get(i).ovi_run_id.toString());
-                        Log.d("test-coordinates", ovServiceModelList.get(i).coordinates.toString());
-                        RelativeLayout rl1 = new RelativeLayout(this);
-                        rl1.setId(i);
-                        rl1.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
-                        rl1.setPadding(15, 10, 15, 10);
-                        rl1.setTag(ovServiceModelList.get(i).trap_id.toString());
-                        rl1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                goIndividualOv(v);
-                            }
-                        });
-                        l1.addView(rl1);
-                        l1.invalidate();
-                        LinearLayout l2 = new LinearLayout(this);
-                        l2.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        l2.setTag(ovServiceModelList.get(i).trap_id.toString());
-                        l2.setOrientation(LinearLayout.VERTICAL);
-                        l2.setPadding(0, 10, 0, 10);
-                        rl1.addView(l2);
-                        rl1.invalidate();
-                        TextView tv1 = new TextView(this);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.setMargins(5, 0, 0, 0);
-                        tv1.setLayoutParams(params);
-                        tv1.setBackgroundColor(Color.TRANSPARENT);
-                        tv1.setTag(ovServiceModelList.get(i).trap_id.toString());
-                        tv1.setText(ovServiceModelList.get(i).trap_id.toString());
-                        tv1.setTextColor(Color.BLACK);
-                        tv1.setTextSize(20);
-                        l2.addView(tv1);
-                        l2.invalidate();
-                        TextView tv2 = new TextView(this);
-                        tv2.setPadding(0, 5, 10, 0);
-                        tv2.setLayoutParams(params);
-                        tv2.setTag(ovServiceModelList.get(i).trap_id.toString());
-                        tv2.setBackgroundColor(Color.TRANSPARENT);
-                        tv2.setTextSize(16);
-                        //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                        //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                        tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
-                        rl1.addView(tv2);
-                        rl1.invalidate();
-                        LayoutParams layoutarams;
-                        layoutarams = (LayoutParams) tv2.getLayoutParams();
-                        layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                        tv2.setLayoutParams(layoutarams);
-                    }
-                } else {
-                    ovCollectionModelList = new ArrayList<>();
-                    ovList = new ArrayList<>();
-                    ovCollectionModelList = dbHandler.getSingleOviCollection(run_name, field_type);
-                    if (ovCollectionModelList.size() > 0) {
-                        for (int i = 0; i < ovCollectionModelList.size(); ++i) {
-                            Log.d("test-ov_trap_id", ovCollectionModelList.get(i).trap_id.toString());
-                            Log.d("test-trap_status", ovCollectionModelList.get(i).collection_status.toString());
-                            Log.d("test-position", ovCollectionModelList.get(i).trap_position.toString());
-                            Log.d("test-run_name", ovCollectionModelList.get(i).ovi_run_id.toString());
-                            Log.d("test-coordinates", ovCollectionModelList.get(i).coordinates.toString());
-                            RelativeLayout rl1 = new RelativeLayout(this);
-                            rl1.setId(i);
-                            rl1.setLayoutParams(new ViewGroup.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    ViewGroup.LayoutParams.WRAP_CONTENT));
-                            rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
-                            rl1.setPadding(15, 10, 15, 10);
-                            rl1.setTag(ovCollectionModelList.get(i).trap_id.toString());
-                            rl1.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    goIndividualOv(v);
-                                }
-                            });
-                            l1.addView(rl1);
-                            l1.invalidate();
-                            LinearLayout l2 = new LinearLayout(this);
-                            l2.setLayoutParams(new ViewGroup.LayoutParams(
-                                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                                    ViewGroup.LayoutParams.WRAP_CONTENT));
-                            l2.setTag(ovCollectionModelList.get(i).trap_id.toString());
-                            l2.setOrientation(LinearLayout.VERTICAL);
-                            l2.setPadding(0, 10, 0, 10);
-                            rl1.addView(l2);
-                            rl1.invalidate();
-                            TextView tv1 = new TextView(this);
-                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            params.setMargins(5, 0, 0, 0);
-                            tv1.setLayoutParams(params);
-                            tv1.setBackgroundColor(Color.TRANSPARENT);
-                            tv1.setTag(ovCollectionModelList.get(i).trap_id.toString());
-                            tv1.setText(ovCollectionModelList.get(i).trap_id.toString());
-                            tv1.setTextColor(Color.BLACK);
-                            tv1.setTextSize(20);
-                            l2.addView(tv1);
-                            l2.invalidate();
-                            TextView tv2 = new TextView(this);
-                            tv2.setPadding(0, 5, 10, 0);
-                            tv2.setLayoutParams(params);
-                            tv2.setTag(ovCollectionModelList.get(i).trap_id.toString());
-                            tv2.setBackgroundColor(Color.TRANSPARENT);
-                            tv2.setTextSize(16);
-                            //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                            //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                            tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
-                            rl1.addView(tv2);
-                            rl1.invalidate();
-                            LayoutParams layoutarams;
-                            layoutarams = (LayoutParams) tv2.getLayoutParams();
-                            layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                            tv2.setLayoutParams(layoutarams);
-                        }
-                    }
-                }
-            }
         }
         if (field_type.equals("bg")) {
             dbHandler = new DbHandler(context);
@@ -347,213 +145,6 @@ public class OvListActivity extends AppCompatActivity {
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_item, bg_runs);
             spinnerRuns.setAdapter(dataAdapter);
-            if (spinnerRuns.getSelectedItem() == null) {
-                run_name = "";
-            } else {
-                run_name = spinnerRuns.getSelectedItem().toString();
-            }
-            dbHandler = new DbHandler(context);
-            bgModelList = new ArrayList<>();
-            bgList = new ArrayList<>();
-            bgModelList = dbHandler.getSingleBgTrap(run_name, field_type);
-            //Log.d("size-ov",Integer.toString(ovModelList.size()));
-            if (bgModelList.size() > 0) {
-                for (int i = 0; i < bgModelList.size(); ++i) {
-                    Log.d("test-bg_trap_id", bgModelList.get(i).bg_trap_id.toString());
-                    Log.d("test-trap_status", bgModelList.get(i).trap_status.toString());
-                    Log.d("test-position", bgModelList.get(i).position.toString());
-                    Log.d("test-run_name", bgModelList.get(i).run_name.toString());
-                    //Log.d("test-person_id", Integer.toString(bgModelList.get(i).person_id));
-                    // Log.d("test-address_id", Integer.toString(bgModelList.get(i).address_id));
-                    Log.d("test-coordinates", bgModelList.get(i).coordinates.toString());
-                    //Log.d("test-exist", bgModelList.get(i).exist_in_remote_server.toString());
-
-                    RelativeLayout rl1 = new RelativeLayout(this);
-                    rl1.setId(i);
-                    rl1.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
-                    rl1.setPadding(15, 10, 15, 10);
-                    rl1.setTag(bgModelList.get(i).bg_trap_id.toString());
-                    rl1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            goIndividualOv(v);
-                        }
-                    });
-                    l1.addView(rl1);
-                    l1.invalidate();
-                    LinearLayout l2 = new LinearLayout(this);
-                    l2.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    l2.setTag(bgModelList.get(i).bg_trap_id.toString());
-                    l2.setOrientation(LinearLayout.VERTICAL);
-                    l2.setPadding(0, 10, 0, 10);
-                    rl1.addView(l2);
-                    rl1.invalidate();
-                    TextView tv1 = new TextView(this);
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(5, 0, 0, 0);
-                    tv1.setLayoutParams(params);
-                    tv1.setBackgroundColor(Color.TRANSPARENT);
-                    tv1.setTag(bgModelList.get(i).bg_trap_id.toString());
-                    tv1.setText(bgModelList.get(i).bg_trap_id.toString());
-                    tv1.setTextColor(Color.BLACK);
-                    tv1.setTextSize(20);
-                    l2.addView(tv1);
-                    l2.invalidate();
-                    TextView tv2 = new TextView(this);
-                    tv2.setPadding(0, 5, 10, 0);
-                    tv2.setLayoutParams(params);
-                    tv2.setTag(bgModelList.get(i).bg_trap_id.toString());
-                    tv2.setBackgroundColor(Color.TRANSPARENT);
-                    tv2.setTextSize(16);
-                    //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                    //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
-                    rl1.addView(tv2);
-                    rl1.invalidate();
-                    LayoutParams layoutarams;
-                    layoutarams = (LayoutParams) tv2.getLayoutParams();
-                    layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                    tv2.setLayoutParams(layoutarams);
-                }
-            } else {
-                dbHandler = new DbHandler(context);
-                bgServiceModelList = new ArrayList<>();
-                bgList = new ArrayList<>();
-                bgServiceModelList = dbHandler.getSingleBgService(run_name, field_type);
-                if (bgServiceModelList.size() > 0) {
-                    for (int i = 0; i < bgServiceModelList.size(); ++i) {
-                        Log.d("test-bg_trap_id", bgServiceModelList.get(i).trap_id.toString());
-                        Log.d("test-position", bgServiceModelList.get(i).trap_position.toString());
-                        Log.d("test-run_name", bgServiceModelList.get(i).bg_run_id.toString());
-                        Log.d("test-coordinates", bgServiceModelList.get(i).coordinates.toString());
-
-                        RelativeLayout rl1 = new RelativeLayout(this);
-                        rl1.setId(i);
-                        rl1.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
-                        rl1.setPadding(15, 10, 15, 10);
-                        rl1.setTag(bgServiceModelList.get(i).trap_id.toString());
-                        rl1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                goIndividualOv(v);
-                            }
-                        });
-                        l1.addView(rl1);
-                        l1.invalidate();
-                        LinearLayout l2 = new LinearLayout(this);
-                        l2.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        l2.setTag(bgServiceModelList.get(i).trap_id.toString());
-                        l2.setOrientation(LinearLayout.VERTICAL);
-                        l2.setPadding(0, 10, 0, 10);
-                        rl1.addView(l2);
-                        rl1.invalidate();
-                        TextView tv1 = new TextView(this);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.setMargins(5, 0, 0, 0);
-                        tv1.setLayoutParams(params);
-                        tv1.setBackgroundColor(Color.TRANSPARENT);
-                        tv1.setTag(bgServiceModelList.get(i).trap_id.toString());
-                        tv1.setText(bgServiceModelList.get(i).trap_id.toString());
-                        tv1.setTextColor(Color.BLACK);
-                        tv1.setTextSize(20);
-                        l2.addView(tv1);
-                        l2.invalidate();
-                        TextView tv2 = new TextView(this);
-                        tv2.setPadding(0, 5, 10, 0);
-                        tv2.setLayoutParams(params);
-                        tv2.setTag(bgServiceModelList.get(i).trap_id.toString());
-                        tv2.setBackgroundColor(Color.TRANSPARENT);
-                        tv2.setTextSize(16);
-                        //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                        //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                        tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
-                        rl1.addView(tv2);
-                        rl1.invalidate();
-                        LayoutParams layoutarams;
-                        layoutarams = (LayoutParams) tv2.getLayoutParams();
-                        layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                        tv2.setLayoutParams(layoutarams);
-                    }
-                } else {
-                    dbHandler = new DbHandler(context);
-                    bgCollectionModelList = new ArrayList<>();
-                    bgList = new ArrayList<>();
-                    bgCollectionModelList = dbHandler.getSingleBgCollection(run_name, field_type);
-                    if (bgCollectionModelList.size() > 0) {
-                        for (int i = 0; i < bgCollectionModelList.size(); ++i) {
-                            Log.d("test-bg_trap_id", bgCollectionModelList.get(i).trap_id.toString());
-                            Log.d("test-position", bgCollectionModelList.get(i).trap_position.toString());
-                            Log.d("test-run_name", bgCollectionModelList.get(i).bg_run_id.toString());
-                            Log.d("test-coordinates", bgCollectionModelList.get(i).coordinates.toString());
-
-                            RelativeLayout rl1 = new RelativeLayout(this);
-                            rl1.setId(i);
-                            rl1.setLayoutParams(new ViewGroup.LayoutParams(
-                                    ViewGroup.LayoutParams.MATCH_PARENT,
-                                    ViewGroup.LayoutParams.WRAP_CONTENT));
-                            rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
-                            rl1.setPadding(15, 10, 15, 10);
-                            rl1.setTag(bgCollectionModelList.get(i).trap_id.toString());
-                            rl1.setOnClickListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    goIndividualOv(v);
-                                }
-                            });
-                            l1.addView(rl1);
-                            l1.invalidate();
-                            LinearLayout l2 = new LinearLayout(this);
-                            l2.setLayoutParams(new ViewGroup.LayoutParams(
-                                    ViewGroup.LayoutParams.WRAP_CONTENT,
-                                    ViewGroup.LayoutParams.WRAP_CONTENT));
-                            l2.setTag(bgCollectionModelList.get(i).trap_id.toString());
-                            l2.setOrientation(LinearLayout.VERTICAL);
-                            l2.setPadding(0, 10, 0, 10);
-                            rl1.addView(l2);
-                            rl1.invalidate();
-                            TextView tv1 = new TextView(this);
-                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                            params.setMargins(5, 0, 0, 0);
-                            tv1.setLayoutParams(params);
-                            tv1.setBackgroundColor(Color.TRANSPARENT);
-                            tv1.setTag(bgCollectionModelList.get(i).trap_id.toString());
-                            tv1.setText(bgCollectionModelList.get(i).trap_id.toString());
-                            tv1.setTextColor(Color.BLACK);
-                            tv1.setTextSize(20);
-                            l2.addView(tv1);
-                            l2.invalidate();
-                            TextView tv2 = new TextView(this);
-                            tv2.setPadding(0, 5, 10, 0);
-                            tv2.setLayoutParams(params);
-                            tv2.setTag(bgCollectionModelList.get(i).trap_id.toString());
-                            tv2.setBackgroundColor(Color.TRANSPARENT);
-                            tv2.setTextSize(16);
-                            //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                            //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                            tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
-                            rl1.addView(tv2);
-                            rl1.invalidate();
-                            LayoutParams layoutarams;
-                            layoutarams = (LayoutParams) tv2.getLayoutParams();
-                            layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                            tv2.setLayoutParams(layoutarams);
-                        }
-                    }
-                }
-            }
         }
 
         if (field_type.equals("mrc")) {
@@ -562,165 +153,34 @@ public class OvListActivity extends AppCompatActivity {
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
                     android.R.layout.simple_spinner_item, mrc_runs);
             spinnerRuns.setAdapter(dataAdapter);
-            if (spinnerRuns.getSelectedItem() == null) {
-                run_name = "";
-            } else {
-                run_name = spinnerRuns.getSelectedItem().toString();
-            }
-            dbHandler = new DbHandler(context);
-            mrcModelList = new ArrayList<>();
-            mrcList = new ArrayList<>();
-            mrcModelList = dbHandler.getSingleMrc(run_name, field_type);
-            if (mrcModelList.size() > 0) {
-                for (int i = 0; i < mrcModelList.size(); ++i) {
-                    Log.d("test-mrc_id", mrcModelList.get(i).identifier.toString());
-                    Log.d("test-trap_status", mrcModelList.get(i).mrc_status.toString());
-                    Log.d("test-run_name", mrcModelList.get(i).run_name.toString());
-//                Log.d("test-person_id", Integer.toString(mrcModelList.get(i).person_id));
-                    //Log.d("test-address_id", Integer.toString(mrcModelList.get(i).address_id));
-                    Log.d("test-coordinates", mrcModelList.get(i).coordinates.toString());
-                    // Log.d("test-exist", mrcModelList.get(i).exist_in_remote_server.toString());
-
-                    RelativeLayout rl1 = new RelativeLayout(this);
-                    rl1.setId(i);
-                    rl1.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.MATCH_PARENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
-                    rl1.setPadding(15, 10, 15, 10);
-                    rl1.setTag(mrcModelList.get(i).identifier.toString());
-                    rl1.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            goIndividualOv(v);
-                        }
-                    });
-                    l1.addView(rl1);
-                    l1.invalidate();
-                    LinearLayout l2 = new LinearLayout(this);
-                    l2.setLayoutParams(new ViewGroup.LayoutParams(
-                            ViewGroup.LayoutParams.WRAP_CONTENT,
-                            ViewGroup.LayoutParams.WRAP_CONTENT));
-                    l2.setTag(mrcModelList.get(i).identifier.toString());
-                    l2.setOrientation(LinearLayout.VERTICAL);
-                    l2.setPadding(0, 10, 0, 10);
-                    rl1.addView(l2);
-                    rl1.invalidate();
-                    TextView tv1 = new TextView(this);
-                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                    params.setMargins(5, 0, 0, 0);
-                    tv1.setLayoutParams(params);
-                    tv1.setBackgroundColor(Color.TRANSPARENT);
-                    tv1.setTag(mrcModelList.get(i).identifier.toString());
-                    tv1.setText(mrcModelList.get(i).identifier.toString());
-                    tv1.setTextColor(Color.BLACK);
-                    tv1.setTextSize(20);
-                    l2.addView(tv1);
-                    l2.invalidate();
-                    TextView tv2 = new TextView(this);
-                    tv2.setPadding(0, 5, 10, 0);
-                    tv2.setLayoutParams(params);
-                    tv2.setTag(mrcModelList.get(i).identifier.toString());
-                    tv2.setBackgroundColor(Color.TRANSPARENT);
-                    tv2.setTextSize(16);
-                    //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                    //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
-                    rl1.addView(tv2);
-                    rl1.invalidate();
-                    LayoutParams layoutarams;
-                    layoutarams = (LayoutParams) tv2.getLayoutParams();
-                    layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                    tv2.setLayoutParams(layoutarams);
-
-                }
-            }
-            else{
-                dbHandler = new DbHandler(context);
-                mrcServiceModelList = new ArrayList<>();
-                mrcList = new ArrayList<>();
-                mrcServiceModelList = dbHandler.getSingleMrcService(run_name, field_type);
-                if(mrcServiceModelList.size()>0){
-                    for (int i = 0; i < mrcServiceModelList.size(); ++i) {
-                        Log.d("test-mrc_id", mrcServiceModelList.get(i).trap_id.toString());
-                        Log.d("test-run_name", mrcServiceModelList.get(i).mrc_run_id.toString());
-                        Log.d("test-coordinates", mrcServiceModelList.get(i).coordinates.toString());
-
-                        RelativeLayout rl1 = new RelativeLayout(this);
-                        rl1.setId(i);
-                        rl1.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.MATCH_PARENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
-                        rl1.setPadding(15, 10, 15, 10);
-                        rl1.setTag(mrcServiceModelList.get(i).trap_id.toString());
-                        rl1.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                goIndividualOv(v);
-                            }
-                        });
-                        l1.addView(rl1);
-                        l1.invalidate();
-                        LinearLayout l2 = new LinearLayout(this);
-                        l2.setLayoutParams(new ViewGroup.LayoutParams(
-                                ViewGroup.LayoutParams.WRAP_CONTENT,
-                                ViewGroup.LayoutParams.WRAP_CONTENT));
-                        l2.setTag(mrcServiceModelList.get(i).trap_id.toString());
-                        l2.setOrientation(LinearLayout.VERTICAL);
-                        l2.setPadding(0, 10, 0, 10);
-                        rl1.addView(l2);
-                        rl1.invalidate();
-                        TextView tv1 = new TextView(this);
-                        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                        params.setMargins(5, 0, 0, 0);
-                        tv1.setLayoutParams(params);
-                        tv1.setBackgroundColor(Color.TRANSPARENT);
-                        tv1.setTag(mrcServiceModelList.get(i).trap_id.toString());
-                        tv1.setText(mrcServiceModelList.get(i).trap_id.toString());
-                        tv1.setTextColor(Color.BLACK);
-                        tv1.setTextSize(20);
-                        l2.addView(tv1);
-                        l2.invalidate();
-                        TextView tv2 = new TextView(this);
-                        tv2.setPadding(0, 5, 10, 0);
-                        tv2.setLayoutParams(params);
-                        tv2.setTag(mrcServiceModelList.get(i).trap_id.toString());
-                        tv2.setBackgroundColor(Color.TRANSPARENT);
-                        tv2.setTextSize(16);
-                        //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                        //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                        tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
-                        rl1.addView(tv2);
-                        rl1.invalidate();
-                        LayoutParams layoutarams;
-                        layoutarams = (LayoutParams) tv2.getLayoutParams();
-                        layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                        tv2.setLayoutParams(layoutarams);
-
-                    }
-                }
-                else{
+        }
+        spinnerRuns.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parentView, View selectedItemView, int position, long id) {
+                if (field_type.equals("ov")) {
+                    LinearLayout l1 = (LinearLayout) findViewById(R.id.contentLinearLayout);
+                    l1.removeAllViews();
                     dbHandler = new DbHandler(context);
-                    mrcReleaseModelList = new ArrayList<>();
-                    mrcList = new ArrayList<>();
-                    mrcReleaseModelList = dbHandler.getSingleMrcRelease(run_name, field_type);
-                    if(mrcReleaseModelList.size()>0){
-                        for (int i = 0; i < mrcReleaseModelList.size(); ++i) {
-                            Log.d("test-mrc_id", mrcReleaseModelList.get(i).trap_id.toString());
-                            Log.d("test-run_name", mrcReleaseModelList.get(i).mrc_run_id.toString());
-                            Log.d("test-coordinates", mrcReleaseModelList.get(i).coordinates.toString());
 
-                            RelativeLayout rl1 = new RelativeLayout(this);
+                    if (spinnerRuns.getSelectedItem() == null) {
+                        run_name = "";
+                    } else {
+                        run_name = spinnerRuns.getSelectedItem().toString();
+                    }
+                    ovModelList = new ArrayList<>();
+                    ovList = new ArrayList<>();
+                    ovModelList = dbHandler.getSingleOvTrap(run_name, field_type);
+                    Log.d("size-ov", Integer.toString(ovModelList.size()));
+                    if (ovModelList.size() > 0) {
+                        for (int i = 0; i < ovModelList.size(); ++i) {
+                            RelativeLayout rl1 = new RelativeLayout(context);
                             rl1.setId(i);
                             rl1.setLayoutParams(new ViewGroup.LayoutParams(
                                     ViewGroup.LayoutParams.MATCH_PARENT,
                                     ViewGroup.LayoutParams.WRAP_CONTENT));
                             rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
                             rl1.setPadding(15, 10, 15, 10);
-                            rl1.setTag(mrcReleaseModelList.get(i).trap_id.toString());
+                            rl1.setTag(ovModelList.get(i).ov_trap_id.toString());
                             rl1.setOnClickListener(new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
@@ -729,30 +189,412 @@ public class OvListActivity extends AppCompatActivity {
                             });
                             l1.addView(rl1);
                             l1.invalidate();
-                            LinearLayout l2 = new LinearLayout(this);
+                            LinearLayout l2 = new LinearLayout(context);
                             l2.setLayoutParams(new ViewGroup.LayoutParams(
                                     ViewGroup.LayoutParams.WRAP_CONTENT,
                                     ViewGroup.LayoutParams.WRAP_CONTENT));
-                            l2.setTag(mrcReleaseModelList.get(i).trap_id.toString());
+                            l2.setTag(ovModelList.get(i).ov_trap_id.toString());
                             l2.setOrientation(LinearLayout.VERTICAL);
                             l2.setPadding(0, 10, 0, 10);
                             rl1.addView(l2);
                             rl1.invalidate();
-                            TextView tv1 = new TextView(this);
+                            TextView tv1 = new TextView(context);
                             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                             params.setMargins(5, 0, 0, 0);
                             tv1.setLayoutParams(params);
                             tv1.setBackgroundColor(Color.TRANSPARENT);
-                            tv1.setTag(mrcReleaseModelList.get(i).trap_id.toString());
-                            tv1.setText(mrcReleaseModelList.get(i).trap_id.toString());
+                            tv1.setTag(ovModelList.get(i).ov_trap_id.toString());
+                            tv1.setText(ovModelList.get(i).ov_trap_id.toString());
                             tv1.setTextColor(Color.BLACK);
                             tv1.setTextSize(20);
                             l2.addView(tv1);
                             l2.invalidate();
-                            TextView tv2 = new TextView(this);
+                            TextView tv2 = new TextView(context);
                             tv2.setPadding(0, 5, 10, 0);
                             tv2.setLayoutParams(params);
-                            tv2.setTag(mrcReleaseModelList.get(i).trap_id.toString());
+                            tv2.setTag(ovModelList.get(i).ov_trap_id.toString());
+                            tv2.setBackgroundColor(Color.TRANSPARENT);
+                            tv2.setTextSize(16);
+                            //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
+                            //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+
+                            tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                            rl1.addView(tv2);
+                            rl1.invalidate();
+                            LayoutParams layoutarams;
+                            layoutarams = (LayoutParams) tv2.getLayoutParams();
+                            layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                            tv2.setLayoutParams(layoutarams);
+                        }
+                    } else {
+                        ovServiceModelList = new ArrayList<>();
+                        ovList = new ArrayList<>();
+                        ovServiceModelList = dbHandler.getSingleOviService(run_name, field_type);
+                        if (ovServiceModelList.size() > 0) {
+                            for (int i = 0; i < ovServiceModelList.size(); ++i) {
+                                RelativeLayout rl1 = new RelativeLayout(context);
+                                rl1.setId(i);
+                                rl1.setLayoutParams(new ViewGroup.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                                rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
+                                rl1.setPadding(15, 10, 15, 10);
+                                rl1.setTag(ovServiceModelList.get(i).trap_id.toString());
+                                rl1.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        goIndividualOv(v);
+                                    }
+                                });
+                                l1.addView(rl1);
+                                l1.invalidate();
+                                LinearLayout l2 = new LinearLayout(context);
+                                l2.setLayoutParams(new ViewGroup.LayoutParams(
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                                l2.setTag(ovServiceModelList.get(i).trap_id.toString());
+                                l2.setOrientation(LinearLayout.VERTICAL);
+                                l2.setPadding(0, 10, 0, 10);
+                                rl1.addView(l2);
+                                rl1.invalidate();
+                                TextView tv1 = new TextView(context);
+                                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                params.setMargins(5, 0, 0, 0);
+                                tv1.setLayoutParams(params);
+                                tv1.setBackgroundColor(Color.TRANSPARENT);
+                                tv1.setTag(ovServiceModelList.get(i).trap_id.toString());
+                                tv1.setText(ovServiceModelList.get(i).trap_id.toString());
+                                tv1.setTextColor(Color.BLACK);
+                                tv1.setTextSize(20);
+                                l2.addView(tv1);
+                                l2.invalidate();
+                                TextView tv2 = new TextView(context);
+                                tv2.setPadding(0, 5, 10, 0);
+                                tv2.setLayoutParams(params);
+                                tv2.setTag(ovServiceModelList.get(i).trap_id.toString());
+                                tv2.setBackgroundColor(Color.TRANSPARENT);
+                                tv2.setTextSize(16);
+                                //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
+                                //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+
+                                tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                rl1.addView(tv2);
+                                rl1.invalidate();
+                                LayoutParams layoutarams;
+                                layoutarams = (LayoutParams) tv2.getLayoutParams();
+                                layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                                tv2.setLayoutParams(layoutarams);
+                            }
+                        } else {
+                            ovCollectionModelList = new ArrayList<>();
+                            ovList = new ArrayList<>();
+                            ovCollectionModelList = dbHandler.getSingleOviCollection(run_name, field_type);
+                            if (ovCollectionModelList.size() > 0) {
+                                for (int i = 0; i < ovCollectionModelList.size(); ++i) {
+                                    RelativeLayout rl1 = new RelativeLayout(context);
+                                    rl1.setId(i);
+                                    rl1.setLayoutParams(new ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
+                                    rl1.setPadding(15, 10, 15, 10);
+                                    rl1.setTag(ovCollectionModelList.get(i).trap_id.toString());
+                                    rl1.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            goIndividualOv(v);
+                                        }
+                                    });
+                                    l1.addView(rl1);
+                                    l1.invalidate();
+                                    LinearLayout l2 = new LinearLayout(context);
+                                    l2.setLayoutParams(new ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    l2.setTag(ovCollectionModelList.get(i).trap_id.toString());
+                                    l2.setOrientation(LinearLayout.VERTICAL);
+                                    l2.setPadding(0, 10, 0, 10);
+                                    rl1.addView(l2);
+                                    rl1.invalidate();
+                                    TextView tv1 = new TextView(context);
+                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                    params.setMargins(5, 0, 0, 0);
+                                    tv1.setLayoutParams(params);
+                                    tv1.setBackgroundColor(Color.TRANSPARENT);
+                                    tv1.setTag(ovCollectionModelList.get(i).trap_id.toString());
+                                    tv1.setText(ovCollectionModelList.get(i).trap_id.toString());
+                                    tv1.setTextColor(Color.BLACK);
+                                    tv1.setTextSize(20);
+                                    l2.addView(tv1);
+                                    l2.invalidate();
+                                    TextView tv2 = new TextView(context);
+                                    tv2.setPadding(0, 5, 10, 0);
+                                    tv2.setLayoutParams(params);
+                                    tv2.setTag(ovCollectionModelList.get(i).trap_id.toString());
+                                    tv2.setBackgroundColor(Color.TRANSPARENT);
+                                    tv2.setTextSize(16);
+                                    //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
+                                    //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+
+                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                    rl1.addView(tv2);
+                                    rl1.invalidate();
+                                    LayoutParams layoutarams;
+                                    layoutarams = (LayoutParams) tv2.getLayoutParams();
+                                    layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                                    tv2.setLayoutParams(layoutarams);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (field_type.equals("bg")) {
+                    LinearLayout l1 = (LinearLayout) findViewById(R.id.contentLinearLayout);
+                    l1.removeAllViews();
+                    if (spinnerRuns.getSelectedItem() == null) {
+                        run_name = "";
+                    } else {
+                        run_name = spinnerRuns.getSelectedItem().toString();
+                    }
+                    dbHandler = new DbHandler(context);
+                    bgModelList = new ArrayList<>();
+                    bgList = new ArrayList<>();
+                    bgModelList = dbHandler.getSingleBgTrap(run_name, field_type);
+                    //Log.d("size-ov",Integer.toString(ovModelList.size()));
+                    if (bgModelList.size() > 0) {
+                        for (int i = 0; i < bgModelList.size(); ++i) {
+                            RelativeLayout rl1 = new RelativeLayout(context);
+                            rl1.setId(i);
+                            rl1.setLayoutParams(new ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                            rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
+                            rl1.setPadding(15, 10, 15, 10);
+                            rl1.setTag(bgModelList.get(i).bg_trap_id.toString());
+                            rl1.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    goIndividualOv(v);
+                                }
+                            });
+                            l1.addView(rl1);
+                            l1.invalidate();
+                            LinearLayout l2 = new LinearLayout(context);
+                            l2.setLayoutParams(new ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                            l2.setTag(bgModelList.get(i).bg_trap_id.toString());
+                            l2.setOrientation(LinearLayout.VERTICAL);
+                            l2.setPadding(0, 10, 0, 10);
+                            rl1.addView(l2);
+                            rl1.invalidate();
+                            TextView tv1 = new TextView(context);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(5, 0, 0, 0);
+                            tv1.setLayoutParams(params);
+                            tv1.setBackgroundColor(Color.TRANSPARENT);
+                            tv1.setTag(bgModelList.get(i).bg_trap_id.toString());
+                            tv1.setText(bgModelList.get(i).bg_trap_id.toString());
+                            tv1.setTextColor(Color.BLACK);
+                            tv1.setTextSize(20);
+                            l2.addView(tv1);
+                            l2.invalidate();
+                            TextView tv2 = new TextView(context);
+                            tv2.setPadding(0, 5, 10, 0);
+                            tv2.setLayoutParams(params);
+                            tv2.setTag(bgModelList.get(i).bg_trap_id.toString());
+                            tv2.setBackgroundColor(Color.TRANSPARENT);
+                            tv2.setTextSize(16);
+                            //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
+                            //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+
+                            tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                            rl1.addView(tv2);
+                            rl1.invalidate();
+                            LayoutParams layoutarams;
+                            layoutarams = (LayoutParams) tv2.getLayoutParams();
+                            layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                            tv2.setLayoutParams(layoutarams);
+                        }
+                    } else {
+                        dbHandler = new DbHandler(context);
+                        bgServiceModelList = new ArrayList<>();
+                        bgList = new ArrayList<>();
+                        bgServiceModelList = dbHandler.getSingleBgService(run_name, field_type);
+                        if (bgServiceModelList.size() > 0) {
+                            for (int i = 0; i < bgServiceModelList.size(); ++i) {
+                                RelativeLayout rl1 = new RelativeLayout(context);
+                                rl1.setId(i);
+                                rl1.setLayoutParams(new ViewGroup.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                                rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
+                                rl1.setPadding(15, 10, 15, 10);
+                                rl1.setTag(bgServiceModelList.get(i).trap_id.toString());
+                                rl1.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        goIndividualOv(v);
+                                    }
+                                });
+                                l1.addView(rl1);
+                                l1.invalidate();
+                                LinearLayout l2 = new LinearLayout(context);
+                                l2.setLayoutParams(new ViewGroup.LayoutParams(
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                                l2.setTag(bgServiceModelList.get(i).trap_id.toString());
+                                l2.setOrientation(LinearLayout.VERTICAL);
+                                l2.setPadding(0, 10, 0, 10);
+                                rl1.addView(l2);
+                                rl1.invalidate();
+                                TextView tv1 = new TextView(context);
+                                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                params.setMargins(5, 0, 0, 0);
+                                tv1.setLayoutParams(params);
+                                tv1.setBackgroundColor(Color.TRANSPARENT);
+                                tv1.setTag(bgServiceModelList.get(i).trap_id.toString());
+                                tv1.setText(bgServiceModelList.get(i).trap_id.toString());
+                                tv1.setTextColor(Color.BLACK);
+                                tv1.setTextSize(20);
+                                l2.addView(tv1);
+                                l2.invalidate();
+                                TextView tv2 = new TextView(context);
+                                tv2.setPadding(0, 5, 10, 0);
+                                tv2.setLayoutParams(params);
+                                tv2.setTag(bgServiceModelList.get(i).trap_id.toString());
+                                tv2.setBackgroundColor(Color.TRANSPARENT);
+                                tv2.setTextSize(16);
+                                //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
+                                //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+
+                                tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                rl1.addView(tv2);
+                                rl1.invalidate();
+                                LayoutParams layoutarams;
+                                layoutarams = (LayoutParams) tv2.getLayoutParams();
+                                layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                                tv2.setLayoutParams(layoutarams);
+                            }
+                        } else {
+                            dbHandler = new DbHandler(context);
+                            bgCollectionModelList = new ArrayList<>();
+                            bgList = new ArrayList<>();
+                            bgCollectionModelList = dbHandler.getSingleBgCollection(run_name, field_type);
+                            if (bgCollectionModelList.size() > 0) {
+                                for (int i = 0; i < bgCollectionModelList.size(); ++i) {
+                                    RelativeLayout rl1 = new RelativeLayout(context);
+                                    rl1.setId(i);
+                                    rl1.setLayoutParams(new ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
+                                    rl1.setPadding(15, 10, 15, 10);
+                                    rl1.setTag(bgCollectionModelList.get(i).trap_id.toString());
+                                    rl1.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            goIndividualOv(v);
+                                        }
+                                    });
+                                    l1.addView(rl1);
+                                    l1.invalidate();
+                                    LinearLayout l2 = new LinearLayout(context);
+                                    l2.setLayoutParams(new ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    l2.setTag(bgCollectionModelList.get(i).trap_id.toString());
+                                    l2.setOrientation(LinearLayout.VERTICAL);
+                                    l2.setPadding(0, 10, 0, 10);
+                                    rl1.addView(l2);
+                                    rl1.invalidate();
+                                    TextView tv1 = new TextView(context);
+                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                    params.setMargins(5, 0, 0, 0);
+                                    tv1.setLayoutParams(params);
+                                    tv1.setBackgroundColor(Color.TRANSPARENT);
+                                    tv1.setTag(bgCollectionModelList.get(i).trap_id.toString());
+                                    tv1.setText(bgCollectionModelList.get(i).trap_id.toString());
+                                    tv1.setTextColor(Color.BLACK);
+                                    tv1.setTextSize(20);
+                                    l2.addView(tv1);
+                                    l2.invalidate();
+                                    TextView tv2 = new TextView(context);
+                                    tv2.setPadding(0, 5, 10, 0);
+                                    tv2.setLayoutParams(params);
+                                    tv2.setTag(bgCollectionModelList.get(i).trap_id.toString());
+                                    tv2.setBackgroundColor(Color.TRANSPARENT);
+                                    tv2.setTextSize(16);
+                                    //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
+                                    //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+
+                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                    rl1.addView(tv2);
+                                    rl1.invalidate();
+                                    LayoutParams layoutarams;
+                                    layoutarams = (LayoutParams) tv2.getLayoutParams();
+                                    layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                                    tv2.setLayoutParams(layoutarams);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (field_type.equals("mrc")) {
+                    LinearLayout l1 = (LinearLayout) findViewById(R.id.contentLinearLayout);
+                    l1.removeAllViews();
+                    dbHandler = new DbHandler(context);
+                    if (spinnerRuns.getSelectedItem() == null) {
+                        run_name = "";
+                    } else {
+                        run_name = spinnerRuns.getSelectedItem().toString();
+                    }
+                    dbHandler = new DbHandler(context);
+                    mrcModelList = new ArrayList<>();
+                    mrcList = new ArrayList<>();
+                    mrcModelList = dbHandler.getSingleMrc(run_name, field_type);
+                    if (mrcModelList.size() > 0) {
+                        for (int i = 0; i < mrcModelList.size(); ++i) {
+                            RelativeLayout rl1 = new RelativeLayout(context);
+                            rl1.setId(i);
+                            rl1.setLayoutParams(new ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.MATCH_PARENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                            rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
+                            rl1.setPadding(15, 10, 15, 10);
+                            rl1.setTag(mrcModelList.get(i).identifier.toString());
+                            rl1.setOnClickListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    goIndividualOv(v);
+                                }
+                            });
+                            l1.addView(rl1);
+                            l1.invalidate();
+                            LinearLayout l2 = new LinearLayout(context);
+                            l2.setLayoutParams(new ViewGroup.LayoutParams(
+                                    ViewGroup.LayoutParams.WRAP_CONTENT,
+                                    ViewGroup.LayoutParams.WRAP_CONTENT));
+                            l2.setTag(mrcModelList.get(i).identifier.toString());
+                            l2.setOrientation(LinearLayout.VERTICAL);
+                            l2.setPadding(0, 10, 0, 10);
+                            rl1.addView(l2);
+                            rl1.invalidate();
+                            TextView tv1 = new TextView(context);
+                            LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                            params.setMargins(5, 0, 0, 0);
+                            tv1.setLayoutParams(params);
+                            tv1.setBackgroundColor(Color.TRANSPARENT);
+                            tv1.setTag(mrcModelList.get(i).identifier.toString());
+                            tv1.setText(mrcModelList.get(i).identifier.toString());
+                            tv1.setTextColor(Color.BLACK);
+                            tv1.setTextSize(20);
+                            l2.addView(tv1);
+                            l2.invalidate();
+                            TextView tv2 = new TextView(context);
+                            tv2.setPadding(0, 5, 10, 0);
+                            tv2.setLayoutParams(params);
+                            tv2.setTag(mrcModelList.get(i).identifier.toString());
                             tv2.setBackgroundColor(Color.TRANSPARENT);
                             tv2.setTextSize(16);
                             //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
@@ -768,9 +610,144 @@ public class OvListActivity extends AppCompatActivity {
 
                         }
                     }
+                    else{
+                        dbHandler = new DbHandler(context);
+                        mrcServiceModelList = new ArrayList<>();
+                        mrcList = new ArrayList<>();
+                        mrcServiceModelList = dbHandler.getSingleMrcService(run_name, field_type);
+                        if(mrcServiceModelList.size()>0){
+                            for (int i = 0; i < mrcServiceModelList.size(); ++i) {
+
+                                RelativeLayout rl1 = new RelativeLayout(context);
+                                rl1.setId(i);
+                                rl1.setLayoutParams(new ViewGroup.LayoutParams(
+                                        ViewGroup.LayoutParams.MATCH_PARENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                                rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
+                                rl1.setPadding(15, 10, 15, 10);
+                                rl1.setTag(mrcServiceModelList.get(i).trap_id.toString());
+                                rl1.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        goIndividualOv(v);
+                                    }
+                                });
+                                l1.addView(rl1);
+                                l1.invalidate();
+                                LinearLayout l2 = new LinearLayout(context);
+                                l2.setLayoutParams(new ViewGroup.LayoutParams(
+                                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                                        ViewGroup.LayoutParams.WRAP_CONTENT));
+                                l2.setTag(mrcServiceModelList.get(i).trap_id.toString());
+                                l2.setOrientation(LinearLayout.VERTICAL);
+                                l2.setPadding(0, 10, 0, 10);
+                                rl1.addView(l2);
+                                rl1.invalidate();
+                                TextView tv1 = new TextView(context);
+                                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                params.setMargins(5, 0, 0, 0);
+                                tv1.setLayoutParams(params);
+                                tv1.setBackgroundColor(Color.TRANSPARENT);
+                                tv1.setTag(mrcServiceModelList.get(i).trap_id.toString());
+                                tv1.setText(mrcServiceModelList.get(i).trap_id.toString());
+                                tv1.setTextColor(Color.BLACK);
+                                tv1.setTextSize(20);
+                                l2.addView(tv1);
+                                l2.invalidate();
+                                TextView tv2 = new TextView(context);
+                                tv2.setPadding(0, 5, 10, 0);
+                                tv2.setLayoutParams(params);
+                                tv2.setTag(mrcServiceModelList.get(i).trap_id.toString());
+                                tv2.setBackgroundColor(Color.TRANSPARENT);
+                                tv2.setTextSize(16);
+                                //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
+                                //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+
+                                tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                rl1.addView(tv2);
+                                rl1.invalidate();
+                                LayoutParams layoutarams;
+                                layoutarams = (LayoutParams) tv2.getLayoutParams();
+                                layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                                tv2.setLayoutParams(layoutarams);
+
+                            }
+                        }
+                        else{
+                            dbHandler = new DbHandler(context);
+                            mrcReleaseModelList = new ArrayList<>();
+                            mrcList = new ArrayList<>();
+                            mrcReleaseModelList = dbHandler.getSingleMrcRelease(run_name, field_type);
+                            if(mrcReleaseModelList.size()>0){
+                                for (int i = 0; i < mrcReleaseModelList.size(); ++i) {
+
+                                    RelativeLayout rl1 = new RelativeLayout(context);
+                                    rl1.setId(i);
+                                    rl1.setLayoutParams(new ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.MATCH_PARENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    rl1.setBackground(ContextCompat.getDrawable(context, R.drawable.vertical_single_border));
+                                    rl1.setPadding(15, 10, 15, 10);
+                                    rl1.setTag(mrcReleaseModelList.get(i).trap_id.toString());
+                                    rl1.setOnClickListener(new View.OnClickListener() {
+                                        @Override
+                                        public void onClick(View v) {
+                                            goIndividualOv(v);
+                                        }
+                                    });
+                                    l1.addView(rl1);
+                                    l1.invalidate();
+                                    LinearLayout l2 = new LinearLayout(context);
+                                    l2.setLayoutParams(new ViewGroup.LayoutParams(
+                                            ViewGroup.LayoutParams.WRAP_CONTENT,
+                                            ViewGroup.LayoutParams.WRAP_CONTENT));
+                                    l2.setTag(mrcReleaseModelList.get(i).trap_id.toString());
+                                    l2.setOrientation(LinearLayout.VERTICAL);
+                                    l2.setPadding(0, 10, 0, 10);
+                                    rl1.addView(l2);
+                                    rl1.invalidate();
+                                    TextView tv1 = new TextView(context);
+                                    LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                                    params.setMargins(5, 0, 0, 0);
+                                    tv1.setLayoutParams(params);
+                                    tv1.setBackgroundColor(Color.TRANSPARENT);
+                                    tv1.setTag(mrcReleaseModelList.get(i).trap_id.toString());
+                                    tv1.setText(mrcReleaseModelList.get(i).trap_id.toString());
+                                    tv1.setTextColor(Color.BLACK);
+                                    tv1.setTextSize(20);
+                                    l2.addView(tv1);
+                                    l2.invalidate();
+                                    TextView tv2 = new TextView(context);
+                                    tv2.setPadding(0, 5, 10, 0);
+                                    tv2.setLayoutParams(params);
+                                    tv2.setTag(mrcReleaseModelList.get(i).trap_id.toString());
+                                    tv2.setBackgroundColor(Color.TRANSPARENT);
+                                    tv2.setTextSize(16);
+                                    //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
+                                    //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
+
+                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                    rl1.addView(tv2);
+                                    rl1.invalidate();
+                                    LayoutParams layoutarams;
+                                    layoutarams = (LayoutParams) tv2.getLayoutParams();
+                                    layoutarams.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                                    tv2.setLayoutParams(layoutarams);
+
+                                }
+                            }
+                        }
+                    }
                 }
+
             }
-        }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parentView) {
+                // your code here
+            }
+
+        });
         button.setOnClickListener(new View.OnClickListener() {
 
             @Override
