@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class DbHandler extends SQLiteOpenHelper {
-    private static final int VERSION = 21;
+    private static final int VERSION = 22;
     private static final String DB_NAME = "FieldDatabase";
     // table and column names for person table
     private static final String TABLE_PERSON = "person";
@@ -536,7 +536,7 @@ public List<String> getAllOviRuns() {
     public List<MrcServiceModel> getSingleMrcService(String selected_run,String field_type) {
         List<MrcServiceModel> mrcServices = new ArrayList();
         SQLiteDatabase db = getReadableDatabase();
-        String query = "select * from " + TABLE_MRC_SERVICE + " where service_id =" + "\'" + selected_run + "\'" + ";";
+        String query = "select * from " + TABLE_MRC_SERVICE + " where mrc_run_id =" + "\'" + selected_run + "\'" + ";";
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
