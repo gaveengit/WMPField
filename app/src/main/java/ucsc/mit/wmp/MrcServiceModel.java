@@ -1,10 +1,8 @@
 package ucsc.mit.wmp;
 
+import android.util.Log;
+
 public class MrcServiceModel {
-    public String service_id;
-    public String service_date;
-    public String service_time;
-    public String service_status;
     public String mrc_run_id;
     public String trap_id;
     public String coordinates;
@@ -13,6 +11,10 @@ public class MrcServiceModel {
     public String location_description;
     public String full_name;
     public String contact_number;
+    public String service_id;
+    public String service_date;
+    public String service_time;
+    public String service_status;
 
     public MrcServiceModel(){
 
@@ -28,6 +30,15 @@ public class MrcServiceModel {
         this.location_description = location_description;
         this.full_name = full_name;
         this.contact_number = contact_number;
+    }
+    public MrcServiceModel(String mrc_run_id,String trap_id, String service_id,String service_date, String service_time, String service_status) {
+        this.mrc_run_id = mrc_run_id;
+        this.trap_id = trap_id;
+        this.service_id = service_id;
+        Log.d("service_id",trap_id);
+        this.service_date = service_date;
+        this.service_time = service_time;
+        this.service_status = service_status;
     }
 
     public void setService_id(String service_id) {

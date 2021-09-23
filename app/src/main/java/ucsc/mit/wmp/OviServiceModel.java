@@ -1,10 +1,6 @@
 package ucsc.mit.wmp;
 
 public class OviServiceModel {
-    public String service_id;
-    public String service_date;
-    public String service_time;
-    public String service_status;
     public String ovi_run_id;
     public String trap_id;
     public String trap_position;
@@ -14,6 +10,10 @@ public class OviServiceModel {
     public String location_description;
     public String full_name;
     public String contact_number;
+    public String service_id;
+    public String service_date;
+    public String service_time;
+    public String service_status;
 
     public OviServiceModel(){
 
@@ -30,6 +30,15 @@ public class OviServiceModel {
         this.location_description = location_description;
         this.full_name = full_name;
         this.contact_number = contact_number;
+    }
+
+    public OviServiceModel(String run_id,String trap_id,String service_id,String date, String time, String status) {
+        this.ovi_run_id = run_id;
+        this.trap_id = trap_id;
+        this.service_id = service_id;
+        this.service_date = date;
+        this.service_time = time;
+        this.service_status = status;
     }
 
     public void setService_id(String service_id) {

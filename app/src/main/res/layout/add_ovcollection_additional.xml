@@ -5,127 +5,78 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@drawable/wallpaper"
         android:orientation="vertical">
 
-        <RelativeLayout
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp">
-
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="#0000FF"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
-                android:text="Edit"
-                android:textColor="#ffffff"
-                android:visibility="gone" />
-        </RelativeLayout>
-
         <TextView
-            android:id="@+id/textViewId"
+            android:id="@+id/textViewPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="MRC Identifier (*)"
+            android:text="Phone"
             android:textColor="#000000"
             android:textSize="17dp" />
 
         <EditText
-            android:id="@+id/editTextTrapId"
+            android:id="@+id/editTextPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/red"
-            android:inputType="textPersonName" />
+            android:inputType="none" />
 
         <TextView
-            android:id="@+id/errorContainerMrcIdentifier"
+            android:id="@+id/textViewAdd1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:textColor="#FF0000"
-            android:text="Collection id is already existing."
-            android:textSize="17dp" />
-
-        <TextView
-            android:id="@+id/textViewStatus"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/transparent"
-            android:text="Mrc Status (*)"
-            android:textColor="#000000"
-            android:textSize="17dp" />
-
-        <RadioGroup
-            android:id="@+id/trapStatus"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content">
-
-            <RadioButton
-                android:id="@+id/radioProposed"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:layout_marginTop="4dp"
-                android:checked="false"
-                android:text="Proposed"
-                android:textSize="17dp" />
-
-            <RadioButton
-                android:id="@+id/radioSet"
-                android:layout_width="wrap_content"
-                android:layout_height="25dp"
-                android:layout_marginTop="4dp"
-                android:checked="false"
-                android:text="Deployed"
-                android:textSize="17dp" />
-        </RadioGroup>
-
-        <TextView
-            android:id="@+id/textViewRespondentName"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/transparent"
-            android:text="Respondent Name (*)"
+            android:text="Address Line1 (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
         <EditText
-            android:id="@+id/editTextRespondentName"
+            android:id="@+id/editTextAdd1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/red"
-            android:inputType="textPersonName" />
+            android:inputType="none" />
 
         <TextView
-            android:id="@+id/textViewLocation"
+            android:id="@+id/textViewAdd2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Location Coordinates (*)"
+            android:text="Address Line2 (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
         <EditText
-            android:id="@+id/editTextLocation"
+            android:id="@+id/editTextAdd2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
-            android:onClick="viewCoordinates"/>
+            android:inputType="none" />
+
+        <TextView
+            android:id="@+id/textViewLocationDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:text="Location Description"
+            android:textColor="#000000"
+            android:textSize="17dp" />
+
+        <EditText
+            android:id="@+id/editTextLocationDescription"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
+
         <TextView
             android:id="@+id/errorContainer"
             android:layout_width="match_parent"
@@ -133,8 +84,8 @@
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
             android:textColor="#FF0000"
-            android:visibility="gone"
-            android:textSize="17dp" />
+            android:textSize="17dp"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -150,11 +101,11 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentLeft="true"
                 android:background="#FF0000"
+                android:onClick="goOvMain"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
                 android:text="Back"
                 android:textColor="#ffffff"
-                android:onClick="goListView"
                 app:backgroundTint="@color/red" />
 
             <Button
@@ -162,12 +113,13 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="#008000"
-                android:onClick="goAdditionalMrc"
+                android:onClick="submitOv"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
-                android:text="Next"
+                android:text="Done"
                 android:textColor="#ffffff"
                 app:backgroundTint="@color/green" />
         </RelativeLayout>
+
     </LinearLayout>
 </ScrollView>

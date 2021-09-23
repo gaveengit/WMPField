@@ -4,8 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-
-    <LinearLayout
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
         android:background="@drawable/wallpaper"
@@ -15,21 +16,22 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="10dp"
             android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingBottom="10dp">
-
+            >
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="#0000FF"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
                 android:text="Edit"
+                android:visibility="gone"
                 android:textColor="#ffffff"
-                android:visibility="gone" />
+                android:paddingRight="50dp"
+                android:paddingLeft="50dp"
+                />
         </RelativeLayout>
 
         <TextView
@@ -38,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="MRC Identifier (*)"
+            android:text="BG Trap Id (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
@@ -47,17 +49,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/red"
-            android:inputType="textPersonName" />
-
+            android:inputType="none" />
         <TextView
-            android:id="@+id/errorContainerMrcIdentifier"
+            android:id="@+id/errorContainerBg"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
             android:textColor="#FF0000"
-            android:text="Collection id is already existing."
+            android:text="BG trap id is already existing."
             android:textSize="17dp" />
+
+        <TextView
+            android:id="@+id/textViewId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:text="Service Id (*)"
+            android:textColor="#000000"
+            android:textSize="17dp" />
+
+        <EditText
+            android:id="@+id/editTextServiceId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
+            />
 
         <TextView
             android:id="@+id/textViewStatus"
@@ -65,34 +83,50 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Mrc Status (*)"
+            android:text="Service Status (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
         <RadioGroup
-            android:id="@+id/trapStatus"
+            android:id="@+id/serviceStatus"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
             <RadioButton
-                android:id="@+id/radioProposed"
+                android:id="@+id/radioServiced"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
-                android:layout_marginTop="4dp"
                 android:checked="false"
-                android:text="Proposed"
-                android:textSize="17dp" />
+                android:layout_marginTop="4dp"
+                android:text="Serviced"
+                android:textSize="17dp"
+                />
 
             <RadioButton
-                android:id="@+id/radioSet"
+                android:id="@+id/radioNotServiced"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
-                android:layout_marginTop="4dp"
                 android:checked="false"
-                android:text="Deployed"
-                android:textSize="17dp" />
+                android:layout_marginTop="4dp"
+                android:text="Not Serviced"
+                android:textSize="17dp"
+                />
         </RadioGroup>
+        <TextView
+            android:id="@+id/textViewPosition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:text="Trap Position (*)"
+            android:textColor="#000000"
+            android:textSize="17dp" />
 
+        <EditText
+            android:id="@+id/editTextTrapPosition"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="none" />
         <TextView
             android:id="@+id/textViewRespondentName"
             android:layout_width="match_parent"
@@ -108,8 +142,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/red"
-            android:inputType="textPersonName" />
-
+            android:inputType="none" />
         <TextView
             android:id="@+id/textViewLocation"
             android:layout_width="match_parent"
@@ -124,7 +157,7 @@
             android:id="@+id/editTextLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="none"
             android:onClick="viewCoordinates"/>
         <TextView
             android:id="@+id/errorContainer"
@@ -140,10 +173,11 @@
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="10dp"
             android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
             android:paddingRight="10dp"
-            android:paddingBottom="10dp">
+            >
 
             <Button
                 android:layout_width="wrap_content"
@@ -154,15 +188,15 @@
                 android:paddingRight="50dp"
                 android:text="Back"
                 android:textColor="#ffffff"
-                android:onClick="goListView"
-                app:backgroundTint="@color/red" />
+                app:backgroundTint="@color/red"
+                android:onClick="goListView"/>
 
             <Button
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="#008000"
-                android:onClick="goAdditionalMrc"
+                android:onClick="goAdditionalBg"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
                 android:text="Next"

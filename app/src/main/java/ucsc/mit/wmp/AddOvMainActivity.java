@@ -40,6 +40,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -48,14 +49,18 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 
 public class AddOvMainActivity extends AppCompatActivity {
     final Context context = this;
+    private DbHandler dbHandler;
     private static final int PRIORITY_HIGH_ACCURACY = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
     public static final String OviTrapId = "OviTrapId";
+    public static final String OriginalOviId = "OriginalOviId";
     public static final String TrapStatus = "TrapStatus";
     public static final String TrapPosition = "TrapPosition";
     public static final String RespondName = "RespondName";
@@ -72,6 +77,8 @@ public class AddOvMainActivity extends AppCompatActivity {
     TextView errorText;
     SharedPreferences sharedpreferences;
     String form_type;
+    private List<OvTrapModel> ovPersonAddressModelList;
+    String original_ov_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -95,6 +102,7 @@ public class AddOvMainActivity extends AppCompatActivity {
         String respond_name = sharedpreferences.getString(RespondName, "");
         String location_coordinates = sharedpreferences.getString(LocationCoordinates, "");
         String ovi_run_id = sharedpreferences.getString(OviRunId, "");
+        original_ov_id = sharedpreferences.getString(OriginalOviId, "");
         Log.d("ovi_run",ovi_run_id);
         if(respond_name.length()!=0) {
             EditTextTrapId.setText(ovi_trap_id);
@@ -164,11 +172,15 @@ public class AddOvMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalOv(View pView) {
-        if (EditTextTrapId.getText().toString().length() == 0 || EditTextTrapPosition.getText().toString().length()
-                ==0 || EditTextRespondName.getText().toString().length() == 0 || EditTextLocationCoordinates.
-                getText().toString().length()==0) {
+        dbHandler = new DbHandler(context);
+        long flag_insert_ov = -1;
+        ovPersonAddressModelList = new ArrayList<>();
+        ovPersonAddressModelList = dbHandler.getSingleOvTrap(EditTextTrapId.getText().toString());
+        if(((ovPersonAddressModelList.size() > 0) && form_type.equals("new")) || (!original_ov_id.equals(EditTextTrapId.getText().toString()) && ovPersonAddressModelList.size() > 0 && form_type.equals("edit-new"))){
             errorText.setVisibility(View.VISIBLE);
-            errorText.setText("Please fill all required fields.");
+            errorText.setText("OVI trap id is already existing.");
+            Toast.makeText(context, "OVI trap id is already existing. Please try again.",
+                    Toast.LENGTH_LONG).show();
         }
         else {
             errorText.setVisibility(View.GONE);

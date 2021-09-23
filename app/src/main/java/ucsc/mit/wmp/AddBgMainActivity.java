@@ -32,6 +32,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -40,10 +41,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class AddBgMainActivity extends AppCompatActivity {
     final Context context = this;
+    private DbHandler dbHandler;
     private static final int PRIORITY_HIGH_ACCURACY = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
     public static final String BgTrapId = "BgTrapId";
@@ -53,6 +57,8 @@ public class AddBgMainActivity extends AppCompatActivity {
     public static final String LocationCoordinates = "LocationCoordinates";
     public static final String BgDetails = "BgDetails";
     public static final String BgRunId = "BgRunId";
+    public static final String OriginalBgId = "OriginalBgId";
+    private List<BgTrapModel> bgPersonAddressModelList;
     EditText EditTextTrapId;
     RadioGroup RadioGroupTrapStatus;
     RadioButton RadioProposed;
@@ -63,6 +69,7 @@ public class AddBgMainActivity extends AppCompatActivity {
     TextView errorText;
     SharedPreferences sharedpreferences;
     String form_type;
+    String original_bg_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +93,7 @@ public class AddBgMainActivity extends AppCompatActivity {
         String respond_name = sharedpreferences.getString(RespondName, "");
         String location_coordinates = sharedpreferences.getString(LocationCoordinates, "");
         String bg_run_id = sharedpreferences.getString(BgRunId, "");
+        original_bg_id = sharedpreferences.getString(OriginalBgId, "");
         Log.d("bg_run",bg_run_id);
         if(respond_name.length()!=0) {
             EditTextTrapId.setText(ovi_trap_id);
@@ -147,11 +155,14 @@ public class AddBgMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalBg(View pView) {
-        if (EditTextTrapId.getText().toString().length() == 0 || EditTextTrapPosition.getText().toString().length()
-                ==0 || EditTextRespondName.getText().toString().length() == 0 || EditTextLocationCoordinates.
-                getText().toString().length()==0) {
+        dbHandler = new DbHandler(context);
+        bgPersonAddressModelList = new ArrayList<>();
+        bgPersonAddressModelList = dbHandler.getSingleBgTrap(EditTextTrapId.getText().toString());
+        if (((bgPersonAddressModelList.size() > 0) && form_type.equals("new")) || (!original_bg_id.equals(EditTextTrapId.getText().toString()) && bgPersonAddressModelList.size() > 0 && form_type.equals("edit-new"))) {
             errorText.setVisibility(View.VISIBLE);
-            errorText.setText("Please fill all required fields.");
+            errorText.setText("BG trap id is already existing.");
+            Toast.makeText(context, "BG trap id is already existing.",
+                    Toast.LENGTH_LONG).show();
         }
         else {
             errorText.setVisibility(View.GONE);

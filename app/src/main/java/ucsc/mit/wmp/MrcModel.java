@@ -89,7 +89,7 @@ public class MrcModel {
     }
 
     public String getLocation_description() {
-        return address_line2;
+        return location_description;
     }
 
     public String getCoordinates() {

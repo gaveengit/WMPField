@@ -51,6 +51,18 @@
         <activity android:name=".IncidentContactActivity"></activity>
         <activity android:name=".IncidentDescriptionActivity"></activity>
         <activity android:name=".IncidentLocationActivity"></activity>
+        <activity android:name=".AddBgServiceMainActivity"></activity>
+        <activity android:name=".AddBgServiceAdditionalActivity"></activity>
+        <activity android:name=".AddBgCollectionMainActivity"></activity>
+        <activity android:name=".AddBgCollectionAdditionalActivity"></activity>
+        <activity android:name=".AddOviServiceMainActivity"></activity>
+        <activity android:name=".AddOviServiceAdditionalActivity"></activity>
+        <activity android:name=".AddOviCollectionMainActivity"></activity>
+        <activity android:name=".AddOviCollectionAdditionalActivity"></activity>
+        <activity android:name=".AddMrcServiceMainActivity"></activity>
+        <activity android:name=".AddMrcServiceAdditionalActivity"></activity>
+        <activity android:name=".AddMrcReleaseMainActivity"></activity>
+        <activity android:name=".AddMrcReleaseAdditionalActivity"></activity>
     </application>
 
 </manifest>

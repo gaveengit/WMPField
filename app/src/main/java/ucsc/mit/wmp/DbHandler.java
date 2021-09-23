@@ -9,11 +9,15 @@ import android.util.Log;
 
 import androidx.annotation.Nullable;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 public class DbHandler extends SQLiteOpenHelper {
-    private static final int VERSION = 22;
+    private static final int VERSION = 28;
     private static final String DB_NAME = "FieldDatabase";
     // table and column names for person table
     private static final String TABLE_PERSON = "person";
@@ -87,6 +91,9 @@ public class DbHandler extends SQLiteOpenHelper {
     private static final String SERVICE_TIME = "service_time";
     private static final String SERVICE_STATUS = "service_status";
 
+    private static final String DATE = "date";
+    private static final String TIME = "time";
+
     public DbHandler(@Nullable Context context) {
         super(context, DB_NAME, null, VERSION);
     }
@@ -95,15 +102,15 @@ public class DbHandler extends SQLiteOpenHelper {
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
 
         String TABLE_CREATE_QUERY_MRC = "CREATE TABLE " + TABLE_MRC + " " + "(" + IDENTIFIER + " TEXT," + MRC_STATUS
-                + " TEXT," + RUN_NAME + " TEXT," + PERSON_NAME + " TEXT," + PERSON_PHONE +" INTEGER," +  ADDRESS_LINE1 + " TEXT," + ADDRESS_LINE2 + " TEXT," + LOCATION_DESCRIPTION + " TEXT," + MRC_COORDINATES + " TEXT," + "primary key " + "(" + IDENTIFIER + ")"+");";
+                + " TEXT," + RUN_NAME + " TEXT," + PERSON_NAME + " TEXT," + PERSON_PHONE +" INTEGER," +  ADDRESS_LINE1 + " TEXT," + ADDRESS_LINE2 + " TEXT," + LOCATION_DESCRIPTION + " TEXT," + MRC_COORDINATES + " TEXT," + DATE +" TEXT,"+ TIME +" TEXT," + "primary key " + "(" + IDENTIFIER + ")"+");";
         sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_MRC);
 
         String TABLE_CREATE_QUERY_BG_TRAP = "CREATE TABLE " + TABLE_BG_TRAP + " " + "(" + BG_TRAP_ID + " TEXT," + BG_TRAP_STATUS
-                + " TEXT," + BG_POSITION + " TEXT," + RUN_NAME + " TEXT," + PERSON_NAME + " TEXT," + PERSON_PHONE +" INTEGER," +  ADDRESS_LINE1 + " TEXT," + ADDRESS_LINE2 + " TEXT," + LOCATION_DESCRIPTION + " TEXT," +  BG_COORDINATES + " TEXT,"+ "primary key " + "(" + BG_TRAP_ID + ")"+");";
+                + " TEXT," + BG_POSITION + " TEXT," + RUN_NAME + " TEXT," + PERSON_NAME + " TEXT," + PERSON_PHONE +" INTEGER," +  ADDRESS_LINE1 + " TEXT," + ADDRESS_LINE2 + " TEXT," + LOCATION_DESCRIPTION + " TEXT," +  BG_COORDINATES + " TEXT,"+ DATE +" TEXT,"+ TIME +" TEXT," + "primary key " + "(" + BG_TRAP_ID + ")"+");";
         sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_BG_TRAP);
 
         String TABLE_CREATE_QUERY_OV_TRAP = "CREATE TABLE " + TABLE_OV_TRAP + " " + "(" + OV_TRAP_ID + " TEXT," + OV_TRAP_STATUS
-                + " TEXT," + OV_POSITION + " TEXT," + RUN_NAME + " TEXT," + PERSON_NAME + " TEXT," + PERSON_PHONE +" INTEGER," +  ADDRESS_LINE1 + " TEXT," + ADDRESS_LINE2 + " TEXT," + LOCATION_DESCRIPTION + " TEXT," + OV_COORDINATES + " TEXT," + "primary key " + "(" + OV_TRAP_ID + ")"+ ");";
+                + " TEXT," + OV_POSITION + " TEXT," + RUN_NAME + " TEXT," + PERSON_NAME + " TEXT," + PERSON_PHONE +" INTEGER," +  ADDRESS_LINE1 + " TEXT," + ADDRESS_LINE2 + " TEXT," + LOCATION_DESCRIPTION + " TEXT," + OV_COORDINATES + " TEXT," + DATE +" TEXT,"+ TIME +" TEXT," + "primary key " + "(" + OV_TRAP_ID + ")"+ ");";
         sqLiteDatabase.execSQL(TABLE_CREATE_QUERY_OV_TRAP);
 
         String TABLE_CREATE_QUERY_OVI_SERVICE = "CREATE TABLE " + TABLE_OVI_SERVICE + " " + "(" + OVI_RUN_ID + " TEXT," + TRAP_ID
@@ -181,6 +188,12 @@ public class DbHandler extends SQLiteOpenHelper {
     }
 
     public long insertDataMrc(MrcModel mrcObj) {
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        Calendar currentTime = Calendar.getInstance();
+        String hour = String.valueOf(currentTime.get(Calendar.HOUR_OF_DAY));
+        String minute = String.valueOf(currentTime.get(Calendar.MINUTE));
+        String current_time = hour + ":" + minute;
+
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(IDENTIFIER, mrcObj.getIdentifier());
@@ -192,6 +205,9 @@ public class DbHandler extends SQLiteOpenHelper {
         contentValues.put(ADDRESS_LINE2 ,mrcObj.getAddress_line2());
         contentValues.put(MRC_COORDINATES, mrcObj.getCoordinates());
         contentValues.put(LOCATION_DESCRIPTION, mrcObj.getLocation_description());
+        contentValues.put(DATE, currentDate);
+        contentValues.put(TIME, current_time);
+
         // save to table
         long flag = sqLiteDatabase.insert(TABLE_MRC, null, contentValues);
         // close connection
@@ -202,6 +218,12 @@ public class DbHandler extends SQLiteOpenHelper {
 
 
     public long insertDataBgTrap(BgTrapModel bgTrapObj) {
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        Calendar currentTime = Calendar.getInstance();
+        String hour = String.valueOf(currentTime.get(Calendar.HOUR_OF_DAY));
+        String minute = String.valueOf(currentTime.get(Calendar.MINUTE));
+        String current_time = hour + ":" + minute;
+
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BG_TRAP_ID, bgTrapObj.getBg_trap_id());
@@ -214,6 +236,9 @@ public class DbHandler extends SQLiteOpenHelper {
         contentValues.put(ADDRESS_LINE2 ,bgTrapObj.getAddress_line2());
         contentValues.put(BG_COORDINATES, bgTrapObj.getCoordinates());
         contentValues.put(LOCATION_DESCRIPTION, bgTrapObj.getLocation_description());
+        contentValues.put(DATE, currentDate);
+        contentValues.put(TIME, current_time);
+
         // save to table
         long flag = sqLiteDatabase.insert(TABLE_BG_TRAP, null, contentValues);
         // close connection
@@ -265,6 +290,12 @@ public class DbHandler extends SQLiteOpenHelper {
     }
 
     public long insertDataOvTrap(OvTrapModel ovTrapObj) {
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        Calendar currentTime = Calendar.getInstance();
+        String hour = String.valueOf(currentTime.get(Calendar.HOUR_OF_DAY));
+        String minute = String.valueOf(currentTime.get(Calendar.MINUTE));
+        String current_time = hour + ":" + minute;
+
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(OV_TRAP_ID, ovTrapObj.getOv_trap_id());
@@ -277,28 +308,14 @@ public class DbHandler extends SQLiteOpenHelper {
         contentValues.put(ADDRESS_LINE2 ,ovTrapObj.getAddress_line2());
         contentValues.put(OV_COORDINATES, ovTrapObj.getCoordinates());
         contentValues.put(LOCATION_DESCRIPTION, ovTrapObj.getLocation_description());
+        contentValues.put(DATE, currentDate);
+        contentValues.put(TIME, current_time);
         // save to table
         long flag = sqLiteDatabase.insert(TABLE_OV_TRAP, null, contentValues);
         // close connection
         sqLiteDatabase.close();
         return flag;
     }
-/*
-    public void insertDataOvCollection(OvCollectionModel ovCollectionObj) {
-        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
-        ContentValues contentValues = new ContentValues();
-        contentValues.put(COLLECTION_ID, ovCollectionObj.getCollection_id());
-        contentValues.put(COLLECTION_DATE, ovCollectionObj.getDate());
-        contentValues.put(COLLECTION_TIME, ovCollectionObj.getTime());
-        contentValues.put(COLLECTION_STATUS, ovCollectionObj.getCollection_status());
-        contentValues.put(TRAP_CONDITION, ovCollectionObj.getTrap_condition());
-        contentValues.put(OV_TRAP_ID, ovCollectionObj.getOv_trap_id());
-        // save to table
-        sqLiteDatabase.insert(TABLE_OV_COLLECTION, null, contentValues);
-        // close connection
-        sqLiteDatabase.close();
-    }
-*/
 public List<String> getAllOviRuns() {
     List<String> runs = new ArrayList<>();
     SQLiteDatabase db = getReadableDatabase();
@@ -557,6 +574,34 @@ public List<String> getAllOviRuns() {
         return mrcServices;
     }
 
+    public List<MrcServiceModel> getSingleMrcServiceTrap(String selected_run,String trap_id) {
+        List<MrcServiceModel> mrcServices = new ArrayList();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select * from " + TABLE_MRC_SERVICE + " where mrc_run_id =" + "\'" + selected_run + "\'" +" and trap_id="+"\'" + trap_id + "\'" +";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                MrcServiceModel mrcService = new MrcServiceModel();
+                mrcService.setMrc_run_id(cursor.getString(0));
+                mrcService.setMrc_trap_id(cursor.getString(1));
+                mrcService.setCoordinates(cursor.getString(2));
+                mrcService.setAdd_line1(cursor.getString(3));
+                mrcService.setAdd_line2(cursor.getString(4));
+                mrcService.setLocation_description(cursor.getString(5));
+                mrcService.setFull_name(cursor.getString(6));
+                mrcService.setContact_number(cursor.getString(7));
+                mrcService.setService_id(cursor.getString(8));
+                mrcService.setDate(cursor.getString(9));
+                mrcService.setTime(cursor.getString(10));
+                mrcService.setService_status(cursor.getString(11));
+
+                mrcServices.add(mrcService);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return mrcServices;
+    }
+
     public List<MrcReleaseModel> getSingleMrcRelease(String selected_run,String field_type) {
         List<MrcReleaseModel> mrcReleases = new ArrayList();
         SQLiteDatabase db = getReadableDatabase();
@@ -581,12 +626,44 @@ public List<String> getAllOviRuns() {
         return mrcReleases;
     }
 
+    public List<MrcReleaseModel> getSingleMrcReleaseTrap(String selected_run,String trap_id) {
+        List<MrcReleaseModel> mrcReleases = new ArrayList();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select * from " + TABLE_MRC_RELEASE + " where mrc_run_id =" + "\'" + selected_run + "\'" +" and trap_id="+"\'" + trap_id + "\'" +";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                MrcReleaseModel mrcRelease = new MrcReleaseModel();
+                mrcRelease.setMrc_run_id(cursor.getString(0));
+                mrcRelease.setMrc_trap_id(cursor.getString(1));
+                mrcRelease.setCoordinates(cursor.getString(2));
+                mrcRelease.setAdd_line1(cursor.getString(3));
+                mrcRelease.setAdd_line2(cursor.getString(4));
+                mrcRelease.setLocation_description(cursor.getString(5));
+                mrcRelease.setFull_name(cursor.getString(6));
+                mrcRelease.setContact_number(cursor.getString(7));
+                mrcRelease.setRelease_id(cursor.getString(8));
+                mrcRelease.setDate(cursor.getString(9));
+                mrcRelease.setTime(cursor.getString(10));
+                mrcRelease.setRelease_status(cursor.getString(11));
+                mrcReleases.add(mrcRelease);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return mrcReleases;
+    }
+
     public int updateSingleMrc(MrcModel mrcInstance) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(MRC_STATUS, mrcInstance.getMrc_status());
-        contentValues.put(RUN_NAME, mrcInstance.getRun_name());
         contentValues.put(MRC_COORDINATES, mrcInstance.getCoordinates());
+        contentValues.put(IDENTIFIER, mrcInstance.getIdentifier());
+        contentValues.put(PERSON_NAME, mrcInstance.person_name);
+        contentValues.put(PERSON_PHONE, mrcInstance.person_phone);
+        contentValues.put(ADDRESS_LINE1, mrcInstance.address_line1);
+        contentValues.put(ADDRESS_LINE2, mrcInstance.address_line2);
+        contentValues.put(LOCATION_DESCRIPTION, mrcInstance.location_description);
         int status = sqLiteDatabase.update(TABLE_MRC, contentValues, "identifier=?",
                 new String[]{String.valueOf(mrcInstance.getIdentifier())});
         return status;
@@ -639,9 +716,14 @@ public List<String> getAllOviRuns() {
     public int updateSingleMrcRelease(MrcReleaseModel mrcReleaseInstance) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(MRC_RUN_ID, mrcReleaseInstance.getMrc_run_id());
+        contentValues.put(TRAP_ID, mrcReleaseInstance.getMrc_trap_id());
+        contentValues.put(RELEASE_ID, mrcReleaseInstance.getRelease_id());
+        contentValues.put(RELEASE_DATE, mrcReleaseInstance.getDate());
+        contentValues.put(RELEASE_TIME, mrcReleaseInstance.getTime());
         contentValues.put(RELEASE_STATUS, mrcReleaseInstance.getRelease_status());
         int status = sqLiteDatabase.update(TABLE_MRC_RELEASE, contentValues,
-                "release_id=?", new String[]{String.valueOf(mrcReleaseInstance.getRelease_id())});
+                "trap_id=? AND mrc_run_id=?", new String[]{String.valueOf(mrcReleaseInstance.getMrc_trap_id()),String.valueOf(mrcReleaseInstance.getMrc_run_id())});
         return status;
     }
 
@@ -738,6 +820,34 @@ public List<String> getAllOviRuns() {
         db.close();
         return bgServices;
     }
+    public List<BgServiceModel> getSingleBgServiceTrap(String selected_run,String trap_id) {
+        List<BgServiceModel> bgServices = new ArrayList();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select * from " + TABLE_BG_SERVICE + " where bg_run_id =" + "\'" + selected_run + "\'"+" and trap_id=" +"\'" + trap_id + "\'"+ ";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                BgServiceModel bgService = new BgServiceModel();
+                bgService.setBg_run_id(cursor.getString(0));
+                bgService.setBg_trap_id(cursor.getString(1));
+                bgService.setBg_trap_position(cursor.getString(2));
+                bgService.setCoordinates(cursor.getString(3));
+                bgService.setAdd_line1(cursor.getString(4));
+                bgService.setAdd_line2(cursor.getString(5));
+                bgService.setLocation_description(cursor.getString(6));
+                bgService.setFull_name(cursor.getString(7));
+                bgService.setContact_number(cursor.getString(8));
+                bgService.setService_id(cursor.getString(9));
+                bgService.setDate(cursor.getString(10));
+                bgService.setTime(cursor.getString(11));
+                bgService.setService_status(cursor.getString(12));
+
+                bgServices.add(bgService);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return bgServices;
+    }
     public List<BgCollectionModel> getSingleBgCollection(String selected_run,String field_type) {
         List<BgCollectionModel> bgCollections = new ArrayList();
         SQLiteDatabase db = getReadableDatabase();
@@ -762,12 +872,45 @@ public List<String> getAllOviRuns() {
         db.close();
         return bgCollections;
     }
+    public List<BgCollectionModel> getSingleBgCollectionTrap(String selected_run,String trap_id) {
+        List<BgCollectionModel> bgCollections = new ArrayList();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select * from " + TABLE_BG_COLLECTION + " where bg_run_id =" + "\'" + selected_run + "\'" +" and trap_id="+ "\'" + trap_id + "\'"+ ";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                BgCollectionModel bgCollection = new BgCollectionModel();
+                bgCollection.setBg_run_id(cursor.getString(0));
+                bgCollection.setBg_trap_id(cursor.getString(1));
+                bgCollection.setBg_trap_position(cursor.getString(2));
+                bgCollection.setCoordinates(cursor.getString(3));
+                bgCollection.setAdd_line1(cursor.getString(4));
+                bgCollection.setAdd_line2(cursor.getString(5));
+                bgCollection.setLocation_description(cursor.getString(6));
+                bgCollection.setFull_name(cursor.getString(7));
+                bgCollection.setContact_number(cursor.getString(8));
+                bgCollection.setCollection_id(cursor.getString(9));
+                bgCollection.setDate(cursor.getString(10));
+                bgCollection.setTime(cursor.getString(11));
+                bgCollection.setCollection_status(cursor.getString(12));
+                bgCollections.add(bgCollection);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return bgCollections;
+    }
     public int updateSingleBgTrap(BgTrapModel bgTrapInstance) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
         contentValues.put(BG_TRAP_STATUS, bgTrapInstance.getTrap_status());
         contentValues.put(BG_POSITION, bgTrapInstance.getPosition());
         contentValues.put(BG_COORDINATES, bgTrapInstance.getCoordinates());
+        contentValues.put(BG_TRAP_ID, bgTrapInstance.getBg_trap_id());
+        contentValues.put(PERSON_NAME, bgTrapInstance.person_name);
+        contentValues.put(PERSON_PHONE, bgTrapInstance.person_phone);
+        contentValues.put(ADDRESS_LINE1, bgTrapInstance.address_line1);
+        contentValues.put(ADDRESS_LINE2, bgTrapInstance.address_line2);
+        contentValues.put(LOCATION_DESCRIPTION, bgTrapInstance.location_description);
         int status = sqLiteDatabase.update(TABLE_BG_TRAP, contentValues, "bg_trap_id=?",
                 new String[]{String.valueOf(bgTrapInstance.getBg_trap_id())});
         return status;
@@ -817,10 +960,55 @@ public List<String> getAllOviRuns() {
     public int updateSingleBgCollection(BgCollectionModel bgCollectionInstance) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
+        contentValues.put(BG_RUN_ID, bgCollectionInstance.getBg_run_id());
+        contentValues.put(TRAP_ID, bgCollectionInstance.getBg_trap_id());
+        contentValues.put(COLLECTION_ID, bgCollectionInstance.getCollection_id());
+        contentValues.put(COLLECTION_DATE, bgCollectionInstance.getDate());
+        contentValues.put(COLLECTION_TIME, bgCollectionInstance.getTime());
         contentValues.put(COLLECTION_STATUS, bgCollectionInstance.getCollection_status());
-        //contentValues.put(TRAP_CONDITION, bgCollectionInstance.getTrap_condition());
         int status = sqLiteDatabase.update(TABLE_BG_COLLECTION, contentValues,
-                "collection_id=?", new String[]{String.valueOf(bgCollectionInstance.getCollection_id())});
+                "trap_id=? AND bg_run_id=?", new String[]{String.valueOf(bgCollectionInstance.getBg_trap_id()),String.valueOf(bgCollectionInstance.getBg_run_id())});
+        return status;
+    }
+    public int updateSingleBgService(BgServiceModel bgServiceInstance) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(BG_RUN_ID, bgServiceInstance.getBg_run_id());
+        contentValues.put(TRAP_ID, bgServiceInstance.getBg_trap_id());
+        contentValues.put(SERVICE_ID, bgServiceInstance.getService_id());
+        contentValues.put(SERVICE_DATE, bgServiceInstance.getDate());
+        contentValues.put(SERVICE_TIME, bgServiceInstance.getTime());
+        contentValues.put(SERVICE_STATUS, bgServiceInstance.getService_status());
+        int status = sqLiteDatabase.update(TABLE_BG_SERVICE, contentValues,
+                "trap_id=? AND bg_run_id=?", new String[]{String.valueOf(bgServiceInstance.getBg_trap_id()),String.valueOf(bgServiceInstance.getBg_run_id())});
+        return status;
+    }
+    public int updateSingleMrcService(MrcServiceModel mrcServiceInstance) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(MRC_RUN_ID, mrcServiceInstance.getMrc_run_id());
+        contentValues.put(TRAP_ID, mrcServiceInstance.getMrc_trap_id());
+        contentValues.put(SERVICE_ID, mrcServiceInstance.getService_id());
+        contentValues.put(SERVICE_DATE, mrcServiceInstance.getDate());
+        contentValues.put(SERVICE_TIME, mrcServiceInstance.getTime());
+        contentValues.put(SERVICE_STATUS, mrcServiceInstance.getService_status());
+        Log.d("service_status",mrcServiceInstance.getService_status());
+        int status = sqLiteDatabase.update(TABLE_MRC_SERVICE, contentValues,
+                "trap_id=? AND mrc_run_id=?", new String[]{String.valueOf(mrcServiceInstance.getMrc_trap_id()),String.valueOf(mrcServiceInstance.getMrc_run_id())});
+        return status;
+    }
+
+    public int updateSingleOviService(OviServiceModel oviServiceInstance) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(OVI_RUN_ID, oviServiceInstance.getOvi_run_id());
+        contentValues.put(TRAP_ID, oviServiceInstance.getOvi_trap_id());
+        contentValues.put(SERVICE_ID, oviServiceInstance.getService_id());
+        contentValues.put(SERVICE_DATE, oviServiceInstance.getDate());
+        contentValues.put(SERVICE_TIME, oviServiceInstance.getTime());
+        contentValues.put(SERVICE_STATUS, oviServiceInstance.getService_status());
+        int status = sqLiteDatabase.update(TABLE_OVI_SERVICE, contentValues,
+                "trap_id=? AND ovi_run_id=?", new String[]{String.valueOf(oviServiceInstance.getOvi_trap_id()),String.valueOf(oviServiceInstance.getOvi_run_id())});
         return status;
     }
 
@@ -920,11 +1108,64 @@ public List<String> getAllOviRuns() {
         db.close();
         return oviServices;
     }
+    public List<OviServiceModel> getSingleOviServiceTrap(String selected_run,String trap_id) {
+        List<OviServiceModel> oviServices = new ArrayList();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select * from " + TABLE_OVI_SERVICE + " where ovi_run_id =" + "\'" + selected_run + "\'"+" and trap_id =" +"\'" + trap_id + "\'"+ ";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                OviServiceModel oviService = new OviServiceModel();
+                oviService.setOvi_run_id(cursor.getString(0));
+                oviService.setOvi_trap_id(cursor.getString(1));
+                oviService.setOvi_trap_position(cursor.getString(2));
+                oviService.setCoordinates(cursor.getString(3));
+                oviService.setAdd_line1(cursor.getString(4));
+                oviService.setAdd_line2(cursor.getString(5));
+                oviService.setLocation_description(cursor.getString(6));
+                oviService.setFull_name(cursor.getString(7));
+                oviService.setContact_number(cursor.getString(8));
+                oviService.setService_id(cursor.getString(9));
+                oviService.setDate(cursor.getString(10));
+                oviService.setTime(cursor.getString(11));
+                oviService.setService_status(cursor.getString(12));
+
+                oviServices.add(oviService);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return oviServices;
+    }
 
     public List<OviCollectionModel> getSingleOviCollection(String selected_run,String field_type) {
         List<OviCollectionModel> oviCollections = new ArrayList();
         SQLiteDatabase db = getReadableDatabase();
         String query = "select * from " + TABLE_OVI_COLLECTION + " where ovi_run_id =" + "\'" + selected_run + "\'" + ";";
+        Cursor cursor = db.rawQuery(query, null);
+        if (cursor.moveToFirst()) {
+            do {
+                OviCollectionModel oviCollection = new OviCollectionModel();
+                oviCollection.setOvi_run_id(cursor.getString(0));
+                oviCollection.setOvi_trap_id(cursor.getString(1));
+                oviCollection.setOvi_trap_position(cursor.getString(2));
+                oviCollection.setCoordinates(cursor.getString(3));
+                oviCollection.setAdd_line1(cursor.getString(4));
+                oviCollection.setAdd_line2(cursor.getString(5));
+                oviCollection.setLocation_description(cursor.getString(6));
+                oviCollection.setFull_name(cursor.getString(7));
+                oviCollection.setContact_number(cursor.getString(8));
+                oviCollection.setCollection_id(cursor.getString(9));
+                oviCollections.add(oviCollection);
+            } while (cursor.moveToNext());
+        }
+        db.close();
+        return oviCollections;
+    }
+
+    public List<OviCollectionModel> getSingleOviCollectionTrap(String selected_run,String trap_id) {
+        List<OviCollectionModel> oviCollections = new ArrayList();
+        SQLiteDatabase db = getReadableDatabase();
+        String query = "select * from " + TABLE_OVI_COLLECTION + " where ovi_run_id =" + "\'" + selected_run + "\'" + " and trap_id=" +"\'" + trap_id + "\'"+ ";";
         Cursor cursor = db.rawQuery(query, null);
         if (cursor.moveToFirst()) {
             do {
@@ -952,6 +1193,13 @@ public List<String> getAllOviRuns() {
         contentValues.put(OV_TRAP_STATUS, ovTrapInstance.getTrap_status());
         contentValues.put(OV_POSITION, ovTrapInstance.getPosition());
         contentValues.put(OV_COORDINATES, ovTrapInstance.getCoordinates());
+        contentValues.put(OV_TRAP_ID, ovTrapInstance.getOv_trap_id());
+        contentValues.put(PERSON_NAME, ovTrapInstance.person_name);
+        contentValues.put(PERSON_PHONE, ovTrapInstance.person_phone);
+        contentValues.put(ADDRESS_LINE1, ovTrapInstance.address_line1);
+        contentValues.put(ADDRESS_LINE2, ovTrapInstance.address_line2);
+        contentValues.put(LOCATION_DESCRIPTION, ovTrapInstance.location_description);
+
         int status = sqLiteDatabase.update(TABLE_OV_TRAP, contentValues,
                 "ov_trap_id=?", new String[]{String.valueOf(ovTrapInstance.getOv_trap_id())});
         return status;
@@ -1026,6 +1274,7 @@ public List<String> getAllOviRuns() {
         contentValues.put(LOCATION_DESCRIPTION,mrcReleaseObj.location_description);
         contentValues.put(FULL_NAME,mrcReleaseObj.full_name);
         contentValues.put(CONTACT_NUMBER,mrcReleaseObj.contact_number);
+        contentValues.put(RELEASE_ID,mrcReleaseObj.release_id);
         contentValues.put(RELEASE_STATUS,mrcReleaseObj.release_status);
         // save to table
         long status = sqLiteDatabase.insert(TABLE_MRC_RELEASE, null, contentValues);

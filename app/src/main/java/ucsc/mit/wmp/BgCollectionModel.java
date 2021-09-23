@@ -1,10 +1,6 @@
 package ucsc.mit.wmp;
 
 public class BgCollectionModel {
-    public String collection_id;
-    public String collection_date;
-    public String collection_time;
-    public String collection_status;
     public String bg_run_id;
     public String trap_id;
     public String trap_position;
@@ -14,6 +10,10 @@ public class BgCollectionModel {
     public String location_description;
     public String full_name;
     public String contact_number;
+    public String collection_id;
+    public String collection_date;
+    public String collection_time;
+    public String collection_status;
 
     public BgCollectionModel() {
 
@@ -31,6 +31,17 @@ public class BgCollectionModel {
         this.full_name = full_name;
         this.contact_number = contact_number;
     }
+
+    public BgCollectionModel(String bg_run_id, String trap_id, String collection_id, String current_date, String current_time, String collection_status) {
+        this.bg_run_id = bg_run_id;
+        this.trap_id = trap_id;
+        this.collection_id = collection_id;
+        this.collection_date = current_date;
+        this.collection_time = current_time;
+        this.collection_status = collection_status;
+    }
+
+
 
     public void setCollection_id(String collection_id) {
         this.collection_id = collection_id;

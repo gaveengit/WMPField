@@ -29,8 +29,6 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
     public static final String AddressLine2 = "AddressLine2";
     public static final String LocationDescription = "LocationDescription";
     public static final String MrcDetails = "MrcDetails";
-    public static final String PersonId = "PersonId";
-    public static final String AddressId = "AddressId";
     EditText EditTextPhone;
     EditText EditTextAddressLine1;
     EditText EditTextAddressLine2;
@@ -100,7 +98,6 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
             sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
             String mrc_id = sharedpreferences.getString(MrcId, "");
             String mrc_status = sharedpreferences.getString(MrcStatus, "");
-            String mrc_position = sharedpreferences.getString(MrcPosition, "");
             String respond_name = sharedpreferences.getString(RespondName, "");
             String respond_phone = sharedpreferences.getString(Phone, "");
             String location_coordinates = sharedpreferences.getString(LocationCoordinates, "");
@@ -110,17 +107,18 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
             String address_line2 = sharedpreferences.getString(AddressLine2, "");
             String location_description = sharedpreferences.getString(LocationDescription, "");
             if (form_type.equals("edit-new")) {
-                //PersonModel personModel = new PersonModel(respond_name, Integer.parseInt(phone), "no");
-                //personModel.setPerson_id(person_id);
-                //dbHandler.updateSinglePerson(personModel);
-                //AddressModel addressModel = new AddressModel(address_line1, address_line2, location_description, "no");
-                //addressModel.setAddress_id(address_id);
-               // dbHandler.updateSingleAddress(addressModel);
+
                 MrcModel mrcModel = new MrcModel(mrc_id, mrc_status,
-                        mrc_run_id,respond_name, respond_phone, address_line1,address_line2,location_description,location_coordinates);
+                        mrc_run_id, respond_name, phone, address_line1, address_line2, location_description, location_coordinates);
                 int flag = dbHandler.updateSingleMrc(mrcModel);
-                Toast.makeText(context, "OVI collection has been added successfully.",
-                        Toast.LENGTH_LONG).show();
+                if(flag != -1) {
+                    Toast.makeText(context, "MRC has been updated successfully.",
+                            Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(context, "Failure in updating .",
+                            Toast.LENGTH_LONG).show();
+                }
                 Intent intent = new Intent(context, OvListActivity.class);
                 intent.putExtra("type", "mrc");
                 startActivity(intent);
@@ -128,31 +126,25 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
                 dbHandler = new DbHandler(context);
                 mrcPersonAddressModelList = new ArrayList<>();
                 mrcPersonAddressModelList = dbHandler.getSingleMrcPersonAddress(mrc_id);
-                if(mrcPersonAddressModelList.size() > 0){
-                    errorText.setVisibility(View.VISIBLE);
-                    errorText.setText("MRC identifier is already existing.");
-                    Toast.makeText(context, "MRC identifier is already existing.",
+
+                MrcModel mrcModel = new MrcModel(mrc_id, mrc_status,
+                        mrc_run_id, respond_name, respond_phone, address_line1, address_line2, location_description, location_coordinates);
+                Log.d("mrc_status", mrcModel.getMrc_status());
+                long flag = dbHandler.insertDataMrc(mrcModel);
+                if (flag != -1) {
+                    Toast.makeText(context, "MRC has been added successfully.",
                             Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(context, OvListActivity.class);
+                    intent.putExtra("type", "mrc");
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(context, "Failure in adding MRC. Please try again..",
+                            Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(context, OvListActivity.class);
+                    intent.putExtra("type", "mrc");
+                    startActivity(intent);
                 }
-                else {
-                    MrcModel mrcModel = new MrcModel(mrc_id, mrc_status,
-                            mrc_run_id, respond_name, respond_phone, address_line1, address_line2, location_description, location_coordinates);
-                    long flag = dbHandler.insertDataMrc(mrcModel);
-                    if(flag!=-1) {
-                        Toast.makeText(context, "MRC has been added successfully.",
-                                Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(context, OvListActivity.class);
-                        intent.putExtra("type", "mrc");
-                        startActivity(intent);
-                    }
-                    else{
-                        Toast.makeText(context, "Failure in adding MRC. Please try again..",
-                                Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(context, OvListActivity.class);
-                        intent.putExtra("type", "mrc");
-                        startActivity(intent);
-                    }
-                }
+
 
             }
         }

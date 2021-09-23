@@ -47,8 +47,33 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/red"
-            android:inputType="textPersonName" />
+            android:inputType="none" />
+        <TextView
+            android:id="@+id/errorContainerMrcIdentifier"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:textColor="#FF0000"
+            android:text="MRC identifier is already existing."
+            android:textSize="17dp" />
 
+        <TextView
+            android:id="@+id/textViewId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:text="Service Id (*)"
+            android:textColor="#000000"
+            android:textSize="17dp" />
+
+        <EditText
+            android:id="@+id/editTextServiceId"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/red"
+            android:inputType="textPersonName" />
         <TextView
             android:id="@+id/errorContainerMrcIdentifier"
             android:layout_width="match_parent"
@@ -65,31 +90,31 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Mrc Status (*)"
+            android:text="Service Status (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
         <RadioGroup
-            android:id="@+id/trapStatus"
+            android:id="@+id/serviceStatus"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
             <RadioButton
-                android:id="@+id/radioProposed"
+                android:id="@+id/radioServiced"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:layout_marginTop="4dp"
                 android:checked="false"
-                android:text="Proposed"
+                android:text="Serviced"
                 android:textSize="17dp" />
 
             <RadioButton
-                android:id="@+id/radioSet"
+                android:id="@+id/radioNotServiced"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:layout_marginTop="4dp"
                 android:checked="false"
-                android:text="Deployed"
+                android:text="Not Serviced"
                 android:textSize="17dp" />
         </RadioGroup>
 
@@ -108,7 +133,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:backgroundTint="@color/red"
-            android:inputType="textPersonName" />
+            android:inputType="none" />
 
         <TextView
             android:id="@+id/textViewLocation"
@@ -124,7 +149,7 @@
             android:id="@+id/editTextLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName"
+            android:inputType="none"
             android:onClick="viewCoordinates"/>
         <TextView
             android:id="@+id/errorContainer"

@@ -111,33 +111,23 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
             int person_id = sharedpreferences.getInt(PersonId, 0);
             int address_id = sharedpreferences.getInt(AddressId, 0);
             if (form_type.equals("edit-new")) {
-                PersonModel personModel = new PersonModel(respond_name, Integer.parseInt(phone), "no");
-                personModel.setPerson_id(person_id);
-                dbHandler.updateSinglePerson(personModel);
-                AddressModel addressModel = new AddressModel(address_line1, address_line2, location_description, "no");
-                addressModel.setAddress_id(address_id);
-                dbHandler.updateSingleAddress(addressModel);
-                //BgTrapModel bgTrapModel = new BgTrapModel(bg_trap_id, trap_status, trap_position,
-                        //, 0, 0, location_coordinates,
-                        //"no");
-                //int flag = dbHandler.updateSingleBgTrap(bgTrapModel);
-                Toast.makeText(context, "BG has been updated successfully.",
-                        Toast.LENGTH_LONG).show();
+                BgTrapModel bgTrapModel = new BgTrapModel(bg_trap_id, trap_status, trap_position,
+                        bg_run_id, respond_name, phone, address_line1, address_line2, location_description, location_coordinates);
+                int flag = dbHandler.updateSingleBgTrap(bgTrapModel);
+                if(flag != -1) {
+                    Toast.makeText(context, "BG trap has been updated successfully.",
+                            Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(context, "Failure in updating BG trap. Please try again.",
+                            Toast.LENGTH_LONG).show();
+                }
                 Intent intent = new Intent(context, OvListActivity.class);
                 intent.putExtra("type", "bg");
                 intent.putExtra("form-type", form_type);
                 startActivity(intent);
 
             } else {
-                dbHandler = new DbHandler(context);
-                bgPersonAddressModelList = new ArrayList<>();
-                bgPersonAddressModelList = dbHandler.getSingleBgTrap(bg_trap_id);
-                if (bgPersonAddressModelList.size() > 0) {
-                    errorText.setVisibility(View.VISIBLE);
-                    errorText.setText("BG trap id is already existing.");
-                    Toast.makeText(context, "BG trap id is already existing.",
-                            Toast.LENGTH_LONG).show();
-                } else {
                     BgTrapModel bgTrapModel = new BgTrapModel(bg_trap_id, trap_status, trap_position,
                             bg_run_id, respond_name,phone, address_line1,address_line2,location_description,location_coordinates);
                     long flag = dbHandler.insertDataBgTrap(bgTrapModel);
@@ -160,5 +150,5 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
             }
         }
     }
-}
+
 

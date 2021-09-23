@@ -49,7 +49,7 @@ public class AddOvAdditionalActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_ov_additional);
         form_type = getIntent().getStringExtra("form-type");
-        Log.d("form-type",form_type);
+        Log.d("form-type", form_type);
         personList = new ArrayList<>();
         addressList = new ArrayList<>();
         EditTextPhone = (EditText) findViewById(R.id.editTextPhone);
@@ -108,56 +108,43 @@ public class AddOvAdditionalActivity extends AppCompatActivity {
             String address_line1 = sharedpreferences.getString(AddressLine1, "");
             String address_line2 = sharedpreferences.getString(AddressLine2, "");
             String location_description = sharedpreferences.getString(LocationDescription, "");
-            int person_id = sharedpreferences.getInt(PersonId, 0);
-            int address_id = sharedpreferences.getInt(AddressId, 0);
-            if(form_type.equals("edit-new")){
-                PersonModel personModel = new PersonModel(respond_name, Integer.parseInt(phone), "no");
-                personModel.setPerson_id(person_id);
-                dbHandler.updateSinglePerson(personModel);
-                AddressModel addressModel = new AddressModel(address_line1, address_line2, location_description, "no");
-                addressModel.setAddress_id(address_id);
-                dbHandler.updateSingleAddress(addressModel);
+            if (form_type.equals("edit-new")) {
                 OvTrapModel ovTrapModel = new OvTrapModel(ovi_trap_id, trap_status, trap_position,
-                        ovi_run_id, respond_name,phone, address_line1,address_line2,location_description,location_coordinates);
+                        ovi_run_id, respond_name, phone, address_line1, address_line2, location_description, location_coordinates);
                 int flag = dbHandler.updateSingleOvTrap(ovTrapModel);
-                Toast.makeText(context, "OVI has been updated successfully.",
-                        Toast.LENGTH_LONG).show();
+                if(flag != -1) {
+                    Toast.makeText(context, "OVI has been updated successfully.",
+                            Toast.LENGTH_LONG).show();
+                }
+                else{
+                    Toast.makeText(context, "Failure in updating OVI trap. Please try again..",
+                            Toast.LENGTH_LONG).show();
+                }
                 Intent intent = new Intent(context, OvListActivity.class);
                 intent.putExtra("type", "ov");
                 startActivity(intent);
-            }
-            else
-            {
+
+            } else {
                 dbHandler = new DbHandler(context);
                 long flag_insert_ov = -1;
-                ovPersonAddressModelList = new ArrayList<>();
-                ovPersonAddressModelList = dbHandler.getSingleOvTrap(ovi_trap_id);
-                if(ovPersonAddressModelList.size() > 0){
-                    errorText.setVisibility(View.VISIBLE);
-                    errorText.setText("OVI trap id is already existing.");
-                    Toast.makeText(context, "OVI trap id is already existing. Please try again.",
-                            Toast.LENGTH_LONG).show();
-                }
-                else {
 
-                    OvTrapModel ovTrapModel = new OvTrapModel(ovi_trap_id, trap_status, trap_position,
-                            ovi_run_id, respond_name,phone, address_line1,address_line2,location_description,location_coordinates);
-                    flag_insert_ov = dbHandler.insertDataOvTrap(ovTrapModel);
-                    if(flag_insert_ov!=-1) {
-                        Toast.makeText(context, "OVI trap has been added successfully.",
-                                Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(context, OvListActivity.class);
-                        intent.putExtra("type", "ov");
-                        startActivity(intent);
-                    }
-                    else{
-                        Toast.makeText(context, "Failure in adding OVI trap. Please try again.",
-                                Toast.LENGTH_LONG).show();
-                        Intent intent = new Intent(context, OvListActivity.class);
-                        intent.putExtra("type", "ov");
-                        startActivity(intent);
-                    }
+                OvTrapModel ovTrapModel = new OvTrapModel(ovi_trap_id, trap_status, trap_position,
+                        ovi_run_id, respond_name, phone, address_line1, address_line2, location_description, location_coordinates);
+                flag_insert_ov = dbHandler.insertDataOvTrap(ovTrapModel);
+                if (flag_insert_ov != -1) {
+                    Toast.makeText(context, "OVI trap has been added successfully.",
+                            Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(context, OvListActivity.class);
+                    intent.putExtra("type", "ov");
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(context, "Failure in adding OVI trap. Please try again.",
+                            Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(context, OvListActivity.class);
+                    intent.putExtra("type", "ov");
+                    startActivity(intent);
                 }
+
             }
         }
     }

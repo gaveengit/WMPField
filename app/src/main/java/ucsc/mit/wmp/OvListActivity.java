@@ -40,7 +40,10 @@ public class OvListActivity extends AppCompatActivity {
     private String field_type;
     Button button;
     public static final String OviTrapId = "OviTrapId";
+    public static final String OriginalOviId = "OriginalOviId";
     public static final String BgTrapId = "BgTrapId";
+    public static final String OriginalBgId = "OriginalBgId";
+    public static final String MrcTrapId = "MrcTrapId";
     public static final String TrapStatus = "TrapStatus";
     public static final String TrapPosition = "TrapPosition";
     public static final String RespondName = "RespondName";
@@ -53,12 +56,25 @@ public class OvListActivity extends AppCompatActivity {
     public static final String BgDetails = "BgDetails";
     public static final String MrcDetails = "MrcDetails";
     public static final String MrcId = "MrcId";
+    public static final String OriginalMrcId = "OriginalMrcId";
     public static final String MrcStatus = "MrcStatus";
     public static final String OviRunId = "OviRunId";
     public static final String BgRunId = "BgRunId";
     public static final String MrcRunId = "MrcRunId";
     public static final String PersonId = "PersonId";
     public static final String AddressId = "AddressId";
+    public static final String BgServiceDetails = "BgServiceDetails";
+    public static final String OviServiceDetails = "OviServiceDetails";
+    public static final String MrcServiceDetails = "MrcServiceDetails";
+    public static final String MrcReleaseDetails = "MrcReleaseDetails";
+    public static final String BgCollectionDetails = "BgCollectionDetails";
+    public static final String OviCollectionDetails = "OviCollectionDetails";
+    public static final String ServiceId = "ServiceId";
+    public static final String ServiceStatus = "ServiceStatus";
+    public static final String CollectionId = "CollectionId";
+    public static final String CollectionStatus = "CollectionStatus";
+    public static final String ReleaseId = "ReleaseId";
+    public static final String ReleaseStatus = "ReleaseStatus";
     private List<OvTrapModel> ovModelList;
     private List<OviServiceModel> ovServiceModelList;
     private List<OviCollectionModel> ovCollectionModelList;
@@ -130,7 +146,29 @@ public class OvListActivity extends AppCompatActivity {
         editor.putString(MrcRunId, "");
         editorMrc.apply();
 
+        sharedpreferences = getSharedPreferences(MrcServiceDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor_clear_mrc_service = sharedpreferences.edit();
+        editor_clear_mrc_service.clear();
 
+        sharedpreferences = getSharedPreferences(MrcReleaseDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor_clear_mrc_release = sharedpreferences.edit();
+        editor_clear_mrc_release.clear();
+
+        sharedpreferences = getSharedPreferences(BgServiceDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor_clear_bg_service = sharedpreferences.edit();
+        editor_clear_bg_service.clear();
+
+        sharedpreferences = getSharedPreferences(BgCollectionDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor_clear_bg_collection = sharedpreferences.edit();
+        editor_clear_bg_collection.clear();
+
+        sharedpreferences = getSharedPreferences(OviServiceDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor_clear_ovi_service = sharedpreferences.edit();
+        editor_clear_ovi_service.clear();
+
+        sharedpreferences = getSharedPreferences(OviCollectionDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor_clear_ovi_collection = sharedpreferences.edit();
+        editor_clear_ovi_collection.clear();
 
         if (field_type.equals("ov")) {
             dbHandler = new DbHandler(context);
@@ -243,7 +281,7 @@ public class OvListActivity extends AppCompatActivity {
                                 rl1.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        goIndividualOv(v);
+                                        goIndividualOviService(v);
                                     }
                                 });
                                 l1.addView(rl1);
@@ -302,7 +340,7 @@ public class OvListActivity extends AppCompatActivity {
                                     rl1.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            goIndividualOv(v);
+                                            goIndividualOviCollection(v);
                                         }
                                     });
                                     l1.addView(rl1);
@@ -434,7 +472,7 @@ public class OvListActivity extends AppCompatActivity {
                                 rl1.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        goIndividualOv(v);
+                                        goIndividualBgService(v);
                                     }
                                 });
                                 l1.addView(rl1);
@@ -494,7 +532,7 @@ public class OvListActivity extends AppCompatActivity {
                                     rl1.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            goIndividualOv(v);
+                                            goIndividualBgCollection(v);
                                         }
                                     });
                                     l1.addView(rl1);
@@ -629,7 +667,7 @@ public class OvListActivity extends AppCompatActivity {
                                 rl1.setOnClickListener(new View.OnClickListener() {
                                     @Override
                                     public void onClick(View v) {
-                                        goIndividualOv(v);
+                                        goIndividualMrcService(v);
                                     }
                                 });
                                 l1.addView(rl1);
@@ -692,7 +730,7 @@ public class OvListActivity extends AppCompatActivity {
                                     rl1.setOnClickListener(new View.OnClickListener() {
                                         @Override
                                         public void onClick(View v) {
-                                            goIndividualOv(v);
+                                            goIndividualMrcRelease(v);
                                         }
                                     });
                                     l1.addView(rl1);
@@ -1165,17 +1203,16 @@ public class OvListActivity extends AppCompatActivity {
             sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString(OviTrapId, ovPersonAddressModelList.get(0).ov_trap_id.toString());
+            editor.putString(OriginalOviId, ovPersonAddressModelList.get(0).ov_trap_id.toString());
             editor.putString(TrapStatus, ovPersonAddressModelList.get(0).trap_status.toString());
             editor.putString(TrapPosition, ovPersonAddressModelList.get(0).position.toString());
             editor.putString(RespondName, ovPersonAddressModelList.get(0).person_name);
             editor.putString(LocationCoordinates, ovPersonAddressModelList.get(0).coordinates);
-            //editor.putString(Phone, String.valueOf(ovPersonAddressModelList.get(0).phone));
+            editor.putString(Phone, String.valueOf(ovPersonAddressModelList.get(0).person_phone));
             editor.putString(AddressLine1, ovPersonAddressModelList.get(0).address_line1);
             editor.putString(AddressLine2, ovPersonAddressModelList.get(0).address_line2);
             editor.putString(LocationDescription, ovPersonAddressModelList.get(0).location_description);
             editor.putString(OviRunId, ovPersonAddressModelList.get(0).run_name);
-            //editor.putInt(PersonId, ovPersonAddressModelList.get(0).person_id);
-            //editor.putInt(AddressId, ovPersonAddressModelList.get(0).address_id);
             editor.apply();
 
             Intent intent = new Intent(context, AddOvMainActivity.class);
@@ -1190,17 +1227,16 @@ public class OvListActivity extends AppCompatActivity {
             sharedpreferences = getSharedPreferences(BgDetails, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString(BgTrapId, bgPersonAddressModelList.get(0).bg_trap_id.toString());
+            editor.putString(OriginalBgId, bgPersonAddressModelList.get(0).bg_trap_id.toString());
             editor.putString(TrapStatus, bgPersonAddressModelList.get(0).trap_status.toString());
             editor.putString(TrapPosition, bgPersonAddressModelList.get(0).position.toString());
             editor.putString(RespondName, bgPersonAddressModelList.get(0).person_name);
             editor.putString(LocationCoordinates, bgPersonAddressModelList.get(0).coordinates);
-            //editor.putString(Phone, String.valueOf(bgPersonAddressModelList.get(0).phone));
+            editor.putString(Phone, String.valueOf(bgPersonAddressModelList.get(0).person_phone));
             editor.putString(AddressLine1, bgPersonAddressModelList.get(0).address_line1);
             editor.putString(AddressLine2, bgPersonAddressModelList.get(0).address_line2);
             editor.putString(LocationDescription, bgPersonAddressModelList.get(0).location_description);
             editor.putString(BgRunId, bgPersonAddressModelList.get(0).run_name);
-            //editor.putInt(PersonId, bgPersonAddressModelList.get(0).person_id);
-            //editor.putInt(AddressId, bgPersonAddressModelList.get(0).address_id);
             editor.apply();
 
             Intent intent = new Intent(context, AddBgMainActivity.class);
@@ -1215,16 +1251,15 @@ public class OvListActivity extends AppCompatActivity {
             sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString(MrcId, mrcPersonAddressModelList.get(0).identifier.toString());
+            editor.putString(OriginalMrcId, mrcPersonAddressModelList.get(0).identifier.toString());
             editor.putString(MrcStatus, mrcPersonAddressModelList.get(0).mrc_status.toString());
             editor.putString(RespondName, mrcPersonAddressModelList.get(0).person_name);
             editor.putString(LocationCoordinates, mrcPersonAddressModelList.get(0).coordinates);
-            // editor.putString(Phone, String.valueOf(mrcPersonAddressModelList.get(0).phone));
+            editor.putString(Phone, String.valueOf(mrcPersonAddressModelList.get(0).person_phone));
             editor.putString(AddressLine1, mrcPersonAddressModelList.get(0).address_line1);
             editor.putString(AddressLine2, mrcPersonAddressModelList.get(0).address_line2);
             editor.putString(LocationDescription, mrcPersonAddressModelList.get(0).location_description);
             editor.putString(MrcRunId, mrcPersonAddressModelList.get(0).run_name);
-            //editor.putInt(PersonId, mrcPersonAddressModelList.get(0).person_id);
-            //editor.putInt(AddressId, mrcPersonAddressModelList.get(0).address_id);
             editor.apply();
             Intent intent = new Intent(context, AddMrcMainActivity.class);
             intent.putExtra("TrapId", v.getTag().toString());
@@ -1233,19 +1268,139 @@ public class OvListActivity extends AppCompatActivity {
         }
     }
 
+    public void goIndividualBgService(View v){
+        dbHandler = new DbHandler(context);
+        bgServiceModelList = new ArrayList<>();
+        bgServiceModelList = dbHandler.getSingleBgServiceTrap(run_name,v.getTag().toString());
+        sharedpreferences = getSharedPreferences(BgServiceDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(BgRunId, bgServiceModelList.get(0).bg_run_id.toString());
+        editor.putString(BgTrapId, bgServiceModelList.get(0).trap_id.toString());
+        editor.putString(TrapPosition, bgServiceModelList.get(0).trap_position.toString());
+        editor.putString(LocationCoordinates, bgServiceModelList.get(0).coordinates);
+        editor.putString(AddressLine1, bgServiceModelList.get(0).add_line1);
+        editor.putString(AddressLine2, bgServiceModelList.get(0).add_line2);
+        editor.putString(LocationDescription, bgServiceModelList.get(0).location_description);
+        editor.putString(RespondName, bgServiceModelList.get(0).full_name);
+        editor.putString(Phone, bgServiceModelList.get(0).contact_number);
+        editor.putString(ServiceId, bgServiceModelList.get(0).service_id);
+        editor.putString(ServiceStatus, bgServiceModelList.get(0).service_status);
+        editor.apply();
+
+        Intent intent = new Intent(context, AddBgServiceMainActivity.class);
+        startActivity(intent);
+    }
+    public void goIndividualBgCollection(View v){
+        dbHandler = new DbHandler(context);
+        bgCollectionModelList = new ArrayList<>();
+        bgCollectionModelList = dbHandler.getSingleBgCollectionTrap(run_name,v.getTag().toString());
+        sharedpreferences = getSharedPreferences(BgCollectionDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(BgRunId, bgCollectionModelList.get(0).bg_run_id.toString());
+        editor.putString(BgTrapId, bgCollectionModelList.get(0).trap_id.toString());
+        editor.putString(TrapPosition, bgCollectionModelList.get(0).trap_position.toString());
+        editor.putString(LocationCoordinates, bgCollectionModelList.get(0).coordinates);
+        editor.putString(AddressLine1, bgCollectionModelList.get(0).add_line1);
+        editor.putString(AddressLine2, bgCollectionModelList.get(0).add_line2);
+        editor.putString(LocationDescription, bgCollectionModelList.get(0).location_description);
+        editor.putString(RespondName, bgCollectionModelList.get(0).full_name);
+        editor.putString(Phone, bgCollectionModelList.get(0).contact_number);
+        editor.putString(CollectionId, bgCollectionModelList.get(0).collection_id);
+        editor.putString(CollectionStatus, bgCollectionModelList.get(0).collection_status);
+        editor.apply();
+
+        Intent intent = new Intent(context, AddBgCollectionMainActivity.class);
+        startActivity(intent);
+    }
+    public void goIndividualOviService(View v){
+        dbHandler = new DbHandler(context);
+        ovServiceModelList = new ArrayList<>();
+        ovServiceModelList = dbHandler.getSingleOviServiceTrap(run_name,v.getTag().toString());
+        sharedpreferences = getSharedPreferences(OviServiceDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(OviRunId, ovServiceModelList.get(0).ovi_run_id.toString());
+        editor.putString(OviTrapId, ovServiceModelList.get(0).trap_id.toString());
+        editor.putString(TrapPosition, ovServiceModelList.get(0).trap_position.toString());
+        editor.putString(LocationCoordinates, ovServiceModelList.get(0).coordinates);
+        editor.putString(AddressLine1, ovServiceModelList.get(0).add_line1);
+        editor.putString(AddressLine2, ovServiceModelList.get(0).add_line2);
+        editor.putString(LocationDescription, ovServiceModelList.get(0).location_description);
+        editor.putString(RespondName, ovServiceModelList.get(0).full_name);
+        editor.putString(Phone, ovServiceModelList.get(0).contact_number);
+        editor.putString(ServiceId, ovServiceModelList.get(0).service_id);
+        editor.putString(ServiceStatus, ovServiceModelList.get(0).service_status);
+        editor.apply();
+        Intent intent = new Intent(context, AddOviServiceMainActivity.class);
+        startActivity(intent);
+    }
+    public void goIndividualOviCollection(View v){
+        dbHandler = new DbHandler(context);
+        ovCollectionModelList = new ArrayList<>();
+        ovCollectionModelList = dbHandler.getSingleOviCollectionTrap(run_name,v.getTag().toString());
+        sharedpreferences = getSharedPreferences(OviCollectionDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(OviRunId, ovCollectionModelList.get(0).ovi_run_id.toString());
+        editor.putString(OviTrapId, ovCollectionModelList.get(0).trap_id.toString());
+        editor.putString(TrapPosition, ovCollectionModelList.get(0).trap_position.toString());
+        editor.putString(LocationCoordinates, ovCollectionModelList.get(0).coordinates);
+        editor.putString(AddressLine1, ovCollectionModelList.get(0).add_line1);
+        editor.putString(AddressLine2, ovCollectionModelList.get(0).add_line2);
+        editor.putString(LocationDescription, ovCollectionModelList.get(0).location_description);
+        editor.putString(RespondName, ovCollectionModelList.get(0).full_name);
+        editor.putString(Phone, ovCollectionModelList.get(0).contact_number);
+        editor.putString(ServiceId, ovCollectionModelList.get(0).collection_id);
+        editor.putString(ServiceStatus, ovCollectionModelList.get(0).collection_status);
+        editor.apply();
+        Intent intent = new Intent(context, AddOviCollectionMainActivity.class);
+        startActivity(intent);
+    }
+
+    public void goIndividualMrcService(View v){
+        dbHandler = new DbHandler(context);
+        mrcServiceModelList = new ArrayList<>();
+        mrcServiceModelList = dbHandler.getSingleMrcServiceTrap(run_name,v.getTag().toString());
+        sharedpreferences = getSharedPreferences(MrcServiceDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(MrcRunId, mrcServiceModelList.get(0).mrc_run_id.toString());
+        editor.putString(MrcTrapId, mrcServiceModelList.get(0).trap_id.toString());
+        editor.putString(LocationCoordinates, mrcServiceModelList.get(0).coordinates);
+        editor.putString(AddressLine1, mrcServiceModelList.get(0).add_line1);
+        editor.putString(AddressLine2, mrcServiceModelList.get(0).add_line2);
+        editor.putString(LocationDescription, mrcServiceModelList.get(0).location_description);
+        editor.putString(RespondName, mrcServiceModelList.get(0).full_name);
+        editor.putString(Phone, mrcServiceModelList.get(0).contact_number);
+        editor.putString(ServiceId, mrcServiceModelList.get(0).service_id);
+        editor.putString(ServiceStatus, mrcServiceModelList.get(0).service_status);
+        editor.apply();
+        Intent intent = new Intent(context, AddMrcServiceMainActivity.class);
+        startActivity(intent);
+    }
+
+    public void goIndividualMrcRelease(View v){
+        dbHandler = new DbHandler(context);
+        mrcReleaseModelList = new ArrayList<>();
+        mrcReleaseModelList = dbHandler.getSingleMrcReleaseTrap(run_name,v.getTag().toString());
+        sharedpreferences = getSharedPreferences(MrcReleaseDetails, Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedpreferences.edit();
+        editor.putString(MrcRunId, mrcReleaseModelList.get(0).mrc_run_id.toString());
+        editor.putString(MrcTrapId, mrcReleaseModelList.get(0).trap_id.toString());
+        editor.putString(LocationCoordinates, mrcReleaseModelList.get(0).coordinates);
+        editor.putString(AddressLine1, mrcReleaseModelList.get(0).add_line1);
+        editor.putString(AddressLine2, mrcReleaseModelList.get(0).add_line2);
+        editor.putString(LocationDescription, mrcReleaseModelList.get(0).location_description);
+        editor.putString(RespondName, mrcReleaseModelList.get(0).full_name);
+        editor.putString(Phone, mrcReleaseModelList.get(0).contact_number);
+        editor.putString(ReleaseId, mrcReleaseModelList.get(0).release_id);
+        editor.putString(ReleaseStatus, mrcReleaseModelList.get(0).release_status);
+        editor.apply();
+        Intent intent = new Intent(context, AddMrcReleaseMainActivity.class);
+
+        startActivity(intent);
+    }
+
     public void goMainMenu(View v) {
         Intent intent = new Intent(context, MainMenuActivity.class);
         startActivity(intent);
     }
 
-    /*
-
-    public void goViewOv(View pView) {
-        Intent intent = new Intent(context, AddOvMainActivity.class);
-        startActivity(intent);
-    }
-
-
-
-    */
 }

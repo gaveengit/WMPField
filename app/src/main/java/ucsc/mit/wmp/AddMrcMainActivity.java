@@ -34,6 +34,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -42,10 +43,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class AddMrcMainActivity extends AppCompatActivity {
     final Context context = this;
+    private DbHandler dbHandler;
     private static final int PRIORITY_HIGH_ACCURACY = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
     public static final String MrcId = "MrcId";
@@ -55,6 +59,8 @@ public class AddMrcMainActivity extends AppCompatActivity {
     public static final String LocationCoordinates = "LocationCoordinates";
     public static final String MrcDetails = "MrcDetails";
     public static final String MrcRunId = "MrcRunId";
+    public static final String OriginalMrcId = "OriginalMrcId";
+    private List<MrcModel> mrcPersonAddressModelList;
     EditText EditTextMrcId;
     RadioGroup RadioGroupMrcStatus;
     RadioButton RadioProposed;
@@ -65,6 +71,8 @@ public class AddMrcMainActivity extends AppCompatActivity {
     TextView errorText;
     SharedPreferences sharedpreferences;
     String form_type;
+    String mrc_id;
+    String original_mrc_id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -78,9 +86,9 @@ public class AddMrcMainActivity extends AppCompatActivity {
         EditTextRespondName = (EditText) findViewById(R.id.editTextRespondentName);
         EditTextLocationCoordinates = (EditText) findViewById(R.id.editTextLocation);
         errorText = (TextView) findViewById(R.id.errorContainer);
-        //RadioProposed.setChecked(true);
         sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
-        String ovi_trap_id = sharedpreferences.getString(MrcId, "");
+        mrc_id = sharedpreferences.getString(MrcId, "");
+        original_mrc_id = sharedpreferences.getString(OriginalMrcId, "");
         String trap_status = sharedpreferences.getString(MrcStatus, "");
         String respond_name = sharedpreferences.getString(RespondName, "");
         String location_coordinates = sharedpreferences.getString(LocationCoordinates, "");
@@ -89,11 +97,11 @@ public class AddMrcMainActivity extends AppCompatActivity {
         Log.d("trap_status",trap_status);
         Log.d("respond_name",respond_name);
         if (respond_name.length() != 0) {
-            EditTextMrcId.setText(ovi_trap_id);
-            if (trap_status.equals("proposed")) {
+            EditTextMrcId.setText(mrc_id);
+            if (trap_status.equals("1")) {
                 RadioProposed.setChecked(true);
             }
-            if (trap_status.equals("set")) {
+            if (trap_status.equals("2")) {
                 RadioSet.setChecked(true);
             }
             EditTextRespondName.setText(respond_name);
@@ -149,11 +157,16 @@ public class AddMrcMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalMrc(View pView) {
-        if (EditTextMrcId.getText().toString().length() == 0 || EditTextRespondName.getText().
-                toString().length() == 0 || EditTextLocationCoordinates.
-                getText().toString().length() == 0) {
+        dbHandler = new DbHandler(context);
+        Log.d("form_type",form_type);
+        mrcPersonAddressModelList = new ArrayList<>();
+        mrcPersonAddressModelList = dbHandler.getSingleMrcPersonAddress(EditTextMrcId.getText().toString());
+        Log.d("size",String.valueOf(mrcPersonAddressModelList.size()));
+        if(((mrcPersonAddressModelList.size() > 0) && form_type.equals("new")) || (!original_mrc_id.equals(EditTextMrcId.getText().toString()) && mrcPersonAddressModelList.size() > 0 && form_type.equals("edit-new"))){
             errorText.setVisibility(View.VISIBLE);
-            errorText.setText("Please fill all required fields.");
+            errorText.setText("MRC identifier is already existing.");
+            Toast.makeText(context, "MRC identifier is already existing.",
+                    Toast.LENGTH_LONG).show();
         } else {
             errorText.setVisibility(View.GONE);
             sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
@@ -161,10 +174,10 @@ public class AddMrcMainActivity extends AppCompatActivity {
             editor.putString(MrcId, EditTextMrcId.getText().toString());
 
             if (RadioProposed.isChecked()) {
-                editor.putString(MrcStatus, "proposed");
+                editor.putString(MrcStatus, "1");
             }
             if (RadioSet.isChecked()) {
-                editor.putString(MrcStatus, "set");
+                editor.putString(MrcStatus, "2");
             }
             editor.putString(RespondName, EditTextRespondName.getText().toString());
             editor.putString(LocationCoordinates, EditTextLocationCoordinates.getText().toString());

@@ -1,10 +1,8 @@
 package ucsc.mit.wmp;
 
+import android.util.Log;
+
 public class MrcReleaseModel {
-    public String release_id;
-    public String release_date;
-    public String release_time;
-    public String release_status;
     public String mrc_run_id;
     public String trap_id;
     public String coordinates;
@@ -13,6 +11,10 @@ public class MrcReleaseModel {
     public String location_description;
     public String full_name;
     public String contact_number;
+    public String release_id;
+    public String release_date;
+    public String release_time;
+    public String release_status;
 
     public MrcReleaseModel(){
 
@@ -28,6 +30,14 @@ public class MrcReleaseModel {
         this.location_description = location_description;
         this.full_name = full_name;
         this.contact_number = contact_number;
+    }
+    public MrcReleaseModel(String mrc_run_id,String trap_id, String release_id,String release_date, String release_time, String release_status) {
+        this.mrc_run_id = mrc_run_id;
+        this.trap_id = trap_id;
+        this.release_id = release_id;
+        this.release_date = release_date;
+        this.release_time = release_time;
+        this.release_status = release_status;
     }
 
     public void setRelease_id(String release_id) {
