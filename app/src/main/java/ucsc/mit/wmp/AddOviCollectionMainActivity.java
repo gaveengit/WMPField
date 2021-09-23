@@ -105,7 +105,7 @@ public class AddOviCollectionMainActivity extends AppCompatActivity {
 
         sharedpreferences = getSharedPreferences(OviCollectionDetails, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
-
+        editor.putString(CollectionId, EditTextCollectionId.getText().toString());
         if(RadioCollected.isChecked())
         {
             editor.putString(CollectionStatus,"1");

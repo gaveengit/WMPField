@@ -970,6 +970,19 @@ public List<String> getAllOviRuns() {
                 "trap_id=? AND bg_run_id=?", new String[]{String.valueOf(bgCollectionInstance.getBg_trap_id()),String.valueOf(bgCollectionInstance.getBg_run_id())});
         return status;
     }
+    public int updateSingleOviCollection(OviCollectionModel oviCollectionInstance) {
+        SQLiteDatabase sqLiteDatabase = getWritableDatabase();
+        ContentValues contentValues = new ContentValues();
+        contentValues.put(OVI_RUN_ID, oviCollectionInstance.getOvi_run_id());
+        contentValues.put(TRAP_ID, oviCollectionInstance.getOvi_trap_id());
+        contentValues.put(COLLECTION_ID, oviCollectionInstance.getCollection_id());
+        contentValues.put(COLLECTION_DATE, oviCollectionInstance.getDate());
+        contentValues.put(COLLECTION_TIME, oviCollectionInstance.getTime());
+        contentValues.put(COLLECTION_STATUS, oviCollectionInstance.getCollection_status());
+        int status = sqLiteDatabase.update(TABLE_OVI_COLLECTION, contentValues,
+                "trap_id=? AND ovi_run_id=?", new String[]{String.valueOf(oviCollectionInstance.getOvi_trap_id()),String.valueOf(oviCollectionInstance.getOvi_run_id())});
+        return status;
+    }
     public int updateSingleBgService(BgServiceModel bgServiceInstance) {
         SQLiteDatabase sqLiteDatabase = getWritableDatabase();
         ContentValues contentValues = new ContentValues();
@@ -1180,6 +1193,10 @@ public List<String> getAllOviRuns() {
                 oviCollection.setFull_name(cursor.getString(7));
                 oviCollection.setContact_number(cursor.getString(8));
                 oviCollection.setCollection_id(cursor.getString(9));
+                oviCollection.setDate(cursor.getString(10));
+                oviCollection.setTime(cursor.getString(11));
+                oviCollection.setCollection_status(cursor.getString(12));
+
                 oviCollections.add(oviCollection);
             } while (cursor.moveToNext());
         }

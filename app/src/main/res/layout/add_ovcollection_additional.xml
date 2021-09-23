@@ -113,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:background="#008000"
-                android:onClick="submitOv"
+                android:onClick="submitOvi"
                 android:paddingLeft="50dp"
                 android:paddingRight="50dp"
                 android:text="Done"

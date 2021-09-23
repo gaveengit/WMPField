@@ -31,6 +31,14 @@ public class OviCollectionModel {
         this.full_name = full_name;
         this.contact_number = contact_number;
     }
+    public OviCollectionModel(String ovi_run_id, String trap_id, String collection_id, String collection_date, String collection_time, String collection_status) {
+        this.ovi_run_id = ovi_run_id;
+        this.trap_id = trap_id;
+        this.collection_id = collection_id;
+        this.collection_date = collection_date;
+        this.collection_time = collection_time;
+        this.collection_status = collection_status;
+    }
 
     public void setCollection_id(String collection_id) {
         this.collection_id = collection_id;

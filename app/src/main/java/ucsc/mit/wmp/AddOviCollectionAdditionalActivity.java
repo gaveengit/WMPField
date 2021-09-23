@@ -81,7 +81,7 @@ public class AddOviCollectionAdditionalActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void submitBg(View v) {
+    public void submitOvi(View v) {
 
         errorText.setVisibility(View.GONE);
         sharedpreferences = getSharedPreferences(OviCollectionDetails, Context.MODE_PRIVATE);
@@ -94,49 +94,39 @@ public class AddOviCollectionAdditionalActivity extends AppCompatActivity {
 
         dbHandler = new DbHandler(context);
         sharedpreferences = getSharedPreferences(OviCollectionDetails, Context.MODE_PRIVATE);
-        String bg_trap_id = sharedpreferences.getString(OviTrapId, "");
-        String service_status = sharedpreferences.getString(CollectionStatus, "");
+        String ovi_trap_id = sharedpreferences.getString(OviTrapId, "");
+        String collection_status = sharedpreferences.getString(CollectionStatus, "");
         String trap_position = sharedpreferences.getString(TrapPosition, "");
         String respond_name = sharedpreferences.getString(RespondName, "");
         String location_coordinates = sharedpreferences.getString(LocationCoordinates, "");
-        String bg_run_id = "Dry Run";
+        String ovi_run_id = sharedpreferences.getString(OviRunId, "");
         String phone = sharedpreferences.getString(Phone, "");
         String address_line1 = sharedpreferences.getString(AddressLine1, "");
         String address_line2 = sharedpreferences.getString(AddressLine2, "");
         String location_description = sharedpreferences.getString(LocationDescription, "");
         String service_id = sharedpreferences.getString(CollectionId, "");
 
-        dbHandler = new DbHandler(context);
-        bgPersonAddressModelList = new ArrayList<>();
-        bgPersonAddressModelList = dbHandler.getSingleBgTrap(bg_trap_id);
-        if (bgPersonAddressModelList.size() > 0) {
-            errorText.setVisibility(View.VISIBLE);
-            errorText.setText("BG trap id is already existing.");
-            Toast.makeText(context, "BG trap id is already existing.",
+
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        Calendar currentTime = Calendar.getInstance();
+        String hour = String.valueOf(currentTime.get(Calendar.HOUR_OF_DAY));
+        String minute = String.valueOf(currentTime.get(Calendar.MINUTE));
+        String current_time = hour + ":" + minute;
+
+        OviCollectionModel oviCollectionModel = new OviCollectionModel(ovi_run_id, ovi_trap_id, service_id, currentDate, current_time, collection_status);
+        long flag = dbHandler.updateSingleOviCollection(oviCollectionModel);
+        if (flag != -1) {
+            Toast.makeText(context, "OVI collection has been updated successfully.",
                     Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(context, OvListActivity.class);
+            intent.putExtra("type", "ov");
+            startActivity(intent);
         } else {
-            String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-            Calendar currentTime = Calendar.getInstance();
-            String hour = String.valueOf(currentTime.get(Calendar.HOUR_OF_DAY));
-            String minute = String.valueOf(currentTime.get(Calendar.MINUTE));
-            String current_time = hour + ":" + minute;
-
-            BgServiceModel bgServiceModel = new BgServiceModel(bg_run_id,bg_trap_id,service_id,currentDate,current_time,service_status);
-            long flag = dbHandler.updateSingleBgService(bgServiceModel);
-            if (flag != -1) {
-                Toast.makeText(context, "BG Service has been added successfully.",
-                        Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(context, OvListActivity.class);
-                intent.putExtra("type", "bg");
-                startActivity(intent);
-            } else {
-                Toast.makeText(context, "Failure in adding BG service. Please try again..",
-                        Toast.LENGTH_LONG).show();
-                Intent intent = new Intent(context, OvListActivity.class);
-                intent.putExtra("type", "bg");
-                startActivity(intent);
-            }
-
+            Toast.makeText(context, "Failure in adding OVI collection. Please try again..",
+                    Toast.LENGTH_LONG).show();
+            Intent intent = new Intent(context, OvListActivity.class);
+            intent.putExtra("type", "ov");
+            startActivity(intent);
         }
 
     }
