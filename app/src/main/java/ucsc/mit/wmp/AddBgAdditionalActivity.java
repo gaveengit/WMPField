@@ -108,8 +108,7 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
             String address_line1 = sharedpreferences.getString(AddressLine1, "");
             String address_line2 = sharedpreferences.getString(AddressLine2, "");
             String location_description = sharedpreferences.getString(LocationDescription, "");
-            int person_id = sharedpreferences.getInt(PersonId, 0);
-            int address_id = sharedpreferences.getInt(AddressId, 0);
+
             if (form_type.equals("edit-new")) {
                 BgTrapModel bgTrapModel = new BgTrapModel(bg_trap_id, trap_status, trap_position,
                         bg_run_id, respond_name, phone, address_line1, address_line2, location_description, location_coordinates);
@@ -131,6 +130,7 @@ public class AddBgAdditionalActivity extends AppCompatActivity {
                     BgTrapModel bgTrapModel = new BgTrapModel(bg_trap_id, trap_status, trap_position,
                             bg_run_id, respond_name,phone, address_line1,address_line2,location_description,location_coordinates);
                     long flag = dbHandler.insertDataBgTrap(bgTrapModel);
+                    Log.d("flag",String.valueOf(flag));
                     if(flag != -1) {
                         Toast.makeText(context, "BG trap has been added successfully.",
                                 Toast.LENGTH_LONG).show();

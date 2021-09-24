@@ -32,6 +32,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -40,10 +41,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class AddBgCollectionMainActivity extends AppCompatActivity {
     final Context context = this;
+    private DbHandler dbHandler;
     private static final int PRIORITY_HIGH_ACCURACY = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
     public static final String BgTrapId = "BgTrapId";
@@ -54,6 +58,7 @@ public class AddBgCollectionMainActivity extends AppCompatActivity {
     public static final String LocationCoordinates = "LocationCoordinates";
     public static final String BgCollectionDetails = "BgCollectionDetails";
     public static final String BgRunId = "BgRunId";
+    private List<BgCollectionModel> bgCollectionModelList;
     EditText EditTextTrapId;
     RadioGroup RadioGroupCollectionStatus;
     RadioButton RadioCollected;
@@ -102,21 +107,31 @@ public class AddBgCollectionMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalBg(View pView) {
-
+        dbHandler = new DbHandler(context);
+        bgCollectionModelList = new ArrayList<>();
+        bgCollectionModelList = dbHandler.getSingleBgCollectionTrapById(EditTextCollectionId.getText().toString());
         sharedpreferences = getSharedPreferences(BgCollectionDetails, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString(CollectionId, EditTextCollectionId.getText().toString());
-        if(RadioCollected.isChecked())
+        String bg_trap_id = sharedpreferences.getString(BgTrapId, "");
+        String run_id = sharedpreferences.getString(BgRunId, "");
+        if((bgCollectionModelList.size()>0) && ((!bgCollectionModelList.get(0).trap_id.equals(bg_trap_id)) || (!bgCollectionModelList.get(0).bg_run_id.equals(run_id))))
         {
-            editor.putString(CollectionStatus,"1");
+            Toast.makeText(context, "Collection id is already existing. Please try using another collection id.",
+                    Toast.LENGTH_LONG).show();
         }
-        if(RadioNotCollected.isChecked())
-        {
-            editor.putString(CollectionStatus,"2");
+        else {
+            sharedpreferences = getSharedPreferences(BgCollectionDetails, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(CollectionId, EditTextCollectionId.getText().toString());
+            if (RadioCollected.isChecked()) {
+                editor.putString(CollectionStatus, "1");
+            }
+            if (RadioNotCollected.isChecked()) {
+                editor.putString(CollectionStatus, "2");
+            }
+            editor.apply();
+            Intent intent = new Intent(context, AddBgCollectionAdditionalActivity.class);
+            startActivity(intent);
         }
-        editor.apply();
-        Intent intent = new Intent(context, AddBgCollectionAdditionalActivity.class);
-        startActivity(intent);
     }
 
     public void goListView(View pView)

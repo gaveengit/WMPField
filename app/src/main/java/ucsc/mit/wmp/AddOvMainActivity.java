@@ -106,10 +106,10 @@ public class AddOvMainActivity extends AppCompatActivity {
         Log.d("ovi_run",ovi_run_id);
         if(respond_name.length()!=0) {
             EditTextTrapId.setText(ovi_trap_id);
-            if (trap_status.equals("proposed")) {
+            if (trap_status.equals("1")) {
                 RadioProposed.setChecked(true);
             }
-            if (trap_status.equals("set")) {
+            if (trap_status.equals("2")) {
                 RadioSet.setChecked(true);
             }
             EditTextTrapPosition.setText(trap_position);
@@ -190,11 +190,11 @@ public class AddOvMainActivity extends AppCompatActivity {
 
             if(RadioProposed.isChecked())
             {
-                editor.putString(TrapStatus,"proposed");
+                editor.putString(TrapStatus,"1");
             }
             if(RadioSet.isChecked())
             {
-                editor.putString(TrapStatus,"set");
+                editor.putString(TrapStatus,"2");
             }
 
             editor.putString(TrapPosition, EditTextTrapPosition.getText().toString());

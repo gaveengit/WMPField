@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -32,6 +34,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -40,10 +43,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class AddOviServiceMainActivity extends AppCompatActivity {
     final Context context = this;
+    private DbHandler dbHandler;
     private static final int PRIORITY_HIGH_ACCURACY = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
     public static final String OviTrapId = "OviTrapId";
@@ -54,6 +60,7 @@ public class AddOviServiceMainActivity extends AppCompatActivity {
     public static final String LocationCoordinates = "LocationCoordinates";
     public static final String OviServiceDetails = "OviServiceDetails";
     public static final String OviRunId = "OviRunId";
+    private List<OviServiceModel> oviServiceModelList;
     EditText EditTextTrapId;
     RadioGroup RadioGroupServiceStatus;
     RadioButton RadioServiced;
@@ -65,6 +72,7 @@ public class AddOviServiceMainActivity extends AppCompatActivity {
     TextView errorText;
     SharedPreferences sharedpreferences;
     String form_type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,7 +91,7 @@ public class AddOviServiceMainActivity extends AppCompatActivity {
         errorText = (TextView) findViewById(R.id.errorContainer);
         sharedpreferences = getSharedPreferences(OviServiceDetails, Context.MODE_PRIVATE);
         String ovi_trap_id = sharedpreferences.getString(OviTrapId, "");
-        Log.d("ovi_trap_id",ovi_trap_id);
+        Log.d("ovi_trap_id", ovi_trap_id);
         String service_id = sharedpreferences.getString(ServiceId, "");
         String service_status = sharedpreferences.getString(ServiceStatus, "");
         String trap_position = sharedpreferences.getString(TrapPosition, "");
@@ -104,25 +112,34 @@ public class AddOviServiceMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalOv(View pView) {
-
+        dbHandler = new DbHandler(context);
+        oviServiceModelList = new ArrayList<>();
+        oviServiceModelList = dbHandler.getSingleOviServiceTrapById(EditTextServiceId.getText().toString());
         sharedpreferences = getSharedPreferences(OviServiceDetails, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString(ServiceId, EditTextServiceId.getText().toString());
-        if(RadioServiced.isChecked())
+        String ovi_trap_id = sharedpreferences.getString(OviTrapId, "");
+        String run_id = sharedpreferences.getString(OviRunId, "");
+        if((oviServiceModelList.size()>0) && ((!oviServiceModelList.get(0).trap_id.equals(ovi_trap_id)) || (!oviServiceModelList.get(0).ovi_run_id.equals(run_id))))
         {
-            editor.putString(ServiceStatus,"1");
+            Toast.makeText(context, "Service id is already existing. Please try using another service id.",
+                    Toast.LENGTH_LONG).show();
         }
-        if(RadioNotServiced.isChecked())
-        {
-            editor.putString(ServiceStatus,"2");
+        else{
+            sharedpreferences = getSharedPreferences(OviServiceDetails, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(ServiceId, EditTextServiceId.getText().toString());
+            if (RadioServiced.isChecked()) {
+                editor.putString(ServiceStatus, "1");
+            }
+            if (RadioNotServiced.isChecked()) {
+                editor.putString(ServiceStatus, "2");
+            }
+            editor.apply();
+            Intent intent = new Intent(context, AddOviServiceAdditionalActivity.class);
+            startActivity(intent);
         }
-        editor.apply();
-        Intent intent = new Intent(context, AddOviServiceAdditionalActivity.class);
-        startActivity(intent);
     }
 
-    public void goListView(View pView)
-    {
+    public void goListView(View pView) {
         Intent intent = new Intent(context, OvListActivity.class);
         intent.putExtra("type", "ov");
         startActivity(intent);

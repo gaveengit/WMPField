@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+
 import com.google.android.gms.location.FusedLocationProviderClient;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
@@ -32,6 +34,7 @@ import android.widget.EditText;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
@@ -40,10 +43,13 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 
 public class AddMrcReleaseMainActivity extends AppCompatActivity {
     final Context context = this;
+    private DbHandler dbHandler;
     private static final int PRIORITY_HIGH_ACCURACY = 100;
     FusedLocationProviderClient fusedLocationProviderClient;
     public static final String MrcTrapId = "MrcTrapId";
@@ -53,6 +59,7 @@ public class AddMrcReleaseMainActivity extends AppCompatActivity {
     public static final String LocationCoordinates = "LocationCoordinates";
     public static final String MrcReleaseDetails = "MrcReleaseDetails";
     public static final String MrcRunId = "MrcRunId";
+    private List<MrcReleaseModel> mrcReleaseModelList;
     EditText EditTextTrapId;
     RadioGroup RadioGroupReleaseStatus;
     RadioButton RadioReleased;
@@ -63,6 +70,7 @@ public class AddMrcReleaseMainActivity extends AppCompatActivity {
     TextView errorText;
     SharedPreferences sharedpreferences;
     String form_type;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +80,7 @@ public class AddMrcReleaseMainActivity extends AppCompatActivity {
         EditTextReleaseId = (EditText) findViewById(R.id.editTextReleaseId);
         RadioGroupReleaseStatus = (RadioGroup) findViewById(R.id.ReleaseStatus);
         RadioReleased = (RadioButton) findViewById(R.id.radioReleased);
-        RadioNotReleased= (RadioButton) findViewById(R.id.radioNotReleased);
+        RadioNotReleased = (RadioButton) findViewById(R.id.radioNotReleased);
         EditTextRespondName = (EditText) findViewById(R.id.editTextRespondentName);
         EditTextLocationCoordinates = (EditText) findViewById(R.id.editTextLocation);
         errorText = (TextView) findViewById(R.id.errorContainer);
@@ -96,26 +104,35 @@ public class AddMrcReleaseMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalMrc(View pView) {
-
+        dbHandler = new DbHandler(context);
+        mrcReleaseModelList = new ArrayList<>();
+        mrcReleaseModelList = dbHandler.getSingleMrcReleaseTrapById(EditTextReleaseId.getText().toString());
         sharedpreferences = getSharedPreferences(MrcReleaseDetails, Context.MODE_PRIVATE);
-        SharedPreferences.Editor editor = sharedpreferences.edit();
-        editor.putString(ReleaseId,EditTextReleaseId.getText().toString());
-        if(RadioReleased.isChecked())
+        String mrc_trap_id = sharedpreferences.getString(MrcTrapId, "");
+        String run_id = sharedpreferences.getString(MrcRunId, "");
+        if((mrcReleaseModelList.size()>0) && ((!mrcReleaseModelList.get(0).trap_id.equals(mrc_trap_id)) || (!mrcReleaseModelList.get(0).mrc_run_id.equals(run_id))))
         {
-            editor.putString(ReleaseStatus,"1");
+            Toast.makeText(context, "Release id is already existing. Please try using another collection id.",
+                    Toast.LENGTH_LONG).show();
         }
-        if(RadioNotReleased.isChecked())
-        {
-            editor.putString(ReleaseStatus,"2");
-        }
+        else{
+            sharedpreferences = getSharedPreferences(MrcReleaseDetails, Context.MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedpreferences.edit();
+            editor.putString(ReleaseId, EditTextReleaseId.getText().toString());
+            if (RadioReleased.isChecked()) {
+                editor.putString(ReleaseStatus, "1");
+            }
+            if (RadioNotReleased.isChecked()) {
+                editor.putString(ReleaseStatus, "2");
+            }
 
-        editor.apply();
-        Intent intent = new Intent(context, AddMrcReleaseAdditionalActivity.class);
-        startActivity(intent);
+            editor.apply();
+            Intent intent = new Intent(context, AddMrcReleaseAdditionalActivity.class);
+            startActivity(intent);
+        }
     }
 
-    public void goListView(View pView)
-    {
+    public void goListView(View pView) {
         Intent intent = new Intent(context, OvListActivity.class);
         intent.putExtra("type", "mrc");
         startActivity(intent);

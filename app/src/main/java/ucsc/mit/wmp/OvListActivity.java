@@ -398,7 +398,7 @@ public class OvListActivity extends AppCompatActivity {
                     bgModelList = new ArrayList<>();
                     bgList = new ArrayList<>();
                     bgModelList = dbHandler.getSingleBgTrap(run_name, field_type);
-                    //Log.d("size-ov",Integer.toString(ovModelList.size()));
+                    Log.d("size-ov",Integer.toString(bgModelList.size()));
                     if (bgModelList.size() > 0) {
                         for (int i = 0; i < bgModelList.size(); ++i) {
                             RelativeLayout rl1 = new RelativeLayout(context);
@@ -796,7 +796,7 @@ public class OvListActivity extends AppCompatActivity {
                         @Override
                         protected Object doInBackground(Object[] objects) {
                             OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder().url("http://192.168.8.101/api/index.php/api/OviServiceController/indexOviService").build();
+                            Request request = new Request.Builder().url("http://192.168.8.102/api/index.php/api/OviServiceController/indexOviService").build();
                             Response response = null;
                             try {
                                 response = client.newCall(request).execute();
@@ -858,7 +858,7 @@ public class OvListActivity extends AppCompatActivity {
                         @Override
                         protected Object doInBackground(Object[] objects) {
                             OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder().url("http://192.168.8.101/api/index.php/api/OviCollectionController/indexOviCollection").build();
+                            Request request = new Request.Builder().url("http://192.168.8.102/api/index.php/api/OviCollectionController/indexOviCollection").build();
                             Response response = null;
                             try {
                                 response = client.newCall(request).execute();
@@ -921,7 +921,7 @@ public class OvListActivity extends AppCompatActivity {
                         @Override
                         protected Object doInBackground(Object[] objects) {
                             OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder().url("http://192.168.8.101/api/index.php/api/BgServiceController/indexBgService").build();
+                            Request request = new Request.Builder().url("http://192.168.8.102/api/index.php/api/BgServiceController/indexBgService").build();
                             Response response = null;
                             try {
                                 response = client.newCall(request).execute();
@@ -981,7 +981,7 @@ public class OvListActivity extends AppCompatActivity {
                         @Override
                         protected Object doInBackground(Object[] objects) {
                             OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder().url("http://192.168.8.101/api/index.php/api/BgCollectionController/indexBgCollection").build();
+                            Request request = new Request.Builder().url("http://192.168.8.102/api/index.php/api/BgCollectionController/indexBgCollection").build();
                             Response response = null;
                             try {
                                 response = client.newCall(request).execute();
@@ -1045,7 +1045,7 @@ public class OvListActivity extends AppCompatActivity {
                         @Override
                         protected Object doInBackground(Object[] objects) {
                             OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder().url("http://192.168.8.101/api/index.php/api/MrcServiceController/indexMrcService").build();
+                            Request request = new Request.Builder().url("http://192.168.8.102/api/index.php/api/MrcServiceController/indexMrcService").build();
                             Response response = null;
                             try {
                                 response = client.newCall(request).execute();
@@ -1105,7 +1105,7 @@ public class OvListActivity extends AppCompatActivity {
                         @Override
                         protected Object doInBackground(Object[] objects) {
                             OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder().url("http://192.168.8.101/api/index.php/api/MrcReleaseController/indexMrcRelease").build();
+                            Request request = new Request.Builder().url("http://192.168.8.102/api/index.php/api/MrcReleaseController/indexMrcRelease").build();
                             Response response = null;
                             try {
                                 response = client.newCall(request).execute();
