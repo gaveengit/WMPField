@@ -56,17 +56,7 @@
             android:id="@+id/editTextEmail"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/red"
             android:inputType="textPersonName" />
-        <TextView
-            android:id="@+id/errorContainerEmail"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/transparent"
-            android:textColor="#FF0000"
-            android:text="Format of email address is invalid."
-            android:textSize="17dp" />
 
         <TextView
             android:id="@+id/textViewPhone"
@@ -74,7 +64,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Phone (*)"
+            android:text="Phone No(*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
@@ -82,18 +72,7 @@
             android:id="@+id/editTextPhone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/red"
             android:inputType="number" />
-
-        <TextView
-            android:id="@+id/errorContainerPhone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/transparent"
-            android:textColor="#FF0000"
-          android:text="Format of phone no is invalid."
-            android:textSize="17dp" />
 
         <RelativeLayout
             android:layout_width="fill_parent"

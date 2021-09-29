@@ -91,9 +91,9 @@ public class IncidentDescriptionActivity extends AppCompatActivity {
         String incident_date = sharedpreferences.getString("incident_date", "");
         String incident_time_hour = sharedpreferences.getString("incident_time_hour", "");
         String incident_time_minute = sharedpreferences.getString("incident_time_minute", "");
-        if(incident_type.length()!=0 && incident_priority.length()!=0 && description.length()!=0 &&
-                incident_date.length()!=0 && incident_time_hour.length()!=0 && incident_time_minute
-                .length()!=0) {
+        if (incident_type.length() != 0 && incident_priority.length() != 0 && description.length() != 0 &&
+                incident_date.length() != 0 && incident_time_hour.length() != 0 && incident_time_minute
+                .length() != 0) {
             for (int i = 0; i < SpinnerIncidentType.getCount(); i++) {
                 if (SpinnerIncidentType.getItemAtPosition(i).equals(incident_type)) {
                     SpinnerIncidentType.setSelection(i);
@@ -116,7 +116,7 @@ public class IncidentDescriptionActivity extends AppCompatActivity {
             calendar.set(Calendar.MONTH, month);
             calendar.set(Calendar.DAY_OF_MONTH, day);
             long milliTime = calendar.getTimeInMillis();
-            CalendarViewCalender.setDate (milliTime, true, true);
+            CalendarViewCalender.setDate(milliTime, true, true);
 
             TimePickerPicker.setHour(Integer.valueOf(incident_time_hour));
             TimePickerPicker.setMinute(Integer.valueOf(incident_time_minute));
@@ -126,13 +126,20 @@ public class IncidentDescriptionActivity extends AppCompatActivity {
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public void goIncidentLocation(View pView) {
-        if ((SpinnerIncidentType.getSelectedItemPosition() == 0) || (SpinnerIncidentPriority.
-                getSelectedItemPosition() == 0) || EditTextDescription.getText()
-                .toString().length() == 0) {
-            errorText.setVisibility(View.VISIBLE);
-            errorText.setText("Please fill all required fields.");
-        } else {
-            errorText.setVisibility(View.INVISIBLE);
+        int error_flag = 0;
+        if (SpinnerIncidentType.getSelectedItemPosition() == 0) {
+            ((TextView) SpinnerIncidentType.getSelectedView()).setError("Incident Type is required.");
+            error_flag = 1;
+        }
+        if (SpinnerIncidentPriority.getSelectedItemPosition() == 0) {
+            ((TextView) SpinnerIncidentType.getSelectedView()).setError("Incident Priority is required.");
+            error_flag = 1;
+        }
+        if (EditTextDescription.getText().toString().length() == 0) {
+            EditTextDescription.setError("Incident description is required.");
+            error_flag = 1;
+        }
+        if (error_flag == 0) {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM/dd");
             String selectedDate = sdf.format(new Date(CalendarViewCalender.getDate()));
             int hour = TimePickerPicker.getHour();
@@ -144,22 +151,22 @@ public class IncidentDescriptionActivity extends AppCompatActivity {
             Log.d("incidentpriority", SpinnerIncidentPriority.getSelectedItem().toString());
             SharedPreferences.Editor editor = sharedpreferences.edit();
 
-            if(SpinnerIncidentType.getSelectedItem().toString().equals("Community Complaint")) {
+            if (SpinnerIncidentType.getSelectedItem().toString().equals("Community Complaint")) {
                 editor.putString(Incident_type, "1");
             }
-            if(SpinnerIncidentType.getSelectedItem().toString().equals("Community Enquiry")) {
+            if (SpinnerIncidentType.getSelectedItem().toString().equals("Community Enquiry")) {
                 editor.putString(Incident_type, "2");
             }
-            if(SpinnerIncidentType.getSelectedItem().toString().equals("Operational Incident")) {
+            if (SpinnerIncidentType.getSelectedItem().toString().equals("Operational Incident")) {
                 editor.putString(Incident_type, "3");
             }
-            if(SpinnerIncidentPriority.getSelectedItem().toString().equals("High")) {
+            if (SpinnerIncidentPriority.getSelectedItem().toString().equals("High")) {
                 editor.putString(Incident_priority, "1");
             }
-            if(SpinnerIncidentPriority.getSelectedItem().toString().equals("Medium")) {
+            if (SpinnerIncidentPriority.getSelectedItem().toString().equals("Medium")) {
                 editor.putString(Incident_priority, "2");
             }
-            if(SpinnerIncidentPriority.getSelectedItem().toString().equals("Low")) {
+            if (SpinnerIncidentPriority.getSelectedItem().toString().equals("Low")) {
                 editor.putString(Incident_priority, "3");
             }
             editor.putString(Description, EditTextDescription.getText().toString());

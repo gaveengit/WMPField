@@ -111,34 +111,43 @@ public class AddBgServiceMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalBg(View pView) {
-        dbHandler = new DbHandler(context);
-        bgServiceModelList = new ArrayList<>();
-        bgServiceModelList = dbHandler.getSingleBgServiceTrapById(EditTextServiceId.getText().toString());
-        sharedpreferences = getSharedPreferences(BgServiceDetails, Context.MODE_PRIVATE);
-        String bg_trap_id = sharedpreferences.getString(BgTrapId, "");
-        String run_id = sharedpreferences.getString(BgRunId, "");
-        if((bgServiceModelList.size()>0) && ((!bgServiceModelList.get(0).trap_id.equals(bg_trap_id)) || (!bgServiceModelList.get(0).bg_run_id.equals(run_id))))
-        {
-            Toast.makeText(context, "Service id is already existing. Please try using another service id.",
-                    Toast.LENGTH_LONG).show();
+        int error_flag = 0;
+        if (EditTextServiceId.getText().toString().length() == 0) {
+            EditTextServiceId.setError("Service Id is required.");
+            error_flag = 1;
         }
-        else
-        {
+        if (RadioServiced.isChecked() == false && RadioNotServiced.isChecked() == false) {
+            RadioServiced.setError("Service status is required");
+            RadioNotServiced.setError("Service status is required");
+            error_flag = 1;
+        }
+
+        if (error_flag == 0) {
+            dbHandler = new DbHandler(context);
+            bgServiceModelList = new ArrayList<>();
+            bgServiceModelList = dbHandler.getSingleBgServiceTrapById(EditTextServiceId.getText().toString());
             sharedpreferences = getSharedPreferences(BgServiceDetails, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(ServiceId, EditTextServiceId.getText().toString());
-            if (RadioServiced.isChecked()) {
-                editor.putString(ServiceStatus, "1");
+            String bg_trap_id = sharedpreferences.getString(BgTrapId, "");
+            String run_id = sharedpreferences.getString(BgRunId, "");
+            if ((bgServiceModelList.size() > 0) && ((!bgServiceModelList.get(0).trap_id.equals(bg_trap_id)) || (!bgServiceModelList.get(0).bg_run_id.equals(run_id)))) {
+                Toast.makeText(context, "Service id is already existing. Please try using another service id.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                sharedpreferences = getSharedPreferences(BgServiceDetails, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(ServiceId, EditTextServiceId.getText().toString());
+                if (RadioServiced.isChecked()) {
+                    editor.putString(ServiceStatus, "1");
+                }
+                if (RadioNotServiced.isChecked()) {
+                    editor.putString(ServiceStatus, "2");
+                }
+                editor.apply();
+                Intent intent = new Intent(context, AddBgServiceAdditionalActivity.class);
+                startActivity(intent);
             }
-            if (RadioNotServiced.isChecked()) {
-                editor.putString(ServiceStatus, "2");
-            }
-            editor.apply();
-            Intent intent = new Intent(context, AddBgServiceAdditionalActivity.class);
-            startActivity(intent);
         }
     }
-
     public void goListView(View pView) {
         Intent intent = new Intent(context, OvListActivity.class);
         intent.putExtra("type", "bg");

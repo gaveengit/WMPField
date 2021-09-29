@@ -10,6 +10,8 @@ public class MrcModel {
     public String address_line2;
     public String location_description;
     public String coordinates;
+    public String date;
+    public String time;
 
     public MrcModel(){
 
@@ -60,6 +62,14 @@ public class MrcModel {
         this.coordinates = coordinates;
     }
 
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
     public String getIdentifier() {
         return identifier;
     }
@@ -94,5 +104,13 @@ public class MrcModel {
 
     public String getCoordinates() {
         return coordinates;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
     }
 }

@@ -19,6 +19,7 @@ public class AddOvAdditionalActivity extends AppCompatActivity {
     final Context context = this;
     private DbHandler dbHandler;
     public static final String OviTrapId = "OviTrapId";
+    public static final String OriginalOviId = "OriginalOviId";
     public static final String TrapStatus = "TrapStatus";
     public static final String TrapPosition = "TrapPosition";
     public static final String RespondName = "RespondName";
@@ -82,13 +83,29 @@ public class AddOvAdditionalActivity extends AppCompatActivity {
     }
 
     public void submitOv(View v) {
-        if (EditTextAddressLine1.getText().toString().length() == 0 || EditTextAddressLine2.getText().toString().
-                length()
-                == 0) {
-            errorText.setVisibility(View.VISIBLE);
-            errorText.setText("Please fill all required fields.");
-        } else {
-            errorText.setVisibility(View.GONE);
+        int error_flag = 0;
+        if (EditTextAddressLine1.getText().toString().length() == 0) {
+            EditTextAddressLine1.setError("Address line1 is required.");
+            error_flag = 1;
+        }
+        if (EditTextAddressLine2.getText().toString().length() == 0) {
+            EditTextAddressLine2.setError("Address line2 is required.");
+            error_flag = 1;
+        }
+        if (EditTextLocationDescription.getText().toString().length() == 0) {
+            EditTextLocationDescription.setError("Location description is required.");
+            error_flag = 1;
+        }
+
+        if (EditTextPhone.getText().toString().length() == 0) {
+            EditTextPhone.setError("Phone no is required.");
+            error_flag = 1;
+        }
+        if (EditTextPhone.getText().toString().length() > 0 && EditTextPhone.getText().toString().length() != 10) {
+            EditTextPhone.setError("Phone no should have 10 digits.");
+            error_flag = 1;
+        }
+        if (error_flag == 0) {
             sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString(Phone, EditTextPhone.getText().toString());
@@ -99,6 +116,7 @@ public class AddOvAdditionalActivity extends AppCompatActivity {
             dbHandler = new DbHandler(context);
             sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
             String ovi_trap_id = sharedpreferences.getString(OviTrapId, "");
+            String ovi_trap_id_original = sharedpreferences.getString(OriginalOviId, "");
             String trap_status = sharedpreferences.getString(TrapStatus, "");
             String trap_position = sharedpreferences.getString(TrapPosition, "");
             String respond_name = sharedpreferences.getString(RespondName, "");
@@ -111,17 +129,17 @@ public class AddOvAdditionalActivity extends AppCompatActivity {
             if (form_type.equals("edit-new")) {
                 OvTrapModel ovTrapModel = new OvTrapModel(ovi_trap_id, trap_status, trap_position,
                         ovi_run_id, respond_name, phone, address_line1, address_line2, location_description, location_coordinates);
-                int flag = dbHandler.updateSingleOvTrap(ovTrapModel);
-                if(flag != -1) {
+                int flag = dbHandler.updateSingleOvTrap(ovTrapModel, ovi_trap_id_original);
+                if (flag != -1) {
                     Toast.makeText(context, "OVI has been updated successfully.",
                             Toast.LENGTH_LONG).show();
-                }
-                else{
+                } else {
                     Toast.makeText(context, "Failure in updating OVI trap. Please try again..",
                             Toast.LENGTH_LONG).show();
                 }
-                Intent intent = new Intent(context, OvListActivity.class);
-                intent.putExtra("type", "ov");
+                Intent intent = new Intent(context, MapsActivity.class);
+                intent.putExtra("run_name", ovi_run_id);
+                intent.putExtra("field_type", "ov");
                 startActivity(intent);
 
             } else {
@@ -134,14 +152,16 @@ public class AddOvAdditionalActivity extends AppCompatActivity {
                 if (flag_insert_ov != -1) {
                     Toast.makeText(context, "OVI trap has been added successfully.",
                             Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(context, OvListActivity.class);
-                    intent.putExtra("type", "ov");
+                    Intent intent = new Intent(context, MapsActivity.class);
+                    intent.putExtra("run_name", ovi_run_id);
+                    intent.putExtra("field_type", "ov");
                     startActivity(intent);
                 } else {
                     Toast.makeText(context, "Failure in adding OVI trap. Please try again.",
                             Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(context, OvListActivity.class);
-                    intent.putExtra("type", "ov");
+                    Intent intent = new Intent(context, MapsActivity.class);
+                    intent.putExtra("run_name", ovi_run_id);
+                    intent.putExtra("field_type", "ov");
                     startActivity(intent);
                 }
 

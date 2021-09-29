@@ -55,6 +55,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static final String MrcReleaseDetails = "MrcReleaseDetails";
     public static final String OriginalOviId = "OriginalOviId";
     public static final String OriginalBgId = "OriginalBgId";
+    public static final String OriginalMrcId = "OriginalMrcId";
     public static final String BgDetails = "BgDetails";
     public static final String MrcDetails = "MrcDetails";
     public static final String MrcId = "MrcId";
@@ -177,17 +178,13 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             // TODO: Consider calling
             //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
             return;
         }
         mMap.setMyLocationEnabled(true);
         mMap.getUiSettings().setMyLocationButtonEnabled(true);
         mMap.getUiSettings().setZoomControlsEnabled(true);
         mMap.getUiSettings().setZoomGesturesEnabled(true);
+        mMap.animateCamera( CameraUpdateFactory.zoomTo( 17.0f ) );
 
         if (field_type.equals("ov")) {
             if (ovModelList.size() > 0) {
@@ -208,7 +205,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 (BitmapDescriptorFactory.HUE_GREEN))).setTag(ovModelList.get(i).ov_trap_id.toString());
                     }
                     // below line is use to move camera.
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(givenLocation));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(givenLocation,14.0f));
                 }
 
             } else {
@@ -234,7 +231,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
 
                         // below line is use to move camera.
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(givenLocation));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(givenLocation,14.0f));
                     }
 
                 } else {
@@ -259,7 +256,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
 
                             // below line is use to move camera.
-                            mMap.moveCamera(CameraUpdateFactory.newLatLng(givenLocation));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(givenLocation,14.0f));
                         }
 
                     }
@@ -284,7 +281,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 (BitmapDescriptorFactory.HUE_GREEN))).setTag(bgModelList.get(i).bg_trap_id.toString());
                     }
                     // below line is use to move camera.
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(givenLocation));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(givenLocation,14.0f));
                 }
 
             } else {
@@ -309,7 +306,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
 
                         // below line is use to move camera.
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(givenLocation));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(givenLocation,14.0f));
                     }
 
                 } else {
@@ -333,7 +330,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
 
                             // below line is use to move camera.
-                            mMap.moveCamera(CameraUpdateFactory.newLatLng(givenLocation));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(givenLocation,14.0f));
                         }
 
                     }
@@ -359,7 +356,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                                 (BitmapDescriptorFactory.HUE_GREEN))).setTag(mrcModelList.get(i).identifier.toString());
                     }
                     // below line is use to move camera.
-                    mMap.moveCamera(CameraUpdateFactory.newLatLng(givenLocation));
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(givenLocation,14.0f));
                 }
 
             } else {
@@ -383,7 +380,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         }
 
                         // below line is use to move camera.
-                        mMap.moveCamera(CameraUpdateFactory.newLatLng(givenLocation));
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(givenLocation,14.0f));
                     }
 
                 } else {
@@ -407,7 +404,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             }
 
                             // below line is use to move camera.
-                            mMap.moveCamera(CameraUpdateFactory.newLatLng(givenLocation));
+                            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(givenLocation,14.0f));
                         }
 
                     }
@@ -595,6 +592,28 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     editor.putString(ReleaseStatus, mrcReleaseModelList.get(0).release_status);
                     editor.apply();
                     Intent intent = new Intent(context, AddMrcReleaseMainActivity.class);
+                    startActivity(intent);
+                }
+                if(RunCategory.equals("mrc_dry")){
+                    dbHandler = new DbHandler(context);
+                    mrcPersonAddressModelList = new ArrayList<>();
+                    mrcPersonAddressModelList = dbHandler.getSingleMrc(marker.getTag().toString());
+                    sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
+                    SharedPreferences.Editor editor = sharedpreferences.edit();
+                    editor.putString(MrcId, mrcPersonAddressModelList.get(0).identifier.toString());
+                    editor.putString(OriginalMrcId, mrcPersonAddressModelList.get(0).identifier.toString());
+                    editor.putString(MrcStatus, mrcPersonAddressModelList.get(0).mrc_status.toString());
+                    editor.putString(RespondName, mrcPersonAddressModelList.get(0).person_name);
+                    editor.putString(LocationCoordinates, mrcPersonAddressModelList.get(0).coordinates);
+                    editor.putString(Phone, String.valueOf(mrcPersonAddressModelList.get(0).person_phone));
+                    editor.putString(AddressLine1, mrcPersonAddressModelList.get(0).address_line1);
+                    editor.putString(AddressLine2, mrcPersonAddressModelList.get(0).address_line2);
+                    editor.putString(LocationDescription, mrcPersonAddressModelList.get(0).location_description);
+                    editor.putString(MrcRunId, mrcPersonAddressModelList.get(0).run_name);
+                    editor.apply();
+                    Intent intent = new Intent(context, AddMrcMainActivity.class);
+                    intent.putExtra("TrapId", marker.getTag().toString());
+                    intent.putExtra("form-type", "edit-new");
                     startActivity(intent);
                 }
 

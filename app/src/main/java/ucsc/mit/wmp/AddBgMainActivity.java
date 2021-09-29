@@ -85,9 +85,8 @@ public class AddBgMainActivity extends AppCompatActivity {
         EditTextRespondName = (EditText) findViewById(R.id.editTextRespondentName);
         EditTextLocationCoordinates = (EditText) findViewById(R.id.editTextLocation);
         errorText = (TextView) findViewById(R.id.errorContainer);
-        RadioProposed.setChecked(true);
         sharedpreferences = getSharedPreferences(BgDetails, Context.MODE_PRIVATE);
-        String ovi_trap_id = sharedpreferences.getString(BgTrapId, "");
+        String bg_trap_id = sharedpreferences.getString(BgTrapId, "");
         String trap_status = sharedpreferences.getString(TrapStatus, "");
         String trap_position = sharedpreferences.getString(TrapPosition, "");
         String respond_name = sharedpreferences.getString(RespondName, "");
@@ -96,7 +95,7 @@ public class AddBgMainActivity extends AppCompatActivity {
         original_bg_id = sharedpreferences.getString(OriginalBgId, "");
         Log.d("bg_run",bg_run_id);
         if(respond_name.length()!=0) {
-            EditTextTrapId.setText(ovi_trap_id);
+            EditTextTrapId.setText(bg_trap_id);
             if (trap_status.equals("1")) {
                 RadioProposed.setChecked(true);
             }
@@ -155,44 +154,63 @@ public class AddBgMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalBg(View pView) {
-        dbHandler = new DbHandler(context);
-        bgPersonAddressModelList = new ArrayList<>();
-        bgPersonAddressModelList = dbHandler.getSingleBgTrap(EditTextTrapId.getText().toString());
-        if (((bgPersonAddressModelList.size() > 0) && form_type.equals("new")) || (!original_bg_id.equals(EditTextTrapId.getText().toString()) && bgPersonAddressModelList.size() > 0 && form_type.equals("edit-new"))) {
-            errorText.setVisibility(View.VISIBLE);
-            errorText.setText("BG trap id is already existing.");
-            Toast.makeText(context, "BG trap id is already existing.",
-                    Toast.LENGTH_LONG).show();
+        int error_flag = 0;
+        if (EditTextTrapId.getText().toString().length() == 0) {
+            EditTextTrapId.setError("BG trap id is required.");
+            error_flag = 1;
         }
-        else {
-            errorText.setVisibility(View.GONE);
-            sharedpreferences = getSharedPreferences(BgDetails, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(BgTrapId,EditTextTrapId.getText().toString());
-
-            if(RadioProposed.isChecked())
-            {
-                editor.putString(TrapStatus,"1");
-            }
-            if(RadioSet.isChecked())
-            {
-                editor.putString(TrapStatus,"2");
-            }
-
-            editor.putString(TrapPosition, EditTextTrapPosition.getText().toString());
-            editor.putString(RespondName, EditTextRespondName.getText().toString());
-            editor.putString(LocationCoordinates, EditTextLocationCoordinates.getText().toString());
-            editor.apply();
-            Intent intent = new Intent(context, AddBgAdditionalActivity.class);
-            if(form_type.equals("edit-new")) {
-                intent.putExtra("form-type", "edit-new");
-            }
-            else{
-                intent.putExtra("form-type", "new");
-            }
-            startActivity(intent);
+        if (RadioProposed.isChecked() == false && RadioSet.isChecked() == false) {
+            RadioProposed.setError("Trap status is required.");
+            RadioSet.setError("Trap status is required.");
+            error_flag = 1;
         }
+        if (EditTextRespondName.getText().toString().length() == 0) {
+            EditTextRespondName.setError("Respondent name is required.");
+            error_flag = 1;
+        }
+        if (EditTextLocationCoordinates.getText().toString().length() == 0) {
+            EditTextLocationCoordinates.setError("Location coordinates is required.");
+            error_flag = 1;
+        }
+        if (EditTextTrapPosition.getText().toString().length() == 0) {
+            EditTextTrapPosition.setError("Location coordinate is required.");
+            error_flag = 1;
+        }
+        if(error_flag==0) {
+            dbHandler = new DbHandler(context);
+            bgPersonAddressModelList = new ArrayList<>();
+            bgPersonAddressModelList = dbHandler.getSingleBgTrap(EditTextTrapId.getText().toString());
+            if (((bgPersonAddressModelList.size() > 0) && form_type.equals("new")) || (!original_bg_id.equals(EditTextTrapId.getText().toString()) && bgPersonAddressModelList.size() > 0 && form_type.equals("edit-new"))) {
+                errorText.setVisibility(View.VISIBLE);
+                errorText.setText("BG trap id is already existing.");
+                Toast.makeText(context, "BG trap id is already existing.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                sharedpreferences = getSharedPreferences(BgDetails, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(BgTrapId, EditTextTrapId.getText().toString());
+                editor.putString(OriginalBgId, original_bg_id);
 
+                if (RadioProposed.isChecked()) {
+                    editor.putString(TrapStatus, "1");
+                }
+                if (RadioSet.isChecked()) {
+                    editor.putString(TrapStatus, "2");
+                }
+
+                editor.putString(TrapPosition, EditTextTrapPosition.getText().toString());
+                editor.putString(RespondName, EditTextRespondName.getText().toString());
+                editor.putString(LocationCoordinates, EditTextLocationCoordinates.getText().toString());
+                editor.apply();
+                Intent intent = new Intent(context, AddBgAdditionalActivity.class);
+                if (form_type.equals("edit-new")) {
+                    intent.putExtra("form-type", "edit-new");
+                } else {
+                    intent.putExtra("form-type", "new");
+                }
+                startActivity(intent);
+            }
+        }
     }
     public void goListView(View pView)
     {

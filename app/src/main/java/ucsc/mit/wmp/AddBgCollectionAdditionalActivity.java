@@ -83,7 +83,6 @@ public class AddBgCollectionAdditionalActivity extends AppCompatActivity {
 
     public void submitBg(View v) {
 
-        errorText.setVisibility(View.GONE);
         sharedpreferences = getSharedPreferences(BgCollectionDetails, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(Phone, EditTextPhone.getText().toString());
@@ -117,14 +116,16 @@ public class AddBgCollectionAdditionalActivity extends AppCompatActivity {
         if (flag != -1) {
             Toast.makeText(context, "BG collection has been added successfully.",
                     Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(context, OvListActivity.class);
-            intent.putExtra("type", "bg");
+            Intent intent = new Intent(context, MapsActivity.class);
+            intent.putExtra("run_name", bg_run_id);
+            intent.putExtra("field_type", "bg");
             startActivity(intent);
         } else {
             Toast.makeText(context, "Failure in updating BG collection. Please try again..",
                     Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(context, OvListActivity.class);
-            intent.putExtra("type", "bg");
+            Intent intent = new Intent(context, MapsActivity.class);
+            intent.putExtra("run_name", bg_run_id);
+            intent.putExtra("field_type", "bg");
             startActivity(intent);
         }
 

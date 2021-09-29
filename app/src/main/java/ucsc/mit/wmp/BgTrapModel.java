@@ -11,6 +11,9 @@ public class BgTrapModel {
     public String address_line2;
     public String location_description;
     public String coordinates;
+    public String date;
+    public String time;
+
     public BgTrapModel(){
 
     }
@@ -65,6 +68,14 @@ public class BgTrapModel {
         this.coordinates = coordinates;
     }
 
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
+    }
+
     public String getBg_trap_id() {
         return bg_trap_id;
     }
@@ -103,6 +114,14 @@ public class BgTrapModel {
 
     public String getCoordinates() {
         return coordinates;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
     }
 }
 

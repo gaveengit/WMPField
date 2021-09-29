@@ -112,30 +112,40 @@ public class AddOviServiceMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalOv(View pView) {
-        dbHandler = new DbHandler(context);
-        oviServiceModelList = new ArrayList<>();
-        oviServiceModelList = dbHandler.getSingleOviServiceTrapById(EditTextServiceId.getText().toString());
-        sharedpreferences = getSharedPreferences(OviServiceDetails, Context.MODE_PRIVATE);
-        String ovi_trap_id = sharedpreferences.getString(OviTrapId, "");
-        String run_id = sharedpreferences.getString(OviRunId, "");
-        if((oviServiceModelList.size()>0) && ((!oviServiceModelList.get(0).trap_id.equals(ovi_trap_id)) || (!oviServiceModelList.get(0).ovi_run_id.equals(run_id))))
-        {
-            Toast.makeText(context, "Service id is already existing. Please try using another service id.",
-                    Toast.LENGTH_LONG).show();
+        int error_flag = 0;
+        if (EditTextServiceId.getText().toString().length() == 0) {
+            EditTextServiceId.setError("Service Id is required.");
+            error_flag = 1;
         }
-        else{
+        if( RadioServiced.isChecked()==false && RadioNotServiced.isChecked()==false){
+            RadioServiced.setError("Service status is required");
+            RadioNotServiced.setError("Service status is required");
+            error_flag = 1;
+        }
+        if(error_flag==1) {
+            dbHandler = new DbHandler(context);
+            oviServiceModelList = new ArrayList<>();
+            oviServiceModelList = dbHandler.getSingleOviServiceTrapById(EditTextServiceId.getText().toString());
             sharedpreferences = getSharedPreferences(OviServiceDetails, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(ServiceId, EditTextServiceId.getText().toString());
-            if (RadioServiced.isChecked()) {
-                editor.putString(ServiceStatus, "1");
+            String ovi_trap_id = sharedpreferences.getString(OviTrapId, "");
+            String run_id = sharedpreferences.getString(OviRunId, "");
+            if ((oviServiceModelList.size() > 0) && ((!oviServiceModelList.get(0).trap_id.equals(ovi_trap_id)) || (!oviServiceModelList.get(0).ovi_run_id.equals(run_id)))) {
+                Toast.makeText(context, "Service id is already existing. Please try using another service id.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                sharedpreferences = getSharedPreferences(OviServiceDetails, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(ServiceId, EditTextServiceId.getText().toString());
+                if (RadioServiced.isChecked()) {
+                    editor.putString(ServiceStatus, "1");
+                }
+                if (RadioNotServiced.isChecked()) {
+                    editor.putString(ServiceStatus, "2");
+                }
+                editor.apply();
+                Intent intent = new Intent(context, AddOviServiceAdditionalActivity.class);
+                startActivity(intent);
             }
-            if (RadioNotServiced.isChecked()) {
-                editor.putString(ServiceStatus, "2");
-            }
-            editor.apply();
-            Intent intent = new Intent(context, AddOviServiceAdditionalActivity.class);
-            startActivity(intent);
         }
     }
 

@@ -105,34 +105,43 @@ public class AddMrcServiceMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalMrc(View pView) {
-        dbHandler = new DbHandler(context);
-        mrcServiceModelList = new ArrayList<>();
-        mrcServiceModelList = dbHandler.getSingleMrcServiceTrapById(EditTextServiceId.getText().toString());
-        sharedpreferences = getSharedPreferences(MrcServiceDetails, Context.MODE_PRIVATE);
-        String mrc_trap_id = sharedpreferences.getString(MrcTrapId, "");
-        String run_id = sharedpreferences.getString(MrcRunId, "");
-        if((mrcServiceModelList.size()>0) && ((!mrcServiceModelList.get(0).trap_id.equals(mrc_trap_id)) || (!mrcServiceModelList.get(0).mrc_run_id.equals(run_id))))
-        {
-            Toast.makeText(context, "Service id is already existing. Please try using another service id.",
-                    Toast.LENGTH_LONG).show();
+        int error_flag = 0;
+        if (EditTextServiceId.getText().toString().length() == 0) {
+            EditTextServiceId.setError("Service Id is required.");
+            error_flag = 1;
         }
-        else{
+        if (RadioServiced.isChecked() == false && RadioNotServiced.isChecked() == false) {
+            RadioServiced.setError("Service status is required");
+            RadioNotServiced.setError("Service status is required");
+            error_flag = 1;
+        }
+        if (error_flag == 0) {
+            dbHandler = new DbHandler(context);
+            mrcServiceModelList = new ArrayList<>();
+            mrcServiceModelList = dbHandler.getSingleMrcServiceTrapById(EditTextServiceId.getText().toString());
             sharedpreferences = getSharedPreferences(MrcServiceDetails, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(ServiceId, EditTextServiceId.getText().toString());
-            if (RadioServiced.isChecked()) {
-                editor.putString(ServiceStatus, "1");
-            }
-            if (RadioNotServiced.isChecked()) {
-                editor.putString(ServiceStatus, "2");
-            }
+            String mrc_trap_id = sharedpreferences.getString(MrcTrapId, "");
+            String run_id = sharedpreferences.getString(MrcRunId, "");
+            if ((mrcServiceModelList.size() > 0) && ((!mrcServiceModelList.get(0).trap_id.equals(mrc_trap_id)) || (!mrcServiceModelList.get(0).mrc_run_id.equals(run_id)))) {
+                Toast.makeText(context, "Service id is already existing. Please try using another service id.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                sharedpreferences = getSharedPreferences(MrcServiceDetails, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(ServiceId, EditTextServiceId.getText().toString());
+                if (RadioServiced.isChecked()) {
+                    editor.putString(ServiceStatus, "1");
+                }
+                if (RadioNotServiced.isChecked()) {
+                    editor.putString(ServiceStatus, "2");
+                }
 
-            editor.apply();
-            Intent intent = new Intent(context, AddMrcServiceAdditionalActivity.class);
-            startActivity(intent);
+                editor.apply();
+                Intent intent = new Intent(context, AddMrcServiceAdditionalActivity.class);
+                startActivity(intent);
+            }
         }
     }
-
     public void goListView(View pView) {
         Intent intent = new Intent(context, OvListActivity.class);
         intent.putExtra("type", "mrc");

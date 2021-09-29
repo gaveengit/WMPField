@@ -157,39 +157,58 @@ public class AddMrcMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalMrc(View pView) {
-        dbHandler = new DbHandler(context);
-        Log.d("form_type",form_type);
-        mrcPersonAddressModelList = new ArrayList<>();
-        mrcPersonAddressModelList = dbHandler.getSingleMrcPersonAddress(EditTextMrcId.getText().toString());
-        Log.d("size",String.valueOf(mrcPersonAddressModelList.size()));
-        if(((mrcPersonAddressModelList.size() > 0) && form_type.equals("new")) || (!original_mrc_id.equals(EditTextMrcId.getText().toString()) && mrcPersonAddressModelList.size() > 0 && form_type.equals("edit-new"))){
-            errorText.setVisibility(View.VISIBLE);
-            errorText.setText("MRC identifier is already existing.");
-            Toast.makeText(context, "MRC identifier is already existing.",
-                    Toast.LENGTH_LONG).show();
-        } else {
-            errorText.setVisibility(View.GONE);
-            sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(MrcId, EditTextMrcId.getText().toString());
+        int error_flag = 0;
+        if (EditTextMrcId.getText().toString().length() == 0) {
+            EditTextMrcId.setError("MRC identifier is required.");
+            error_flag = 1;
+        }
+        if (RadioProposed.isChecked() == false && RadioSet.isChecked() == false) {
+            RadioProposed.setError("Trap status is required.");
+            RadioSet.setError("Trap status is required.");
+            error_flag = 1;
+        }
+        if (EditTextRespondName.getText().toString().length() == 0) {
+            EditTextRespondName.setError("Respondent name is required.");
+            error_flag = 1;
+        }
+        if (EditTextLocationCoordinates.getText().toString().length() == 0) {
+            EditTextLocationCoordinates.setError("Location coordinates is required.");
+            error_flag = 1;
+        }
+        if (error_flag == 0) {
+            dbHandler = new DbHandler(context);
+            Log.d("form_type", form_type);
+            mrcPersonAddressModelList = new ArrayList<>();
+            mrcPersonAddressModelList = dbHandler.getSingleMrcPersonAddress(EditTextMrcId.getText().toString());
+            Log.d("size", String.valueOf(mrcPersonAddressModelList.size()));
+            if (((mrcPersonAddressModelList.size() > 0) && form_type.equals("new")) || (!original_mrc_id.equals(EditTextMrcId.getText().toString()) && mrcPersonAddressModelList.size() > 0 && form_type.equals("edit-new"))) {
 
-            if (RadioProposed.isChecked()) {
-                editor.putString(MrcStatus, "1");
+                errorText.setText("MRC identifier is already existing.");
+                Toast.makeText(context, "MRC identifier is already existing.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                errorText.setVisibility(View.GONE);
+                sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(MrcId, EditTextMrcId.getText().toString());
+
+                if (RadioProposed.isChecked()) {
+                    editor.putString(MrcStatus, "1");
+                }
+                if (RadioSet.isChecked()) {
+                    editor.putString(MrcStatus, "2");
+                }
+                editor.putString(RespondName, EditTextRespondName.getText().toString());
+                editor.putString(LocationCoordinates, EditTextLocationCoordinates.getText().toString());
+                editor.apply();
+                Intent intent = new Intent(context, AddMrcAdditionalActivity.class);
+                if (form_type.equals("edit-new")) {
+                    intent.putExtra("form-type", "edit-new");
+                } else {
+                    intent.putExtra("form-type", "new");
+                }
+                startActivity(intent);
             }
-            if (RadioSet.isChecked()) {
-                editor.putString(MrcStatus, "2");
-            }
-            editor.putString(RespondName, EditTextRespondName.getText().toString());
-            editor.putString(LocationCoordinates, EditTextLocationCoordinates.getText().toString());
-            editor.apply();
-            Intent intent = new Intent(context, AddMrcAdditionalActivity.class);
-            if(form_type.equals("edit-new")) {
-                intent.putExtra("form-type", "edit-new");
-            }
-            else{
-                intent.putExtra("form-type", "new");
-            }
-            startActivity(intent);
         }
     }
 

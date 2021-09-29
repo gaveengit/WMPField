@@ -83,7 +83,6 @@ public class AddBgServiceAdditionalActivity extends AppCompatActivity {
 
     public void submitBg(View v) {
 
-        errorText.setVisibility(View.GONE);
         sharedpreferences = getSharedPreferences(BgServiceDetails, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(Phone, EditTextPhone.getText().toString());
@@ -118,14 +117,16 @@ public class AddBgServiceAdditionalActivity extends AppCompatActivity {
         if (flag != -1) {
             Toast.makeText(context, "BG Service has been updated successfully.",
                     Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(context, OvListActivity.class);
-            intent.putExtra("type", "bg");
+            Intent intent = new Intent(context, MapsActivity.class);
+            intent.putExtra("run_name", bg_run_id);
+            intent.putExtra("field_type", "bg");
             startActivity(intent);
         } else {
             Toast.makeText(context, "Failure in adding BG service. Please try again..",
                     Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(context, OvListActivity.class);
-            intent.putExtra("type", "bg");
+            Intent intent = new Intent(context, MapsActivity.class);
+            intent.putExtra("run_name", bg_run_id);
+            intent.putExtra("field_type", "bg");
             startActivity(intent);
         }
 

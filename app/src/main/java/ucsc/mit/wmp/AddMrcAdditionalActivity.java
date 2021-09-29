@@ -29,6 +29,7 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
     public static final String AddressLine2 = "AddressLine2";
     public static final String LocationDescription = "LocationDescription";
     public static final String MrcDetails = "MrcDetails";
+    public static final String OriginalMrcId = "OriginalMrcId";
     EditText EditTextPhone;
     EditText EditTextAddressLine1;
     EditText EditTextAddressLine2;
@@ -79,13 +80,25 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
     }
 
     public void SubmitMrc(View v) {
-        if (EditTextAddressLine1.getText().toString().length() == 0 || EditTextAddressLine2.getText().toString().
-                length()
-                == 0) {
-            errorText.setVisibility(View.VISIBLE);
-            errorText.setText("Please fill all required fields.");
-        } else {
-            errorText.setVisibility(View.GONE);
+        int error_flag = 0;
+        if (EditTextAddressLine1.getText().toString().length() == 0) {
+            EditTextAddressLine1.setError("Address line1 is required.");
+            error_flag = 1;
+        }
+        if (EditTextAddressLine2.getText().toString().length() == 0) {
+            EditTextAddressLine2.setError("Address line2 is required.");
+            error_flag = 1;
+        }
+        if (EditTextLocationDescription.getText().toString().length() == 0) {
+            EditTextLocationDescription.setError("Location description is required.");
+            error_flag = 1;
+
+        if (EditTextPhone.getText().toString().length() == 0) {
+            EditTextPhone.setError("Phone no is required.");
+            error_flag = 1;
+        }
+
+        if (error_flag == 0) {
             sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
             SharedPreferences.Editor editor = sharedpreferences.edit();
             editor.putString(Phone, EditTextPhone.getText().toString());
@@ -97,6 +110,7 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
             dbHandler = new DbHandler(context);
             sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
             String mrc_id = sharedpreferences.getString(MrcId, "");
+            String mrc_id_original = sharedpreferences.getString(OriginalMrcId, "");
             String mrc_status = sharedpreferences.getString(MrcStatus, "");
             String respond_name = sharedpreferences.getString(RespondName, "");
             String respond_phone = sharedpreferences.getString(Phone, "");
@@ -110,17 +124,17 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
 
                 MrcModel mrcModel = new MrcModel(mrc_id, mrc_status,
                         mrc_run_id, respond_name, phone, address_line1, address_line2, location_description, location_coordinates);
-                int flag = dbHandler.updateSingleMrc(mrcModel);
-                if(flag != -1) {
+                int flag = dbHandler.updateSingleMrc(mrcModel, mrc_id_original);
+                if (flag != -1) {
                     Toast.makeText(context, "MRC has been updated successfully.",
                             Toast.LENGTH_LONG).show();
-                }
-                else{
+                } else {
                     Toast.makeText(context, "Failure in updating .",
                             Toast.LENGTH_LONG).show();
                 }
-                Intent intent = new Intent(context, OvListActivity.class);
-                intent.putExtra("type", "mrc");
+                Intent intent = new Intent(context, MapsActivity.class);
+                intent.putExtra("run_name", mrc_run_id);
+                intent.putExtra("field_type", "mrc");
                 startActivity(intent);
             } else {
                 dbHandler = new DbHandler(context);
@@ -134,19 +148,19 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
                 if (flag != -1) {
                     Toast.makeText(context, "MRC has been added successfully.",
                             Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(context, OvListActivity.class);
-                    intent.putExtra("type", "mrc");
+                    Intent intent = new Intent(context, MapsActivity.class);
+                    intent.putExtra("run_name", mrc_run_id);
+                    intent.putExtra("field_type", "mrc");
                     startActivity(intent);
                 } else {
                     Toast.makeText(context, "Failure in adding MRC. Please try again..",
                             Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(context, OvListActivity.class);
-                    intent.putExtra("type", "mrc");
+                    Intent intent = new Intent(context, MapsActivity.class);
+                    intent.putExtra("run_name", mrc_run_id);
+                    intent.putExtra("field_type", "mrc");
                     startActivity(intent);
                 }
-
-
             }
         }
     }
-}
+}}

@@ -10,27 +10,21 @@
         android:layout_height="fill_parent"
         android:background="@drawable/wallpaper"
         android:orientation="vertical">
-
-        <RelativeLayout
-            android:layout_width="fill_parent"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:paddingLeft="10dp"
-            android:paddingTop="10dp"
-            android:paddingRight="10dp"
-            android:paddingBottom="10dp">
+            android:gravity="center_horizontal">
 
-            <Button
+            <TextView
+                android:id="@+id/Title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="#0000FF"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
-                android:text="Edit"
-                android:textColor="#ffffff"
-                android:visibility="gone" />
-        </RelativeLayout>
+                android:layout_marginTop="5dp"
+                android:background="@android:color/transparent"
+                android:text="MRC Main Details"
+                android:textColor="#000000"
+                android:textSize="20dp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textViewId"
@@ -46,18 +40,8 @@
             android:id="@+id/editTextTrapId"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/red"
             android:inputType="textPersonName" />
 
-        <TextView
-            android:id="@+id/errorContainerMrcIdentifier"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/transparent"
-            android:textColor="#FF0000"
-            android:text="Collection id is already existing."
-            android:textSize="17dp" />
 
         <TextView
             android:id="@+id/textViewStatus"
@@ -107,7 +91,6 @@
             android:id="@+id/editTextRespondentName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:backgroundTint="@color/red"
             android:inputType="textPersonName" />
 
         <TextView

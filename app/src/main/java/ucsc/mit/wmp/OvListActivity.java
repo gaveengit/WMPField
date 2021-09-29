@@ -90,7 +90,7 @@ public class OvListActivity extends AppCompatActivity {
     private List<MrcServiceModel> mrcServiceModelList;
     private List<MrcReleaseModel> mrcReleaseModelList;
     private List<String> mrcList;
-
+    TextView titleText;
 
     Spinner spinnerRuns;
     SharedPreferences sharedpreferences;
@@ -101,6 +101,7 @@ public class OvListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.localeggs_listview);
         dbHandler = new DbHandler(context);
+        titleText = (TextView) findViewById(R.id.Title);
         LinearLayout l1 = (LinearLayout) findViewById(R.id.contentLinearLayout);
         button = (Button) findViewById(R.id.sync_button);
         l1.removeAllViews();
@@ -171,6 +172,7 @@ public class OvListActivity extends AppCompatActivity {
         editor_clear_ovi_collection.clear();
 
         if (field_type.equals("ov")) {
+            titleText.setText("OVI Field Activities");
             dbHandler = new DbHandler(context);
             List<String> ovi_runs = dbHandler.getAllOviRuns();
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
@@ -178,6 +180,7 @@ public class OvListActivity extends AppCompatActivity {
             spinnerRuns.setAdapter(dataAdapter);
         }
         if (field_type.equals("bg")) {
+            titleText.setText("BG Field Activities");
             dbHandler = new DbHandler(context);
             List<String> bg_runs = dbHandler.getAllBgRuns();
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
@@ -186,6 +189,7 @@ public class OvListActivity extends AppCompatActivity {
         }
 
         if (field_type.equals("mrc")) {
+            titleText.setText("MRC Field Activities");
             dbHandler = new DbHandler(context);
             List<String> mrc_runs = dbHandler.getAllMrcRuns();
             ArrayAdapter<String> dataAdapter = new ArrayAdapter<String>(this,
@@ -255,8 +259,12 @@ public class OvListActivity extends AppCompatActivity {
                             tv2.setTextSize(16);
                             //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
                             //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                            tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                            if(ovModelList.get(i).trap_status != null && ovModelList.get(i).trap_status.equals("1")) {
+                                tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                            }
+                            else if(ovModelList.get(i).trap_status != null && ovModelList.get(i).trap_status.equals("2")) {
+                                tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.right));
+                            }
                             rl1.addView(tv2);
                             rl1.invalidate();
                             LayoutParams layoutarams;
@@ -315,7 +323,15 @@ public class OvListActivity extends AppCompatActivity {
                                 //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
                                 //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
 
-                                tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                if(ovServiceModelList.get(i).service_status != null && ovServiceModelList.get(i).service_status.equals("1")) {
+                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.right));
+                                }
+                                else if(ovServiceModelList.get(i).service_status != null && ovServiceModelList.get(i).service_status.equals("2")) {
+                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.cross));
+                                }
+                                else{
+                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                }
                                 rl1.addView(tv2);
                                 rl1.invalidate();
                                 LayoutParams layoutarams;
@@ -371,10 +387,15 @@ public class OvListActivity extends AppCompatActivity {
                                     tv2.setTag(ovCollectionModelList.get(i).trap_id.toString());
                                     tv2.setBackgroundColor(Color.TRANSPARENT);
                                     tv2.setTextSize(16);
-                                    //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                                    //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                    if(ovCollectionModelList.get(i).collection_status != null && ovCollectionModelList.get(i).collection_status.equals("1")) {
+                                        tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.right));
+                                    }
+                                    else if(ovCollectionModelList.get(i).collection_status != null && ovCollectionModelList.get(i).collection_status.equals("2")) {
+                                        tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.cross));
+                                    }
+                                    else{
+                                        tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                    }
                                     rl1.addView(tv2);
                                     rl1.invalidate();
                                     LayoutParams layoutarams;
@@ -398,7 +419,7 @@ public class OvListActivity extends AppCompatActivity {
                     bgModelList = new ArrayList<>();
                     bgList = new ArrayList<>();
                     bgModelList = dbHandler.getSingleBgTrap(run_name, field_type);
-                    Log.d("size-ov",Integer.toString(bgModelList.size()));
+                    Log.d("size-ov", Integer.toString(bgModelList.size()));
                     if (bgModelList.size() > 0) {
                         for (int i = 0; i < bgModelList.size(); ++i) {
                             RelativeLayout rl1 = new RelativeLayout(context);
@@ -443,10 +464,12 @@ public class OvListActivity extends AppCompatActivity {
                             tv2.setTag(bgModelList.get(i).bg_trap_id.toString());
                             tv2.setBackgroundColor(Color.TRANSPARENT);
                             tv2.setTextSize(16);
-                            //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                            //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                            tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                            if(bgModelList.get(i).trap_status != null && bgModelList.get(i).trap_status.equals("1")) {
+                                tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                            }
+                            else if(bgModelList.get(i).trap_status != null && bgModelList.get(i).trap_status.equals("2")) {
+                                tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.right));
+                            }
                             rl1.addView(tv2);
                             rl1.invalidate();
                             LayoutParams layoutarams;
@@ -503,10 +526,15 @@ public class OvListActivity extends AppCompatActivity {
                                 tv2.setTag(bgServiceModelList.get(i).trap_id.toString());
                                 tv2.setBackgroundColor(Color.TRANSPARENT);
                                 tv2.setTextSize(16);
-                                //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                                //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                                tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                if(bgServiceModelList.get(i).service_status != null && bgServiceModelList.get(i).service_status.equals("1")) {
+                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.right));
+                                }
+                                else if(bgServiceModelList.get(i).service_status != null && bgServiceModelList.get(i).service_status.equals("2")) {
+                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.cross));
+                                }
+                                else{
+                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                }
                                 rl1.addView(tv2);
                                 rl1.invalidate();
                                 LayoutParams layoutarams;
@@ -563,10 +591,15 @@ public class OvListActivity extends AppCompatActivity {
                                     tv2.setTag(bgCollectionModelList.get(i).trap_id.toString());
                                     tv2.setBackgroundColor(Color.TRANSPARENT);
                                     tv2.setTextSize(16);
-                                    //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                                    //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                    if(bgCollectionModelList.get(i).collection_status != null && bgCollectionModelList.get(i).collection_status.equals("1")) {
+                                        tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.right));
+                                    }
+                                    else if(bgCollectionModelList.get(i).collection_status != null && bgCollectionModelList.get(i).collection_status.equals("2")) {
+                                        tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.cross));
+                                    }
+                                    else{
+                                        tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                    }
                                     rl1.addView(tv2);
                                     rl1.invalidate();
                                     LayoutParams layoutarams;
@@ -635,10 +668,12 @@ public class OvListActivity extends AppCompatActivity {
                             tv2.setTag(mrcModelList.get(i).identifier.toString());
                             tv2.setBackgroundColor(Color.TRANSPARENT);
                             tv2.setTextSize(16);
-                            //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                            //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                            tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                            if(mrcModelList.get(i).mrc_status != null && mrcModelList.get(i).mrc_status.equals("1")) {
+                                tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                            }
+                            else if(mrcModelList.get(i).mrc_status != null && mrcModelList.get(i).mrc_status.equals("2")) {
+                                tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.right));
+                            }
                             rl1.addView(tv2);
                             rl1.invalidate();
                             LayoutParams layoutarams;
@@ -647,13 +682,12 @@ public class OvListActivity extends AppCompatActivity {
                             tv2.setLayoutParams(layoutarams);
 
                         }
-                    }
-                    else{
+                    } else {
                         dbHandler = new DbHandler(context);
                         mrcServiceModelList = new ArrayList<>();
                         mrcList = new ArrayList<>();
                         mrcServiceModelList = dbHandler.getSingleMrcService(run_name, field_type);
-                        if(mrcServiceModelList.size()>0){
+                        if (mrcServiceModelList.size() > 0) {
                             for (int i = 0; i < mrcServiceModelList.size(); ++i) {
 
                                 RelativeLayout rl1 = new RelativeLayout(context);
@@ -697,11 +731,15 @@ public class OvListActivity extends AppCompatActivity {
                                 tv2.setLayoutParams(params);
                                 tv2.setTag(mrcServiceModelList.get(i).trap_id.toString());
                                 tv2.setBackgroundColor(Color.TRANSPARENT);
-                                tv2.setTextSize(16);
-                                //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                                //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                                tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                if(mrcServiceModelList.get(i).service_status != null && mrcServiceModelList.get(i).service_status.equals("1")) {
+                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.right));
+                                }
+                                else if(mrcServiceModelList.get(i).service_status != null && mrcServiceModelList.get(i).service_status.equals("2")) {
+                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.cross));
+                                }
+                                else{
+                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                }
                                 rl1.addView(tv2);
                                 rl1.invalidate();
                                 LayoutParams layoutarams;
@@ -710,13 +748,12 @@ public class OvListActivity extends AppCompatActivity {
                                 tv2.setLayoutParams(layoutarams);
 
                             }
-                        }
-                        else{
+                        } else {
                             dbHandler = new DbHandler(context);
                             mrcReleaseModelList = new ArrayList<>();
                             mrcList = new ArrayList<>();
                             mrcReleaseModelList = dbHandler.getSingleMrcRelease(run_name, field_type);
-                            if(mrcReleaseModelList.size()>0){
+                            if (mrcReleaseModelList.size() > 0) {
                                 for (int i = 0; i < mrcReleaseModelList.size(); ++i) {
 
                                     RelativeLayout rl1 = new RelativeLayout(context);
@@ -761,10 +798,15 @@ public class OvListActivity extends AppCompatActivity {
                                     tv2.setTag(mrcReleaseModelList.get(i).trap_id.toString());
                                     tv2.setBackgroundColor(Color.TRANSPARENT);
                                     tv2.setTextSize(16);
-                                    //RelativeLayout.LayoutParams params3 = (RelativeLayout.LayoutParams) tv2.getLayoutParams();
-                                    //params3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT, RelativeLayout.TRUE);
-
-                                    tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                    if(mrcReleaseModelList.get(i).release_status != null && mrcReleaseModelList.get(i).release_status.equals("1")) {
+                                        tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.right));
+                                    }
+                                    else if(mrcReleaseModelList.get(i).release_status != null && mrcReleaseModelList.get(i).release_status.equals("2")) {
+                                        tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.cross));
+                                    }
+                                    else{
+                                        tv2.setBackground(ContextCompat.getDrawable(context, R.drawable.substract));
+                                    }
                                     rl1.addView(tv2);
                                     rl1.invalidate();
                                     LayoutParams layoutarams;
@@ -791,12 +833,199 @@ public class OvListActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (field_type.equals("ov")) {
+                    Toast.makeText(context, "Data synchronization is being processed. Please wait.",
+                            Toast.LENGTH_SHORT).show();
+
+                    ovServiceModelList = new ArrayList<>();
+                    ovServiceModelList = dbHandler.getAllOviServicesForSync();
+                    Log.d("service_size", String.valueOf(ovServiceModelList.size()));
+                    if (ovServiceModelList.size() != 0) {
+                        for (int i = 0; i < ovServiceModelList.size(); ++i) {
+                            String service_id = ovServiceModelList.get(i).getService_id();
+                            String trap_id = ovServiceModelList.get(i).getOvi_trap_id();
+                            String service_date = ovServiceModelList.get(i).getDate();
+                            String service_time = ovServiceModelList.get(i).getTime();
+                            String service_status = ovServiceModelList.get(i).getService_status();
+                            String run_id = ovServiceModelList.get(i).getOvi_run_id();
+                            String append_url = service_id + "/" + trap_id + "/" + service_date + "/" + service_time + "/" + service_status + "/" + run_id;
+                            AsyncTask asyncTask = new AsyncTask() {
+
+                                @Override
+                                protected Object doInBackground(Object[] objects) {
+                                    OkHttpClient client = new OkHttpClient();
+                                    Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/OviServiceController/insertOviService/" + append_url).build();
+                                    Response response = null;
+                                    try {
+                                        response = client.newCall(request).execute();
+                                        return response.body().string();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Object o) {
+
+                                    Log.d("response", o.toString());
+                                    try {
+
+                                        JSONObject obj = new JSONObject(o.toString());
+
+                                        Log.d("json_response", String.valueOf(obj.getBoolean("status")));
+                                        if (String.valueOf(obj.getBoolean("status")).equals("true")) {
+                                            Toast.makeText(context, service_id + " has been transfered to server successfully.",
+                                                    Toast.LENGTH_SHORT).show();
+                                            int del_count = (int) dbHandler.deleteDataOviService(service_id);
+                                            if (del_count > 0) {
+                                                Toast.makeText(context, service_id + " has been deleted from mobile database successfully.",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } else {
+                                            Toast.makeText(context, "Error in transfering " + service_id + " to server." + obj.get("message") + " Please try again.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (Throwable t) {
+
+                                    }
+                                }
+                            }.execute();
+
+                        }
+                    }
+                    ovCollectionModelList = new ArrayList<>();
+                    ovCollectionModelList = dbHandler.getAllOviCollectionsForSync();
+                    Log.d("collection_size", String.valueOf(ovCollectionModelList.size()));
+                    if (ovCollectionModelList.size() != 0) {
+                        for (int i = 0; i < ovCollectionModelList.size(); ++i) {
+                            String collection_id = ovCollectionModelList.get(i).getCollection_id();
+                            String trap_id = ovCollectionModelList.get(i).getOvi_trap_id();
+                            String collection_date = ovCollectionModelList.get(i).getDate();
+                            String collection_time = ovCollectionModelList.get(i).getTime();
+                            String collection_status = ovCollectionModelList.get(i).getCollection_status();
+                            String run_id = ovCollectionModelList.get(i).getOvi_run_id();
+                            String append_url = collection_id + "/" + trap_id + "/" + collection_date + "/" + collection_time + "/" + collection_status + "/" + run_id;
+                            AsyncTask asyncTask = new AsyncTask() {
+
+                                @Override
+                                protected Object doInBackground(Object[] objects) {
+                                    OkHttpClient client = new OkHttpClient();
+                                    Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/OviCollectionController/insertOviCollection/" + append_url).build();
+                                    Response response = null;
+                                    try {
+                                        response = client.newCall(request).execute();
+                                        return response.body().string();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Object o) {
+
+                                    Log.d("response", o.toString());
+                                    try {
+
+                                        JSONObject obj = new JSONObject(o.toString());
+
+                                        Log.d("json_response", String.valueOf(obj.getBoolean("status")));
+                                        if (String.valueOf(obj.getBoolean("status")).equals("true")) {
+                                            Toast.makeText(context, collection_id + " has been transfered to server successfully.",
+                                                    Toast.LENGTH_SHORT).show();
+                                            int del_count = (int) dbHandler.deleteDataOviCollection(collection_id);
+                                            if (del_count > 0) {
+                                                Toast.makeText(context, collection_id + " has been deleted from mobile database successfully.",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } else {
+                                            Toast.makeText(context, "Error in transfering " + collection_id + " to server." + obj.get("message") + " Please try again.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (Throwable t) {
+
+                                    }
+                                }
+                            }.execute();
+
+                        }
+                    }
+                    ovModelList = new ArrayList<>();
+                    ovModelList = dbHandler.getAllOviTrapForSync();
+                    if (ovModelList.size() > 0) {
+                        for (int i = 0; i < ovModelList.size(); ++i) {
+                            String trap_id = ovModelList.get(i).getOv_trap_id();
+                            String trap_status = ovModelList.get(i).getTrap_status();
+                            String trap_position = ovModelList.get(i).getPosition();
+                            String coordinates = ovModelList.get(i).getCoordinates();
+                            String ovi_date = ovModelList.get(i).getDate();
+                            String ovi_time = ovModelList.get(i).getTime();
+                            String person_name = ovModelList.get(i).getPerson_name();
+                            String person_phone = ovModelList.get(i).getPerson_phone();
+                            String add_line1 = ovModelList.get(i).getAddress_line1();
+                            String add_line2 = ovModelList.get(i).getAddress_line2();
+                            String location_description = ovModelList.get(i).getLocation_description();
+
+                            String append_url = trap_id + "/" + trap_status + "/" + trap_position + "/" + coordinates + "/" + ovi_date + "/" + ovi_time + "/" + person_name
+                                    + "/" + person_phone + "/" + add_line1 + "/" + add_line2 + "/" + location_description;
+                            AsyncTask asyncTask = new AsyncTask() {
+
+                                @Override
+                                protected Object doInBackground(Object[] objects) {
+                                    OkHttpClient client = new OkHttpClient();
+                                    Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/OviTrapController/insertOviTrap/" + append_url).build();
+                                    Response response = null;
+                                    try {
+                                        response = client.newCall(request).execute();
+                                        return response.body().string();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Object o) {
+
+                                    Log.d("response", o.toString());
+                                    try {
+
+                                        JSONObject obj = new JSONObject(o.toString());
+
+                                        Log.d("json_response", String.valueOf(obj.getBoolean("status")));
+                                        if (String.valueOf(obj.getBoolean("status")).equals("true")) {
+                                            Toast.makeText(context, trap_id + " has been transfered to server successfully.",
+                                                    Toast.LENGTH_SHORT).show();
+                                            int del_count = (int) dbHandler.deleteDataOviTrap(trap_id);
+                                            if (del_count > 0) {
+                                                Toast.makeText(context, trap_id + " has been deleted from mobile database successfully.",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } else {
+                                            Toast.makeText(context, "Error in transfering " + trap_id + " to server." + obj.get("message") + " Please try again.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (Throwable t) {
+
+                                    }
+                                }
+                            }.execute();
+
+                        }
+                    }
+
                     AsyncTask asyncTaskGetOviService = new AsyncTask() {
 
                         @Override
                         protected Object doInBackground(Object[] objects) {
                             OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder().url("http://192.168.8.102/api/index.php/api/OviServiceController/indexOviService").build();
+                            Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/OviServiceController/indexOviService").build();
                             Response response = null;
                             try {
                                 response = client.newCall(request).execute();
@@ -810,7 +1039,7 @@ public class OvListActivity extends AppCompatActivity {
                         @Override
                         protected void onPostExecute(Object o) {
 
-                            Log.d("response", o.toString());
+
                             try {
                                 JSONArray jsonArr = new JSONArray(o.toString());
                                 long sync_status = -1;
@@ -825,40 +1054,35 @@ public class OvListActivity extends AppCompatActivity {
                                     String location_description = jsonObj.getString("location_description");
                                     String full_name = jsonObj.getString("full_name");
                                     String contact_number = jsonObj.getString("contact_number");
+                                    ovServiceModelList = new ArrayList<>();
+                                    ovServiceModelList = dbHandler.getSingleOviServiceTrap(ovi_run_id, trap_id);
+                                    if (ovServiceModelList.size() == 0) {
+                                        OviServiceModel oviService = new OviServiceModel(ovi_run_id, trap_id, trap_position, coordinates,
+                                                add_line1, add_line2, location_description, full_name, contact_number);
 
-                                    OviServiceModel oviService = new OviServiceModel(ovi_run_id, trap_id, trap_position, coordinates,
-                                            add_line1, add_line2, location_description, full_name, contact_number);
-
-                                    sync_status = dbHandler.insertDataOviService(oviService);
-                                    Log.d("sync_status", String.valueOf(sync_status));
-                                    Log.d("obj", jsonObj.getString("trap_id"));
-                                }
-                                if (sync_status != -1) {
-                                    //Toast.makeText(context, "Data synchronization has been successfull.",
-                                    //Toast.LENGTH_LONG).show();
-                                    //Intent intent = new Intent(context, OvListActivity.class);
-                                    //intent.putExtra("type", "ov");
-                                    //startActivity(intent);
-                                } else {
-                                    //Toast.makeText(context, "Error in synchronization. Please try again.",
-                                    //Toast.LENGTH_LONG).show();
-                                    //Intent intent = new Intent(context, OvListActivity.class);
-                                    //intent.putExtra("type", "ov");
-                                    // startActivity(intent);
+                                        sync_status = dbHandler.insertDataOviService(oviService);
+                                        if (sync_status > 1) {
+                                            Toast.makeText(context, trap_id + " of " + ovi_run_id + " has been added to mobile database.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(context, trap_id + " of " + ovi_run_id + " has occured an error in adding to mobile database.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+                                        Log.d("sync_status", String.valueOf(sync_status));
+                                        Log.d("obj", jsonObj.getString("trap_id"));
+                                    }
                                 }
                             } catch (Throwable t) {
 
                             }
                         }
                     }.execute();
-
-
                     AsyncTask asyncTaskGetOviCollection = new AsyncTask() {
 
                         @Override
                         protected Object doInBackground(Object[] objects) {
                             OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder().url("http://192.168.8.102/api/index.php/api/OviCollectionController/indexOviCollection").build();
+                            Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/OviCollectionController/indexOviCollection").build();
                             Response response = null;
                             try {
                                 response = client.newCall(request).execute();
@@ -872,7 +1096,6 @@ public class OvListActivity extends AppCompatActivity {
                         @Override
                         protected void onPostExecute(Object o) {
 
-                            Log.d("response", o.toString());
                             try {
                                 JSONArray jsonArr = new JSONArray(o.toString());
                                 long sync_status = -1;
@@ -887,41 +1110,228 @@ public class OvListActivity extends AppCompatActivity {
                                     String location_description = jsonObj.getString("location_description");
                                     String full_name = jsonObj.getString("full_name");
                                     String contact_number = jsonObj.getString("contact_number");
+                                    ovCollectionModelList = new ArrayList<>();
+                                    ovCollectionModelList = dbHandler.getSingleOviCollectionTrap(ovi_run_id, trap_id);
+                                    if (ovCollectionModelList.size() == 0) {
+                                        OviCollectionModel oviCollection = new OviCollectionModel(ovi_run_id, trap_id, trap_position, coordinates,
+                                                add_line1, add_line2, location_description, full_name, contact_number);
 
-                                    OviCollectionModel oviCollection = new OviCollectionModel(ovi_run_id, trap_id, trap_position, coordinates,
-                                            add_line1, add_line2, location_description, full_name, contact_number);
+                                        sync_status = dbHandler.insertDataOviCollection(oviCollection);
+                                        if (sync_status > 1) {
+                                            Toast.makeText(context, trap_id + " of " + ovi_run_id + " has been added to mobile database.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(context, trap_id + " of " + ovi_run_id + " has occured an error in adding to mobile database.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
 
-                                    sync_status = dbHandler.insertDataOviCollection(oviCollection);
-                                    Log.d("sync_status", String.valueOf(sync_status));
-                                    Log.d("obj", jsonObj.getString("trap_id"));
-                                }
-                                if (sync_status != -1) {
-                                    Toast.makeText(context, "Data synchronization has been successfull.",
-                                            Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(context, OvListActivity.class);
-                                    intent.putExtra("type", "ov");
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(context, "Error in synchronization. Please try again.",
-                                            Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(context, OvListActivity.class);
-                                    intent.putExtra("type", "ov");
-                                    startActivity(intent);
+                                    }
                                 }
                             } catch (Throwable t) {
 
                             }
+                            Intent intent = new Intent(context, OvListActivity.class);
+                            intent.putExtra("type", "ov");
+                            startActivity(intent);
+
                         }
                     }.execute();
 
+
                 }
                 if (field_type.equals("bg")) {
+
+                    Toast.makeText(context, "Data synchronization is being processed. Please wait.",
+                            Toast.LENGTH_SHORT).show();
+
+                    bgServiceModelList = new ArrayList<>();
+                    bgServiceModelList = dbHandler.getAllBgServicesForSync();
+                    if (bgServiceModelList.size() != 0) {
+                        for (int i = 0; i < bgServiceModelList.size(); ++i) {
+                            String service_id = bgServiceModelList.get(i).getService_id();
+                            String trap_id = bgServiceModelList.get(i).getBg_trap_id();
+                            String service_date = bgServiceModelList.get(i).getDate();
+                            String service_time = bgServiceModelList.get(i).getTime();
+                            String service_status = bgServiceModelList.get(i).getService_status();
+                            String run_id = bgServiceModelList.get(i).getBg_run_id();
+                            String append_url = service_id + "/" + trap_id + "/" + service_date + "/" + service_time + "/" + service_status + "/" + run_id;
+                            AsyncTask asyncTask = new AsyncTask() {
+
+                                @Override
+                                protected Object doInBackground(Object[] objects) {
+                                    OkHttpClient client = new OkHttpClient();
+                                    Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/BgServiceController/insertBgService/" + append_url).build();
+                                    Response response = null;
+                                    try {
+                                        response = client.newCall(request).execute();
+                                        return response.body().string();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Object o) {
+
+                                    Log.d("response", o.toString());
+                                    try {
+
+                                        JSONObject obj = new JSONObject(o.toString());
+
+                                        Log.d("json_response", String.valueOf(obj.getBoolean("status")));
+                                        if (String.valueOf(obj.getBoolean("status")).equals("true")) {
+                                            Toast.makeText(context, service_id + " has been transfered to server successfully.",
+                                                    Toast.LENGTH_SHORT).show();
+                                            int del_count = (int) dbHandler.deleteDataBgService(service_id);
+                                            if (del_count > 0) {
+                                                Toast.makeText(context, service_id + " has been deleted from mobile database successfully.",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } else {
+                                            Toast.makeText(context, "Error in transfering " + service_id + " to server." + obj.get("message") + " Please try again.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (Throwable t) {
+
+                                    }
+                                }
+                            }.execute();
+
+                        }
+                    }
+                    bgCollectionModelList = new ArrayList<>();
+                    bgCollectionModelList = dbHandler.getAllBgCollectionsForSync();
+                    if (bgCollectionModelList.size() != 0) {
+                        for (int i = 0; i < bgCollectionModelList.size(); ++i) {
+                            String collection_id = bgCollectionModelList.get(i).getCollection_id();
+                            String trap_id = bgCollectionModelList.get(i).getBg_trap_id();
+                            String collection_date = bgCollectionModelList.get(i).getDate();
+                            String collection_time = bgCollectionModelList.get(i).getTime();
+                            String collection_status = bgCollectionModelList.get(i).getCollection_status();
+                            String run_id = bgCollectionModelList.get(i).getBg_run_id();
+                            String append_url = collection_id + "/" + trap_id + "/" + collection_date + "/" + collection_time + "/" + collection_status + "/" + run_id;
+                            AsyncTask asyncTask = new AsyncTask() {
+
+                                @Override
+                                protected Object doInBackground(Object[] objects) {
+                                    OkHttpClient client = new OkHttpClient();
+                                    Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/BgCollectionController/insertBgCollection/" + append_url).build();
+                                    Response response = null;
+                                    try {
+                                        response = client.newCall(request).execute();
+                                        return response.body().string();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Object o) {
+
+                                    Log.d("response", o.toString());
+                                    try {
+
+                                        JSONObject obj = new JSONObject(o.toString());
+
+                                        Log.d("json_response", String.valueOf(obj.getBoolean("status")));
+                                        if (String.valueOf(obj.getBoolean("status")).equals("true")) {
+                                            Toast.makeText(context, collection_id + " has been transfered to server successfully.",
+                                                    Toast.LENGTH_SHORT).show();
+                                            int del_count = (int) dbHandler.deleteDataBgCollection(collection_id);
+                                            if (del_count > 0) {
+                                                Toast.makeText(context, collection_id + " has been deleted from mobile database successfully.",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } else {
+                                            Toast.makeText(context, "Error in transfering " + collection_id + " to server." + obj.get("message") + " Please try again.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (Throwable t) {
+
+                                    }
+                                }
+                            }.execute();
+
+                        }
+                    }
+                    bgModelList = new ArrayList<>();
+                    bgModelList = dbHandler.getAllBgTrapForSync();
+                    if (bgModelList.size() > 0) {
+                        for (int i = 0; i < bgModelList.size(); ++i) {
+                            String trap_id = bgModelList.get(i).getBg_trap_id();
+                            String trap_status = bgModelList.get(i).getTrap_status();
+                            String trap_position = bgModelList.get(i).getPosition();
+                            String coordinates = bgModelList.get(i).getCoordinates();
+                            String ovi_date = bgModelList.get(i).getDate();
+                            String ovi_time = bgModelList.get(i).getTime();
+                            String person_name = bgModelList.get(i).getPerson_name();
+                            String person_phone = bgModelList.get(i).getPerson_phone();
+                            String add_line1 = bgModelList.get(i).getAddress_line1();
+                            String add_line2 = bgModelList.get(i).getAddress_line2();
+                            String location_description = bgModelList.get(i).getLocation_description();
+
+                            String append_url = trap_id + "/" + trap_status + "/" + trap_position + "/" + coordinates + "/" + ovi_date + "/" + ovi_time + "/" + person_name
+                                    + "/" + person_phone + "/" + add_line1 + "/" + add_line2 + "/" + location_description;
+                            AsyncTask asyncTask = new AsyncTask() {
+
+                                @Override
+                                protected Object doInBackground(Object[] objects) {
+                                    OkHttpClient client = new OkHttpClient();
+                                    Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/BgTrapController/insertBgTrap/" + append_url).build();
+                                    Response response = null;
+                                    try {
+                                        response = client.newCall(request).execute();
+                                        return response.body().string();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Object o) {
+
+                                    Log.d("response", o.toString());
+                                    try {
+
+                                        JSONObject obj = new JSONObject(o.toString());
+
+                                        Log.d("json_response", String.valueOf(obj.getBoolean("status")));
+                                        if (String.valueOf(obj.getBoolean("status")).equals("true")) {
+                                            Toast.makeText(context, trap_id + " has been transfered to server successfully.",
+                                                    Toast.LENGTH_SHORT).show();
+                                            int del_count = (int) dbHandler.deleteDataBgTrap(trap_id);
+                                            if (del_count > 0) {
+                                                Toast.makeText(context, trap_id + " has been deleted from mobile database successfully.",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } else {
+                                            Toast.makeText(context, "Error in transfering " + trap_id + " to server." + obj.get("message") + " Please try again.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (Throwable t) {
+
+                                    }
+                                }
+                            }.execute();
+
+                        }
+                    }
+
                     AsyncTask asyncTaskGetBgService = new AsyncTask() {
 
                         @Override
                         protected Object doInBackground(Object[] objects) {
                             OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder().url("http://192.168.8.102/api/index.php/api/BgServiceController/indexBgService").build();
+                            Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/BgServiceController/indexBgService").build();
                             Response response = null;
                             try {
                                 response = client.newCall(request).execute();
@@ -935,7 +1345,7 @@ public class OvListActivity extends AppCompatActivity {
                         @Override
                         protected void onPostExecute(Object o) {
 
-                            Log.d("response", o.toString());
+
                             try {
                                 JSONArray jsonArr = new JSONArray(o.toString());
                                 long sync_status = -1;
@@ -950,26 +1360,22 @@ public class OvListActivity extends AppCompatActivity {
                                     String location_description = jsonObj.getString("location_description");
                                     String full_name = jsonObj.getString("full_name");
                                     String contact_number = jsonObj.getString("contact_number");
+                                    bgServiceModelList = new ArrayList<>();
+                                    bgServiceModelList = dbHandler.getSingleBgServiceTrap(bg_run_id, trap_id);
+                                    if (bgServiceModelList.size() == 0) {
+                                        BgServiceModel bgService = new BgServiceModel(bg_run_id, trap_id, trap_position, coordinates,
+                                                add_line1, add_line2, location_description, full_name, contact_number);
 
-                                    BgServiceModel bgService = new BgServiceModel(bg_run_id, trap_id, trap_position, coordinates,
-                                            add_line1, add_line2, location_description, full_name, contact_number);
+                                        sync_status = dbHandler.insertDataBgService(bgService);
+                                        if (sync_status > 1) {
+                                            Toast.makeText(context, trap_id + " of " + bg_run_id + " has been added to mobile database.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(context, trap_id + " of " + bg_run_id + " has occured an error in adding to mobile database.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
 
-                                    sync_status = dbHandler.insertDataBgService(bgService);
-                                    Log.d("sync_status", String.valueOf(sync_status));
-                                    Log.d("obj", jsonObj.getString("trap_id"));
-                                }
-                                if (sync_status != -1) {
-                                    //Toast.makeText(context, "Data synchronization has been successfull.",
-                                    //Toast.LENGTH_LONG).show();
-                                    //Intent intent = new Intent(context, OvListActivity.class);
-                                    //intent.putExtra("type", "bg");
-                                    //startActivity(intent);
-                                } else {
-                                    //Toast.makeText(context, "Error in synchronization. Please try again.",
-                                    //Toast.LENGTH_LONG).show();
-                                    //Intent intent = new Intent(context, OvListActivity.class);
-                                    //intent.putExtra("type", "bg");
-                                    //startActivity(intent);
+                                    }
                                 }
                             } catch (Throwable t) {
 
@@ -981,7 +1387,7 @@ public class OvListActivity extends AppCompatActivity {
                         @Override
                         protected Object doInBackground(Object[] objects) {
                             OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder().url("http://192.168.8.102/api/index.php/api/BgCollectionController/indexBgCollection").build();
+                            Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/BgCollectionController/indexBgCollection").build();
                             Response response = null;
                             try {
                                 response = client.newCall(request).execute();
@@ -995,7 +1401,6 @@ public class OvListActivity extends AppCompatActivity {
                         @Override
                         protected void onPostExecute(Object o) {
 
-                            Log.d("response_col", o.toString());
                             try {
                                 JSONArray jsonArr = new JSONArray(o.toString());
                                 long sync_status = -1;
@@ -1010,42 +1415,225 @@ public class OvListActivity extends AppCompatActivity {
                                     String location_description = jsonObj.getString("location_description");
                                     String full_name = jsonObj.getString("full_name");
                                     String contact_number = jsonObj.getString("contact_number");
+                                    bgCollectionModelList = new ArrayList<>();
+                                    bgCollectionModelList = dbHandler.getSingleBgCollectionTrap(bg_run_id, trap_id);
+                                    if (bgCollectionModelList.size() == 0) {
+                                        BgCollectionModel bgCollection = new BgCollectionModel(bg_run_id, trap_id, trap_position, coordinates,
+                                                add_line1, add_line2, location_description, full_name, contact_number);
 
-                                    BgCollectionModel bgCollection = new BgCollectionModel(bg_run_id, trap_id, trap_position, coordinates,
-                                            add_line1, add_line2, location_description, full_name, contact_number);
+                                        sync_status = dbHandler.insertDataBgCollection(bgCollection);
+                                        if (sync_status > 1) {
+                                            Toast.makeText(context, trap_id + " of " + bg_run_id + " has been added to mobile database.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(context, trap_id + " of " + bg_run_id + " has occured an error in adding to mobile database.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
 
-                                    sync_status = dbHandler.insertDataBgCollection(bgCollection);
-                                    Log.d("sync_status", String.valueOf(sync_status));
-                                    Log.d("obj_col", jsonObj.getString("trap_id"));
-                                }
-                                if (sync_status != -1) {
-                                    Toast.makeText(context, "Data synchronization has been successfull.",
-                                            Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(context, OvListActivity.class);
-                                    intent.putExtra("type", "bg");
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(context, "Error in synchronization. Please try again.",
-                                            Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(context, OvListActivity.class);
-                                    intent.putExtra("type", "bg");
-                                    startActivity(intent);
+                                    }
                                 }
                             } catch (Throwable t) {
 
                             }
+                            Intent intent = new Intent(context, OvListActivity.class);
+                            intent.putExtra("type", "bg");
+                            startActivity(intent);
+
                         }
                     }.execute();
-
                 }
 
                 if (field_type.equals("mrc")) {
+                    Toast.makeText(context, "Data synchronization is being processed. Please wait.",
+                            Toast.LENGTH_SHORT).show();
+
+                    mrcServiceModelList = new ArrayList<>();
+                    mrcServiceModelList = dbHandler.getAllMrcServicesForSync();
+                    if (mrcServiceModelList.size() != 0) {
+                        for (int i = 0; i < mrcServiceModelList.size(); ++i) {
+                            String service_id = mrcServiceModelList.get(i).getService_id();
+                            String trap_id = mrcServiceModelList.get(i).getMrc_trap_id();
+                            String service_date = mrcServiceModelList.get(i).getDate();
+                            String service_time = mrcServiceModelList.get(i).getTime();
+                            String service_status = mrcServiceModelList.get(i).getService_status();
+                            String run_id = mrcServiceModelList.get(i).getMrc_run_id();
+                            String append_url = service_id + "/" + trap_id + "/" + service_date + "/" + service_time + "/" + service_status + "/" + run_id;
+                            AsyncTask asyncTask = new AsyncTask() {
+
+                                @Override
+                                protected Object doInBackground(Object[] objects) {
+                                    OkHttpClient client = new OkHttpClient();
+                                    Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/mrcServiceController/insertMrcService/" + append_url).build();
+                                    Response response = null;
+                                    try {
+                                        response = client.newCall(request).execute();
+                                        return response.body().string();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Object o) {
+
+                                    Log.d("response", o.toString());
+                                    try {
+
+                                        JSONObject obj = new JSONObject(o.toString());
+
+                                        Log.d("json_response", String.valueOf(obj.getBoolean("status")));
+                                        if (String.valueOf(obj.getBoolean("status")).equals("true")) {
+                                            Toast.makeText(context, service_id + " has been transfered to server successfully.",
+                                                    Toast.LENGTH_SHORT).show();
+                                            int del_count = (int) dbHandler.deleteDataMrcService(service_id);
+                                            if (del_count > 0) {
+                                                Toast.makeText(context, service_id + " has been deleted from mobile database successfully.",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } else {
+                                            Toast.makeText(context, "Error in transfering " + service_id + " to server." + obj.get("message") + " Please try again.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (Throwable t) {
+
+                                    }
+                                }
+                            }.execute();
+
+                        }
+                    }
+                    mrcReleaseModelList = new ArrayList<>();
+                    mrcReleaseModelList = dbHandler.getAllMrcReleaseForSync();
+                    if (mrcReleaseModelList.size() != 0) {
+                        for (int i = 0; i < mrcReleaseModelList.size(); ++i) {
+                            String release_id = mrcReleaseModelList.get(i).getRelease_id();
+                            String trap_id = mrcReleaseModelList.get(i).getMrc_trap_id();
+                            String release_date = mrcReleaseModelList.get(i).getDate();
+                            String release_time = mrcReleaseModelList.get(i).getTime();
+                            String release_status = mrcReleaseModelList.get(i).getRelease_status();
+                            String run_id = mrcReleaseModelList.get(i).getMrc_run_id();
+                            String append_url = release_id + "/" + trap_id + "/" + release_date + "/" + release_time + "/" + release_status + "/" + run_id;
+                            AsyncTask asyncTask = new AsyncTask() {
+
+                                @Override
+                                protected Object doInBackground(Object[] objects) {
+                                    OkHttpClient client = new OkHttpClient();
+                                    Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/MrcReleaseController/insertMrcRelease/" + append_url).build();
+                                    Response response = null;
+                                    try {
+                                        response = client.newCall(request).execute();
+                                        return response.body().string();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Object o) {
+
+                                    Log.d("response", o.toString());
+                                    try {
+
+                                        JSONObject obj = new JSONObject(o.toString());
+
+                                        Log.d("json_response", String.valueOf(obj.getBoolean("status")));
+                                        if (String.valueOf(obj.getBoolean("status")).equals("true")) {
+                                            Toast.makeText(context, release_id + " has been transfered to server successfully.",
+                                                    Toast.LENGTH_SHORT).show();
+                                            int del_count = (int) dbHandler.deleteDataMrcRelease(release_id);
+                                            if (del_count > 0) {
+                                                Toast.makeText(context, release_id + " has been deleted from mobile database successfully.",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } else {
+                                            Toast.makeText(context, "Error in transfering " + release_id + " to server." + obj.get("message") + " Please try again.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (Throwable t) {
+
+                                    }
+                                }
+                            }.execute();
+
+                        }
+                    }
+                    mrcModelList = new ArrayList<>();
+                    mrcModelList = dbHandler.getAllMrcTrapForSync();
+                    if (mrcModelList.size() > 0) {
+                        for (int i = 0; i < mrcModelList.size(); ++i) {
+                            String trap_id = mrcModelList.get(i).getIdentifier();
+                            String trap_status = mrcModelList.get(i).getMrc_status();
+                            String coordinates = mrcModelList.get(i).getCoordinates();
+                            String mrc_date = mrcModelList.get(i).getDate();
+                            String mrc_time = mrcModelList.get(i).getTime();
+                            String person_name = mrcModelList.get(i).getPerson_name();
+                            String person_phone = mrcModelList.get(i).getPerson_phone();
+                            String add_line1 = mrcModelList.get(i).getAddress_line1();
+                            String add_line2 = mrcModelList.get(i).getAddress_line2();
+                            String location_description = mrcModelList.get(i).getLocation_description();
+
+                            String append_url = trap_id + "/" + trap_status + "/" + coordinates + "/" + mrc_date + "/" + mrc_time + "/" + person_name
+                                    + "/" + person_phone + "/" + add_line1 + "/" + add_line2 + "/" + location_description;
+                            AsyncTask asyncTask = new AsyncTask() {
+
+                                @Override
+                                protected Object doInBackground(Object[] objects) {
+                                    OkHttpClient client = new OkHttpClient();
+                                    Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/MrcTrapController/insertMrcTrap/" + append_url).build();
+                                    Response response = null;
+                                    try {
+                                        response = client.newCall(request).execute();
+                                        return response.body().string();
+                                    } catch (IOException e) {
+                                        e.printStackTrace();
+                                    }
+                                    return null;
+                                }
+
+                                @Override
+                                protected void onPostExecute(Object o) {
+
+                                    Log.d("response", o.toString());
+                                    try {
+
+                                        JSONObject obj = new JSONObject(o.toString());
+
+                                        Log.d("json_response", String.valueOf(obj.getBoolean("status")));
+                                        if (String.valueOf(obj.getBoolean("status")).equals("true")) {
+                                            Toast.makeText(context, trap_id + " has been transfered to server successfully.",
+                                                    Toast.LENGTH_SHORT).show();
+                                            int del_count = (int) dbHandler.deleteDataMrcTrap(trap_id);
+                                            if (del_count > 0) {
+                                                Toast.makeText(context, trap_id + " has been deleted from mobile database successfully.",
+                                                        Toast.LENGTH_SHORT).show();
+                                            }
+
+                                        } else {
+                                            Toast.makeText(context, "Error in transfering " + trap_id + " to server." + obj.get("message") + " Please try again.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
+
+                                    } catch (Throwable t) {
+
+                                    }
+                                }
+                            }.execute();
+
+                        }
+                    }
+
                     AsyncTask asyncTaskGetMrcService = new AsyncTask() {
 
                         @Override
                         protected Object doInBackground(Object[] objects) {
                             OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder().url("http://192.168.8.102/api/index.php/api/MrcServiceController/indexMrcService").build();
+                            Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/MrcServiceController/indexMrcService").build();
                             Response response = null;
                             try {
                                 response = client.newCall(request).execute();
@@ -1059,7 +1647,7 @@ public class OvListActivity extends AppCompatActivity {
                         @Override
                         protected void onPostExecute(Object o) {
 
-                            Log.d("response", o.toString());
+
                             try {
                                 JSONArray jsonArr = new JSONArray(o.toString());
                                 long sync_status = -1;
@@ -1073,39 +1661,34 @@ public class OvListActivity extends AppCompatActivity {
                                     String location_description = jsonObj.getString("location_description");
                                     String full_name = jsonObj.getString("full_name");
                                     String contact_number = jsonObj.getString("contact_number");
+                                    mrcServiceModelList = new ArrayList<>();
+                                    mrcServiceModelList = dbHandler.getSingleMrcServiceTrap(mrc_run_id, trap_id);
+                                    if (mrcServiceModelList.size() == 0) {
+                                        MrcServiceModel mrcService = new MrcServiceModel(mrc_run_id, trap_id, coordinates,
+                                                add_line1, add_line2, location_description, full_name, contact_number);
 
-                                    MrcServiceModel mrcService = new MrcServiceModel(mrc_run_id, trap_id, coordinates,
-                                            add_line1, add_line2, location_description, full_name, contact_number);
+                                        sync_status = dbHandler.insertDataMrcService(mrcService);
+                                        if (sync_status > 1) {
+                                            Toast.makeText(context, trap_id + " of " + mrc_run_id + " has been added to mobile database.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(context, trap_id + " of " + mrc_run_id + " has occured an error in adding to mobile database.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
 
-                                    sync_status = dbHandler.insertDataMrcService(mrcService);
-                                    Log.d("sync_status", String.valueOf(sync_status));
-                                    Log.d("obj", jsonObj.getString("trap_id"));
-                                }
-                                if (sync_status != -1) {
-                                    //Toast.makeText(context, "Data synchronization has been successfull.",
-                                    //Toast.LENGTH_LONG).show();
-                                    //Intent intent = new Intent(context, OvListActivity.class);
-                                    //intent.putExtra("type", "mrc");
-                                    //startActivity(intent);
-                                } else {
-                                    //Toast.makeText(context, "Error in synchronization. Please try again.",
-                                    //Toast.LENGTH_LONG).show();
-                                    //Intent intent = new Intent(context, OvListActivity.class);
-                                    //intent.putExtra("type", "mrc");
-                                    //startActivity(intent);
+                                    }
                                 }
                             } catch (Throwable t) {
 
                             }
                         }
                     }.execute();
-
                     AsyncTask asyncTaskGetMrcRelease = new AsyncTask() {
 
                         @Override
                         protected Object doInBackground(Object[] objects) {
                             OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder().url("http://192.168.8.102/api/index.php/api/MrcReleaseController/indexMrcRelease").build();
+                            Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/MrcReleaseController/indexMrcRelease").build();
                             Response response = null;
                             try {
                                 response = client.newCall(request).execute();
@@ -1119,7 +1702,6 @@ public class OvListActivity extends AppCompatActivity {
                         @Override
                         protected void onPostExecute(Object o) {
 
-                            Log.d("response", o.toString());
                             try {
                                 JSONArray jsonArr = new JSONArray(o.toString());
                                 long sync_status = -1;
@@ -1133,37 +1715,38 @@ public class OvListActivity extends AppCompatActivity {
                                     String location_description = jsonObj.getString("location_description");
                                     String full_name = jsonObj.getString("full_name");
                                     String contact_number = jsonObj.getString("contact_number");
+                                    mrcReleaseModelList = new ArrayList<>();
+                                    mrcReleaseModelList = dbHandler.getSingleMrcReleaseTrap(mrc_run_id, trap_id);
+                                    if (mrcReleaseModelList.size() == 0) {
+                                        MrcReleaseModel mrcRelease = new MrcReleaseModel(mrc_run_id, trap_id, coordinates,
+                                                add_line1, add_line2, location_description, full_name, contact_number);
 
-                                    MrcReleaseModel mrcRelease = new MrcReleaseModel(mrc_run_id, trap_id, coordinates,
-                                            add_line1, add_line2, location_description, full_name, contact_number);
+                                        sync_status = dbHandler.insertDataMrcRelease(mrcRelease);
+                                        if (sync_status > 1) {
+                                            Toast.makeText(context, trap_id + " of " + mrc_run_id + " has been added to mobile database.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        } else {
+                                            Toast.makeText(context, trap_id + " of " + mrc_run_id + " has occured an error in adding to mobile database.",
+                                                    Toast.LENGTH_SHORT).show();
+                                        }
 
-                                    sync_status = dbHandler.insertDataMrcRelease(mrcRelease);
-                                    Log.d("sync_status", String.valueOf(sync_status));
-                                    Log.d("obj", jsonObj.getString("trap_id"));
-                                }
-                                if (sync_status != -1) {
-                                    Toast.makeText(context, "Data synchronization has been successfull.",
-                                            Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(context, OvListActivity.class);
-                                    intent.putExtra("type", "mrc");
-                                    startActivity(intent);
-                                } else {
-                                    Toast.makeText(context, "Error in synchronization. Please try again.",
-                                            Toast.LENGTH_LONG).show();
-                                    Intent intent = new Intent(context, OvListActivity.class);
-                                    intent.putExtra("type", "mrc");
-                                    startActivity(intent);
+                                    }
                                 }
                             } catch (Throwable t) {
 
                             }
+                            Intent intent = new Intent(context, OvListActivity.class);
+                            intent.putExtra("type", "mrc");
+                            startActivity(intent);
+
                         }
                     }.execute();
-
                 }
+
             }
 
             ;
+
 
         });
     }
@@ -1268,10 +1851,10 @@ public class OvListActivity extends AppCompatActivity {
         }
     }
 
-    public void goIndividualBgService(View v){
+    public void goIndividualBgService(View v) {
         dbHandler = new DbHandler(context);
         bgServiceModelList = new ArrayList<>();
-        bgServiceModelList = dbHandler.getSingleBgServiceTrap(run_name,v.getTag().toString());
+        bgServiceModelList = dbHandler.getSingleBgServiceTrap(run_name, v.getTag().toString());
         sharedpreferences = getSharedPreferences(BgServiceDetails, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(BgRunId, bgServiceModelList.get(0).bg_run_id.toString());
@@ -1290,10 +1873,11 @@ public class OvListActivity extends AppCompatActivity {
         Intent intent = new Intent(context, AddBgServiceMainActivity.class);
         startActivity(intent);
     }
-    public void goIndividualBgCollection(View v){
+
+    public void goIndividualBgCollection(View v) {
         dbHandler = new DbHandler(context);
         bgCollectionModelList = new ArrayList<>();
-        bgCollectionModelList = dbHandler.getSingleBgCollectionTrap(run_name,v.getTag().toString());
+        bgCollectionModelList = dbHandler.getSingleBgCollectionTrap(run_name, v.getTag().toString());
         sharedpreferences = getSharedPreferences(BgCollectionDetails, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(BgRunId, bgCollectionModelList.get(0).bg_run_id.toString());
@@ -1312,10 +1896,11 @@ public class OvListActivity extends AppCompatActivity {
         Intent intent = new Intent(context, AddBgCollectionMainActivity.class);
         startActivity(intent);
     }
-    public void goIndividualOviService(View v){
+
+    public void goIndividualOviService(View v) {
         dbHandler = new DbHandler(context);
         ovServiceModelList = new ArrayList<>();
-        ovServiceModelList = dbHandler.getSingleOviServiceTrap(run_name,v.getTag().toString());
+        ovServiceModelList = dbHandler.getSingleOviServiceTrap(run_name, v.getTag().toString());
         sharedpreferences = getSharedPreferences(OviServiceDetails, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(OviRunId, ovServiceModelList.get(0).ovi_run_id.toString());
@@ -1333,10 +1918,11 @@ public class OvListActivity extends AppCompatActivity {
         Intent intent = new Intent(context, AddOviServiceMainActivity.class);
         startActivity(intent);
     }
-    public void goIndividualOviCollection(View v){
+
+    public void goIndividualOviCollection(View v) {
         dbHandler = new DbHandler(context);
         ovCollectionModelList = new ArrayList<>();
-        ovCollectionModelList = dbHandler.getSingleOviCollectionTrap(run_name,v.getTag().toString());
+        ovCollectionModelList = dbHandler.getSingleOviCollectionTrap(run_name, v.getTag().toString());
         sharedpreferences = getSharedPreferences(OviCollectionDetails, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(OviRunId, ovCollectionModelList.get(0).ovi_run_id.toString());
@@ -1355,10 +1941,10 @@ public class OvListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void goIndividualMrcService(View v){
+    public void goIndividualMrcService(View v) {
         dbHandler = new DbHandler(context);
         mrcServiceModelList = new ArrayList<>();
-        mrcServiceModelList = dbHandler.getSingleMrcServiceTrap(run_name,v.getTag().toString());
+        mrcServiceModelList = dbHandler.getSingleMrcServiceTrap(run_name, v.getTag().toString());
         sharedpreferences = getSharedPreferences(MrcServiceDetails, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(MrcRunId, mrcServiceModelList.get(0).mrc_run_id.toString());
@@ -1376,10 +1962,10 @@ public class OvListActivity extends AppCompatActivity {
         startActivity(intent);
     }
 
-    public void goIndividualMrcRelease(View v){
+    public void goIndividualMrcRelease(View v) {
         dbHandler = new DbHandler(context);
         mrcReleaseModelList = new ArrayList<>();
-        mrcReleaseModelList = dbHandler.getSingleMrcReleaseTrap(run_name,v.getTag().toString());
+        mrcReleaseModelList = dbHandler.getSingleMrcReleaseTrap(run_name, v.getTag().toString());
         sharedpreferences = getSharedPreferences(MrcReleaseDetails, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(MrcRunId, mrcReleaseModelList.get(0).mrc_run_id.toString());

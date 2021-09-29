@@ -104,31 +104,41 @@ public class AddMrcReleaseMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalMrc(View pView) {
-        dbHandler = new DbHandler(context);
-        mrcReleaseModelList = new ArrayList<>();
-        mrcReleaseModelList = dbHandler.getSingleMrcReleaseTrapById(EditTextReleaseId.getText().toString());
-        sharedpreferences = getSharedPreferences(MrcReleaseDetails, Context.MODE_PRIVATE);
-        String mrc_trap_id = sharedpreferences.getString(MrcTrapId, "");
-        String run_id = sharedpreferences.getString(MrcRunId, "");
-        if((mrcReleaseModelList.size()>0) && ((!mrcReleaseModelList.get(0).trap_id.equals(mrc_trap_id)) || (!mrcReleaseModelList.get(0).mrc_run_id.equals(run_id))))
-        {
-            Toast.makeText(context, "Release id is already existing. Please try using another collection id.",
-                    Toast.LENGTH_LONG).show();
+        int error_flag = 0;
+        if (EditTextReleaseId.getText().toString().length() == 0) {
+            EditTextReleaseId.setError("Release Id is required.");
+            error_flag = 1;
         }
-        else{
+        if( RadioReleased.isChecked()==false && RadioNotReleased.isChecked()==false){
+            RadioReleased.setError("Release status is required");
+            RadioNotReleased.setError("Release status is required");
+            error_flag = 1;
+        }
+        if(error_flag==0) {
+            dbHandler = new DbHandler(context);
+            mrcReleaseModelList = new ArrayList<>();
+            mrcReleaseModelList = dbHandler.getSingleMrcReleaseTrapById(EditTextReleaseId.getText().toString());
             sharedpreferences = getSharedPreferences(MrcReleaseDetails, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(ReleaseId, EditTextReleaseId.getText().toString());
-            if (RadioReleased.isChecked()) {
-                editor.putString(ReleaseStatus, "1");
-            }
-            if (RadioNotReleased.isChecked()) {
-                editor.putString(ReleaseStatus, "2");
-            }
+            String mrc_trap_id = sharedpreferences.getString(MrcTrapId, "");
+            String run_id = sharedpreferences.getString(MrcRunId, "");
+            if ((mrcReleaseModelList.size() > 0) && ((!mrcReleaseModelList.get(0).trap_id.equals(mrc_trap_id)) || (!mrcReleaseModelList.get(0).mrc_run_id.equals(run_id)))) {
+                Toast.makeText(context, "Release id is already existing. Please try using another collection id.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                sharedpreferences = getSharedPreferences(MrcReleaseDetails, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(ReleaseId, EditTextReleaseId.getText().toString());
+                if (RadioReleased.isChecked()) {
+                    editor.putString(ReleaseStatus, "1");
+                }
+                if (RadioNotReleased.isChecked()) {
+                    editor.putString(ReleaseStatus, "2");
+                }
 
-            editor.apply();
-            Intent intent = new Intent(context, AddMrcReleaseAdditionalActivity.class);
-            startActivity(intent);
+                editor.apply();
+                Intent intent = new Intent(context, AddMrcReleaseAdditionalActivity.class);
+                startActivity(intent);
+            }
         }
     }
 

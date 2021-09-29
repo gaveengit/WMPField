@@ -79,6 +79,7 @@ public class AddOvMainActivity extends AppCompatActivity {
     String form_type;
     private List<OvTrapModel> ovPersonAddressModelList;
     String original_ov_id;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,7 +95,6 @@ public class AddOvMainActivity extends AppCompatActivity {
         EditTextRespondName = (EditText) findViewById(R.id.editTextRespondentName);
         EditTextLocationCoordinates = (EditText) findViewById(R.id.editTextLocation);
         errorText = (TextView) findViewById(R.id.errorContainer);
-        RadioProposed.setChecked(true);
         sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
         String ovi_trap_id = sharedpreferences.getString(OviTrapId, "");
         String trap_status = sharedpreferences.getString(TrapStatus, "");
@@ -103,8 +103,8 @@ public class AddOvMainActivity extends AppCompatActivity {
         String location_coordinates = sharedpreferences.getString(LocationCoordinates, "");
         String ovi_run_id = sharedpreferences.getString(OviRunId, "");
         original_ov_id = sharedpreferences.getString(OriginalOviId, "");
-        Log.d("ovi_run",ovi_run_id);
-        if(respond_name.length()!=0) {
+        Log.d("ovi_run", ovi_run_id);
+        if (respond_name.length() != 0) {
             EditTextTrapId.setText(ovi_trap_id);
             if (trap_status.equals("1")) {
                 RadioProposed.setChecked(true);
@@ -172,44 +172,63 @@ public class AddOvMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalOv(View pView) {
-        dbHandler = new DbHandler(context);
-        long flag_insert_ov = -1;
-        ovPersonAddressModelList = new ArrayList<>();
-        ovPersonAddressModelList = dbHandler.getSingleOvTrap(EditTextTrapId.getText().toString());
-        if(((ovPersonAddressModelList.size() > 0) && form_type.equals("new")) || (!original_ov_id.equals(EditTextTrapId.getText().toString()) && ovPersonAddressModelList.size() > 0 && form_type.equals("edit-new"))){
-            errorText.setVisibility(View.VISIBLE);
-            errorText.setText("OVI trap id is already existing.");
-            Toast.makeText(context, "OVI trap id is already existing. Please try again.",
-                    Toast.LENGTH_LONG).show();
+        int error_flag = 0;
+        if (EditTextTrapId.getText().toString().length() == 0) {
+            EditTextTrapId.setError("BG trap id is required.");
+            error_flag = 1;
         }
-        else {
-            errorText.setVisibility(View.GONE);
-            sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(OviTrapId,EditTextTrapId.getText().toString());
+        if (RadioProposed.isChecked() == false && RadioSet.isChecked() == false) {
+            RadioProposed.setError("Trap status is required.");
+            RadioSet.setError("Trap status is required.");
+            error_flag = 1;
+        }
+        if (EditTextRespondName.getText().toString().length() == 0) {
+            EditTextRespondName.setError("Respondent name is required.");
+            error_flag = 1;
+        }
+        if (EditTextLocationCoordinates.getText().toString().length() == 0) {
+            EditTextLocationCoordinates.setError("Location coordinates is required.");
+            error_flag = 1;
+        }
+        if (EditTextTrapPosition.getText().toString().length() == 0) {
+            EditTextTrapPosition.setError("Location coordinate is required.");
+            error_flag = 1;
+        }
+        if (error_flag == 0) {
+            dbHandler = new DbHandler(context);
+            long flag_insert_ov = -1;
+            ovPersonAddressModelList = new ArrayList<>();
+            ovPersonAddressModelList = dbHandler.getSingleOvTrap(EditTextTrapId.getText().toString());
+            if (((ovPersonAddressModelList.size() > 0) && form_type.equals("new")) || (!original_ov_id.equals(EditTextTrapId.getText().toString()) && ovPersonAddressModelList.size() > 0 && form_type.equals("edit-new"))) {
+                errorText.setVisibility(View.VISIBLE);
+                errorText.setText("OVI trap id is already existing.");
+                Toast.makeText(context, "OVI trap id is already existing. Please try again.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                sharedpreferences = getSharedPreferences(OviDetails, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(OviTrapId, EditTextTrapId.getText().toString());
 
-            if(RadioProposed.isChecked())
-            {
-                editor.putString(TrapStatus,"1");
-            }
-            if(RadioSet.isChecked())
-            {
-                editor.putString(TrapStatus,"2");
-            }
+                if (RadioProposed.isChecked()) {
+                    editor.putString(TrapStatus, "1");
+                }
+                if (RadioSet.isChecked()) {
+                    editor.putString(TrapStatus, "2");
+                }
 
-            editor.putString(TrapPosition, EditTextTrapPosition.getText().toString());
-            editor.putString(RespondName, EditTextRespondName.getText().toString());
-            editor.putString(LocationCoordinates, EditTextLocationCoordinates.getText().toString());
-            editor.apply();
-            Intent intent = new Intent(context, AddOvAdditionalActivity.class);
-            Log.d("form-type",form_type);
-            if(form_type.equals("edit-new")) {
-                intent.putExtra("form-type", "edit-new");
+                editor.putString(TrapPosition, EditTextTrapPosition.getText().toString());
+                editor.putString(RespondName, EditTextRespondName.getText().toString());
+                editor.putString(LocationCoordinates, EditTextLocationCoordinates.getText().toString());
+                editor.apply();
+                Intent intent = new Intent(context, AddOvAdditionalActivity.class);
+                Log.d("form-type", form_type);
+                if (form_type.equals("edit-new")) {
+                    intent.putExtra("form-type", "edit-new");
+                } else {
+                    intent.putExtra("form-type", "new");
+                }
+                startActivity(intent);
             }
-            else{
-                intent.putExtra("form-type", "new");
-            }
-            startActivity(intent);
         }
     }
 }

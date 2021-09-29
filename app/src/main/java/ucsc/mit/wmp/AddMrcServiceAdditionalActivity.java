@@ -82,7 +82,6 @@ public class AddMrcServiceAdditionalActivity extends AppCompatActivity {
 
     public void submitMrcService(View v) {
 
-        errorText.setVisibility(View.GONE);
         sharedpreferences = getSharedPreferences(MrcServiceDetails, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(Phone, EditTextPhone.getText().toString());
@@ -110,14 +109,16 @@ public class AddMrcServiceAdditionalActivity extends AppCompatActivity {
         if (flag != -1) {
             Toast.makeText(context, "MRC Service has been updated successfully.",
                     Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(context, OvListActivity.class);
-            intent.putExtra("type", "mrc");
+            Intent intent = new Intent(context,MapsActivity.class);
+            intent.putExtra("run_name", mrc_run_id);
+            intent.putExtra("field_type", "mrc");
             startActivity(intent);
         } else {
             Toast.makeText(context, "Failure in adding MRC service. Please try again..",
                     Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(context, OvListActivity.class);
-            intent.putExtra("type", "mrc");
+            Intent intent = new Intent(context,MapsActivity.class);
+            intent.putExtra("run_name", mrc_run_id);
+            intent.putExtra("field_type", "mrc");
             startActivity(intent);
         }
 

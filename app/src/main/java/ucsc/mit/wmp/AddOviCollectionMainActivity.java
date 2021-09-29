@@ -110,34 +110,42 @@ public class AddOviCollectionMainActivity extends AppCompatActivity {
     }
 
     public void goAdditionalOvi(View pView) {
-        dbHandler = new DbHandler(context);
-        oviCollectionModelList = new ArrayList<>();
-        oviCollectionModelList = dbHandler.getSingleOviCollectionTrapById(EditTextCollectionId.getText().toString());
-        sharedpreferences = getSharedPreferences(OviCollectionDetails, Context.MODE_PRIVATE);
-        String ovi_trap_id = sharedpreferences.getString(OviTrapId, "");
-        String run_id = sharedpreferences.getString(OviRunId, "");
-        if((oviCollectionModelList.size()>0) && ((!oviCollectionModelList.get(0).trap_id.equals(ovi_trap_id)) || (!oviCollectionModelList.get(0).ovi_run_id.equals(run_id))))
-        {
-            Toast.makeText(context, "Collection id is already existing. Please try using another collection id.",
-                    Toast.LENGTH_LONG).show();
+        int error_flag = 0;
+        if (EditTextCollectionId.getText().toString().length() == 0) {
+            EditTextCollectionId.setError("Collection Id is required.");
+            error_flag = 1;
         }
-        else
-        {
+        if (RadioCollected.isChecked() == false && RadioNotCollected.isChecked() == false) {
+            RadioCollected.setError("Collection status is required");
+            RadioNotCollected.setError("Collection status is required");
+            error_flag = 1;
+        }
+        if (error_flag==0) {
+            dbHandler = new DbHandler(context);
+            oviCollectionModelList = new ArrayList<>();
+            oviCollectionModelList = dbHandler.getSingleOviCollectionTrapById(EditTextCollectionId.getText().toString());
             sharedpreferences = getSharedPreferences(OviCollectionDetails, Context.MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedpreferences.edit();
-            editor.putString(CollectionId, EditTextCollectionId.getText().toString());
-            if (RadioCollected.isChecked()) {
-                editor.putString(CollectionStatus, "1");
+            String ovi_trap_id = sharedpreferences.getString(OviTrapId, "");
+            String run_id = sharedpreferences.getString(OviRunId, "");
+            if ((oviCollectionModelList.size() > 0) && ((!oviCollectionModelList.get(0).trap_id.equals(ovi_trap_id)) || (!oviCollectionModelList.get(0).ovi_run_id.equals(run_id)))) {
+                Toast.makeText(context, "Collection id is already existing. Please try using another collection id.",
+                        Toast.LENGTH_LONG).show();
+            } else {
+                sharedpreferences = getSharedPreferences(OviCollectionDetails, Context.MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedpreferences.edit();
+                editor.putString(CollectionId, EditTextCollectionId.getText().toString());
+                if (RadioCollected.isChecked()) {
+                    editor.putString(CollectionStatus, "1");
+                }
+                if (RadioNotCollected.isChecked()) {
+                    editor.putString(CollectionStatus, "2");
+                }
+                editor.apply();
+                Intent intent = new Intent(context, AddOviCollectionAdditionalActivity.class);
+                startActivity(intent);
             }
-            if (RadioNotCollected.isChecked()) {
-                editor.putString(CollectionStatus, "2");
-            }
-            editor.apply();
-            Intent intent = new Intent(context, AddOviCollectionAdditionalActivity.class);
-            startActivity(intent);
         }
     }
-
     public void goListView(View pView) {
         Intent intent = new Intent(context, OvListActivity.class);
         intent.putExtra("type", "Ov");

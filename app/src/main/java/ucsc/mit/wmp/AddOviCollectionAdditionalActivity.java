@@ -83,7 +83,6 @@ public class AddOviCollectionAdditionalActivity extends AppCompatActivity {
 
     public void submitOvi(View v) {
 
-        errorText.setVisibility(View.GONE);
         sharedpreferences = getSharedPreferences(OviCollectionDetails, Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedpreferences.edit();
         editor.putString(Phone, EditTextPhone.getText().toString());
@@ -118,14 +117,16 @@ public class AddOviCollectionAdditionalActivity extends AppCompatActivity {
         if (flag != -1) {
             Toast.makeText(context, "OVI collection has been updated successfully.",
                     Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(context, OvListActivity.class);
-            intent.putExtra("type", "ov");
+            Intent intent = new Intent(context, MapsActivity.class);
+            intent.putExtra("run_name", ovi_run_id);
+            intent.putExtra("field_type", "ov");
             startActivity(intent);
         } else {
             Toast.makeText(context, "Failure in adding OVI collection. Please try again..",
                     Toast.LENGTH_LONG).show();
-            Intent intent = new Intent(context, OvListActivity.class);
-            intent.putExtra("type", "ov");
+            Intent intent = new Intent(context, MapsActivity.class);
+            intent.putExtra("run_name", ovi_run_id);
+            intent.putExtra("field_type", "ov");
             startActivity(intent);
         }
 
