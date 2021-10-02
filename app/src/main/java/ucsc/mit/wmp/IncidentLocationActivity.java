@@ -51,6 +51,7 @@ public class IncidentLocationActivity extends AppCompatActivity {
     EditText EditTextGnd;
     EditText EditTextTrapCode;
     TextView errorText;
+    TextView username_text;
     Button button;
 
     public static final String Coordinates = "coordinates";
@@ -150,6 +151,9 @@ public class IncidentLocationActivity extends AppCompatActivity {
                     if(email.equals("")){
                         email = "NULL";
                     }
+                    if(location_description.equals("")){
+                        location_description = "NULL";
+                    }
 
 
                     String append_url = stakeholderName + "/" + email + "/" + phone + "/" + incident_type + "/" + incident_priority + "/" + description + "/" + incident_date.replace("/","-") + "/" + incident_time_hour + ":" + incident_time_minute + "/" + coordinates + "/" + address + "/" + location_description + "/" + gnd + "/" + trapcode + "/" + "pending";
@@ -201,6 +205,9 @@ public class IncidentLocationActivity extends AppCompatActivity {
             }
 
         });
+        username_text = (TextView) findViewById(R.id.textViewUsername);
+        sharedpreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        username_text.setText(sharedpreferences.getString("UserName", ""));
 
     }
 
@@ -310,5 +317,9 @@ public class IncidentLocationActivity extends AppCompatActivity {
             Log.d("check-gnd", gnd);
             Log.d("check-trapcode", trapcode);
         }
+    }
+    public void logout(View pView){
+        Intent intent = new Intent(context, LoginActivityController.class);
+        startActivity(intent);
     }
 }

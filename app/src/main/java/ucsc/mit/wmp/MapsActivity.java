@@ -68,7 +68,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     public static final String AddressId = "AddressId";
     public static final String ServiceId = "ServiceId";
     public static final String ServiceStatus = "ServiceStatus";
-    public static final String CollectionId = "ServiceId";
+    public static final String CollectionId = "CollectionId";
     public static final String CollectionStatus = "ServiceStatus";
     public static final String ReleaseId = "ReleaseId";
     public static final String ReleaseStatus = "ReleaseStatus";
@@ -243,7 +243,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                             String longitude = separated_coordinates[1].trim();
                             givenLocation = new LatLng(Double.parseDouble(latitude), Double.parseDouble(longitude));
                             // adding marker to each location on google maps
-                            Log.d("col_status", ovCollectionModelList.get(i).collection_status);
                             if (ovCollectionModelList.get(i).collection_status == null) {
                                 mMap.addMarker(new MarkerOptions().position(givenLocation).zIndex(2.0f).icon(BitmapDescriptorFactory.defaultMarker
                                         (BitmapDescriptorFactory.HUE_BLUE))).setTag(ovCollectionModelList.get(i).trap_id.toString());
@@ -550,7 +549,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     editor.putString(CollectionId, bgCollectionModelList.get(0).collection_id);
                     editor.putString(CollectionStatus, bgCollectionModelList.get(0).collection_status);
                     editor.apply();
-
                     Intent intent = new Intent(context, AddBgCollectionMainActivity.class);
                     startActivity(intent);
                 }

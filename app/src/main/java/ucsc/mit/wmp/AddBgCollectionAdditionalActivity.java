@@ -40,6 +40,7 @@ public class AddBgCollectionAdditionalActivity extends AppCompatActivity {
     EditText EditTextAddressLine2;
     EditText EditTextLocationDescription;
     TextView errorText;
+    TextView username_text;
     SharedPreferences sharedpreferences;
     private List<PersonModel> personList;
     private List<AddressModel> addressList;
@@ -57,6 +58,7 @@ public class AddBgCollectionAdditionalActivity extends AppCompatActivity {
         EditTextAddressLine2 = (EditText) findViewById(R.id.editTextAdd2);
         EditTextLocationDescription = (EditText) findViewById(R.id.editTextLocationDescription);
         errorText = (TextView) findViewById(R.id.errorContainer);
+        username_text = (TextView) findViewById(R.id.textViewUsername);
         sharedpreferences = getSharedPreferences(BgCollectionDetails, Context.MODE_PRIVATE);
         String phone = sharedpreferences.getString(Phone, "");
         String address_line1 = sharedpreferences.getString(AddressLine1, "");
@@ -66,6 +68,9 @@ public class AddBgCollectionAdditionalActivity extends AppCompatActivity {
         EditTextAddressLine1.setText(address_line1);
         EditTextAddressLine2.setText(address_line2);
         EditTextLocationDescription.setText(location_description);
+
+        sharedpreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        username_text.setText(sharedpreferences.getString("UserName", ""));
     }
 
     public void goBgMain(View v) {
@@ -129,7 +134,10 @@ public class AddBgCollectionAdditionalActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-
+    }
+    public void logout(View pView){
+        Intent intent = new Intent(context, LoginActivityController.class);
+        startActivity(intent);
     }
 }
 

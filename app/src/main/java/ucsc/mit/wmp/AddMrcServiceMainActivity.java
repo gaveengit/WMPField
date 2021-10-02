@@ -68,6 +68,7 @@ public class AddMrcServiceMainActivity extends AppCompatActivity {
     EditText EditTextLocationCoordinates;
     EditText EditTextServiceId;
     TextView errorText;
+    TextView username_text;
     SharedPreferences sharedpreferences;
     String form_type;
 
@@ -101,6 +102,11 @@ public class AddMrcServiceMainActivity extends AppCompatActivity {
         }
         EditTextRespondName.setText(respond_name);
         EditTextLocationCoordinates.setText(location_coordinates);
+
+        username_text = (TextView) findViewById(R.id.textViewUsername);
+        sharedpreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        username_text.setText(sharedpreferences.getString("UserName", ""));
+
 
     }
 
@@ -145,6 +151,10 @@ public class AddMrcServiceMainActivity extends AppCompatActivity {
     public void goListView(View pView) {
         Intent intent = new Intent(context, OvListActivity.class);
         intent.putExtra("type", "mrc");
+        startActivity(intent);
+    }
+    public void logout(View pView){
+        Intent intent = new Intent(context, LoginActivityController.class);
         startActivity(intent);
     }
 }

@@ -35,6 +35,7 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
     EditText EditTextAddressLine2;
     EditText EditTextLocationDescription;
     TextView errorText;
+    TextView username_text;
     SharedPreferences sharedpreferences;
     private List<PersonModel> personList;
     private List<AddressModel> addressList;
@@ -64,6 +65,11 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
         EditTextAddressLine1.setText(address_line1);
         EditTextAddressLine2.setText(address_line2);
         EditTextLocationDescription.setText(location_description);
+
+        username_text = (TextView) findViewById(R.id.textViewUsername);
+        sharedpreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        username_text.setText(sharedpreferences.getString("UserName", ""));
+
     }
 
     public void goMrcMain(View v) {
@@ -80,6 +86,7 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
     }
 
     public void SubmitMrc(View v) {
+
         int error_flag = 0;
         if (EditTextAddressLine1.getText().toString().length() == 0) {
             EditTextAddressLine1.setError("Address line1 is required.");
@@ -92,11 +99,12 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
         if (EditTextLocationDescription.getText().toString().length() == 0) {
             EditTextLocationDescription.setError("Location description is required.");
             error_flag = 1;
-
+        }
         if (EditTextPhone.getText().toString().length() == 0) {
             EditTextPhone.setError("Phone no is required.");
             error_flag = 1;
         }
+        Log.d("error_flag",String.valueOf(error_flag));
 
         if (error_flag == 0) {
             sharedpreferences = getSharedPreferences(MrcDetails, Context.MODE_PRIVATE);
@@ -137,6 +145,7 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
                 intent.putExtra("field_type", "mrc");
                 startActivity(intent);
             } else {
+                Log.d("status","new mrc");
                 dbHandler = new DbHandler(context);
                 mrcPersonAddressModelList = new ArrayList<>();
                 mrcPersonAddressModelList = dbHandler.getSingleMrcPersonAddress(mrc_id);
@@ -163,4 +172,9 @@ public class AddMrcAdditionalActivity extends AppCompatActivity {
             }
         }
     }
-}}
+
+    public void logout(View pView){
+        Intent intent = new Intent(context, LoginActivityController.class);
+        startActivity(intent);
+    }
+}

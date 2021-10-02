@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.TextView;
 
 public class MainMenuActivity extends AppCompatActivity {
     final Context context = this;
@@ -28,6 +29,7 @@ public class MainMenuActivity extends AppCompatActivity {
     public static final String Gnd = "gnd";
     public static final String Trapcode = "trapcode";
 
+    TextView username_text;
     SharedPreferences sharedpreferences;
 
     @Override
@@ -51,6 +53,10 @@ public class MainMenuActivity extends AppCompatActivity {
         editor.putString(Gnd, "");
         editor.putString(Trapcode, "");
         editor.apply();
+        username_text = (TextView) findViewById(R.id.textViewUsername);
+        sharedpreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        username_text.setText(sharedpreferences.getString("UserName", ""));
+
     }
     public void goOvListView(View pView) {
         Intent intent = new Intent(context, OvListActivity.class);
@@ -69,6 +75,10 @@ public class MainMenuActivity extends AppCompatActivity {
     }
    public void goIncidentView(View pView) {
         Intent intent = new Intent(context, IncidentContactActivity.class);
+        startActivity(intent);
+    }
+    public void logout(View pView){
+        Intent intent = new Intent(context, LoginActivityController.class);
         startActivity(intent);
     }
 }

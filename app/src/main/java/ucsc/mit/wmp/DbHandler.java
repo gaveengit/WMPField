@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class DbHandler extends SQLiteOpenHelper {
-    private static final int VERSION = 34;
+    private static final int VERSION = 35;
     private static final String DB_NAME = "FieldDatabase";
     // table and column names for person table
     private static final String TABLE_PERSON = "person";

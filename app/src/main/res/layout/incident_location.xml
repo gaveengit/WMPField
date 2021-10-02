@@ -10,6 +10,47 @@
         android:layout_height="fill_parent"
         android:background="@drawable/wallpaper"
         android:orientation="vertical">
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="155dp"
+            android:paddingTop="10dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="10dp">
+
+            <TextView
+                android:id="@+id/textViewUsername"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:text="username"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/green"
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/textViewSeperator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:text="┃"
+                android:textColor="@color/green"
+                android:layout_marginRight="10dp"
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/textViewName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:text="Logout"
+                android:onClick="logout"
+                android:textColor="@color/green"
+                android:textSize="17dp" />
+
+
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

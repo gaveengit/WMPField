@@ -37,6 +37,7 @@ public class IncidentContactActivity extends AppCompatActivity {
     EditText EditTextEmailInput;
     EditText EditTextPhoneInput;
     TextView errorText;
+    TextView username_text;
     TextView title;
     Button button;
 
@@ -57,6 +58,10 @@ public class IncidentContactActivity extends AppCompatActivity {
         EditTextPhoneInput.setText(phone);
         button = (Button) findViewById(R.id.nextbtn);
         title = (TextView) findViewById(R.id.Title);
+        username_text = (TextView) findViewById(R.id.textViewUsername);
+        sharedpreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        username_text.setText(sharedpreferences.getString("UserName", ""));
+
     }
 
     public void goIncidentDescription(View pView) {
@@ -92,10 +97,12 @@ public class IncidentContactActivity extends AppCompatActivity {
         }
 
     }
-
-
     public void goMainMenu(View pView) {
         Intent intent = new Intent(context, MainMenuActivity.class);
+        startActivity(intent);
+    }
+    public void logout(View pView){
+        Intent intent = new Intent(context, LoginActivityController.class);
         startActivity(intent);
     }
 }

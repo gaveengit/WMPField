@@ -39,6 +39,7 @@ public class AddMrcServiceAdditionalActivity extends AppCompatActivity {
     EditText EditTextAddressLine2;
     EditText EditTextLocationDescription;
     TextView errorText;
+    TextView username_text;
     SharedPreferences sharedpreferences;
     private List<PersonModel> personList;
     private List<AddressModel> addressList;
@@ -65,6 +66,11 @@ public class AddMrcServiceAdditionalActivity extends AppCompatActivity {
         EditTextAddressLine1.setText(address_line1);
         EditTextAddressLine2.setText(address_line2);
         EditTextLocationDescription.setText(location_description);
+
+        username_text = (TextView) findViewById(R.id.textViewUsername);
+        sharedpreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        username_text.setText(sharedpreferences.getString("UserName", ""));
+
     }
 
     public void goMrcMain(View v) {
@@ -122,7 +128,10 @@ public class AddMrcServiceAdditionalActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-
+    }
+    public void logout(View pView){
+        Intent intent = new Intent(context, LoginActivityController.class);
+        startActivity(intent);
     }
 }
 

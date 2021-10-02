@@ -68,6 +68,7 @@ public class AddBgCollectionMainActivity extends AppCompatActivity {
     EditText EditTextLocationCoordinates;
     EditText EditTextCollectionId;
     TextView errorText;
+    TextView username_text;
     SharedPreferences sharedpreferences;
     String form_type;
     @Override
@@ -103,6 +104,11 @@ public class AddBgCollectionMainActivity extends AppCompatActivity {
         EditTextTrapPosition.setText(trap_position);
         EditTextRespondName.setText(respond_name);
         EditTextLocationCoordinates.setText(location_coordinates);
+
+        username_text = (TextView) findViewById(R.id.textViewUsername);
+        sharedpreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        username_text.setText(sharedpreferences.getString("UserName", ""));
+
 
     }
 
@@ -147,6 +153,10 @@ public class AddBgCollectionMainActivity extends AppCompatActivity {
     {
         Intent intent = new Intent(context, OvListActivity.class);
         intent.putExtra("type", "bg");
+        startActivity(intent);
+    }
+    public void logout(View pView){
+        Intent intent = new Intent(context, LoginActivityController.class);
         startActivity(intent);
     }
 }

@@ -70,6 +70,7 @@ public class IncidentDescriptionActivity extends AppCompatActivity {
     Spinner SpinnerIncidentPriority;
     EditText EditTextDescription;
     TextView errorText;
+    TextView username_text;
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -122,6 +123,10 @@ public class IncidentDescriptionActivity extends AppCompatActivity {
             TimePickerPicker.setMinute(Integer.valueOf(incident_time_minute));
 
         }
+        username_text = (TextView) findViewById(R.id.textViewUsername);
+        sharedpreferences = getSharedPreferences("LoginDetails", Context.MODE_PRIVATE);
+        username_text.setText(sharedpreferences.getString("UserName", ""));
+
     }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
@@ -181,6 +186,10 @@ public class IncidentDescriptionActivity extends AppCompatActivity {
 
     public void goBack(View pView) {
         Intent intent = new Intent(context, IncidentContactActivity.class);
+        startActivity(intent);
+    }
+    public void logout(View pView){
+        Intent intent = new Intent(context, LoginActivityController.class);
         startActivity(intent);
     }
 

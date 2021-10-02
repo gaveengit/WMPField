@@ -64,7 +64,6 @@
         <activity android:name=".AddMrcServiceAdditionalActivity"></activity>
         <activity android:name=".AddMrcReleaseMainActivity"></activity>
         <activity android:name=".AddMrcReleaseAdditionalActivity"></activity>
-        <activity android:name=".OviDataSyncActivity"></activity>
     </application>
 
 </manifest>

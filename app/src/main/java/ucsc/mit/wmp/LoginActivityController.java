@@ -72,7 +72,7 @@ public class LoginActivityController extends AppCompatActivity {
                         @Override
                         protected Object doInBackground(Object[] objects) {
                             OkHttpClient client = new OkHttpClient();
-                            Request request = new Request.Builder().url("http://192.168.8.100/api/index.php/api/LoginController/indexCheckLogin/" + append_url).build();
+                            Request request = new Request.Builder().url("http://192.168.8.101/api/index.php/api/LoginController/indexCheckLogin/" + append_url).build();
                             Response response = null;
                             try {
                                 response = client.newCall(request).execute();
