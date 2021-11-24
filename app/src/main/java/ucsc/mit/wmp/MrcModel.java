@@ -3,24 +3,30 @@ package ucsc.mit.wmp;
 public class MrcModel {
     public String identifier;
     public String mrc_status;
-    public String release_type;
     public String run_name;
-    public String person_id;
-    public String address_id;
-    public String exist_in_remote_server;
+    public String person_name;
+    public String person_phone;
+    public String address_line1;
+    public String address_line2;
+    public String location_description;
+    public String coordinates;
+    public String date;
+    public String time;
 
     public MrcModel(){
 
     }
 
-    public MrcModel(String identifier, String mrc_status, String release_type, String run_name, String person_id, String address_id, String exist_in_remote_server) {
+    public MrcModel(String identifier, String mrc_status, String run_name, String person_name, String person_phone, String address_line1, String address_line2,String location_description, String coordinates) {
         this.identifier = identifier;
         this.mrc_status = mrc_status;
-        this.release_type = release_type;
         this.run_name = run_name;
-        this.person_id = person_id;
-        this.address_id = address_id;
-        this.exist_in_remote_server = exist_in_remote_server;
+        this.person_name = person_name;
+        this.person_phone = person_phone;
+        this.address_line1 = address_line1;
+        this.address_line2 = address_line2;
+        this.location_description = location_description;
+        this.coordinates = coordinates;
     }
 
     public void setIdentifier(String identifier) {
@@ -31,24 +37,37 @@ public class MrcModel {
         this.mrc_status = mrc_status;
     }
 
-    public void setRelease_type(String release_type) {
-        this.release_type = release_type;
-    }
-
     public void setRun_name(String run_name) {
         this.run_name = run_name;
     }
 
-    public void setPerson_id(String person_id) {
-        this.person_id = person_id;
+    public void setPerson_name(String person_name) {
+        this.person_name = person_name;
     }
 
-    public void setAddress_id(String address_id) {
-        this.address_id = address_id;
+    public void setPerson_phone(String person_phone) {
+        this.person_phone = person_phone;
     }
 
-    public void setExist_in_remote_server(String exist_in_remote_server) {
-        this.exist_in_remote_server = exist_in_remote_server;
+    public void setAddress_line1(String address_line1) {
+        this.address_line1 = address_line1;
+    }
+    public void setAddress_line2(String address_line2) {
+        this.address_line2 = address_line2;
+    }
+    public void setLocation_description(String location_description) {
+        this.location_description = location_description;
+    }
+    public void setCoordinates(String coordinates) {
+        this.coordinates = coordinates;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
+    public void setTime(String time) {
+        this.time = time;
     }
 
     public String getIdentifier() {
@@ -59,23 +78,39 @@ public class MrcModel {
         return mrc_status;
     }
 
-    public String getRelease_type() {
-        return release_type;
-    }
-
     public String getRun_name() {
         return run_name;
     }
 
-    public String getPerson_id() {
-        return person_id;
+    public String getPerson_name() {
+        return person_name;
     }
 
-    public String getAddress_id() {
-        return address_id;
+    public String getPerson_phone() {
+        return person_phone;
     }
 
-    public String getExist_in_remote_server() {
-        return exist_in_remote_server;
+    public String getAddress_line1() {
+        return address_line1;
+    }
+
+    public String getAddress_line2() {
+        return address_line2;
+    }
+
+    public String getLocation_description() {
+        return location_description;
+    }
+
+    public String getCoordinates() {
+        return coordinates;
+    }
+
+    public String getDate() {
+        return date;
+    }
+
+    public String getTime() {
+        return time;
     }
 }

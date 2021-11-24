@@ -10,27 +10,62 @@
         android:layout_height="fill_parent"
         android:background="@drawable/wallpaper"
         android:orientation="vertical">
-
-        <RelativeLayout
+        <LinearLayout
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="10dp"
+            android:paddingLeft="155dp"
             android:paddingTop="10dp"
             android:paddingRight="10dp"
             android:paddingBottom="10dp">
 
-            <Button
+            <TextView
+                android:id="@+id/textViewUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentRight="true"
-                android:background="#0000FF"
-                android:paddingLeft="50dp"
-                android:paddingRight="50dp"
-                android:text="Edit"
-                android:textColor="#ffffff"
-                android:visibility="gone" />
-        </RelativeLayout>
+                android:background="@android:color/transparent"
+                android:text="username"
+                android:layout_marginRight="10dp"
+                android:textColor="@color/green"
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/textViewSeperator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:text="┃"
+                android:textColor="@color/green"
+                android:layout_marginRight="10dp"
+                android:textSize="17dp" />
+
+            <TextView
+                android:id="@+id/textViewName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@android:color/transparent"
+                android:text="Logout"
+                android:onClick="logout"
+                android:textColor="@color/green"
+                android:textSize="17dp" />
+
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal">
+
+            <TextView
+                android:id="@+id/Title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:background="@android:color/transparent"
+                android:text="MRC Main Details"
+                android:textColor="#000000"
+                android:textSize="20dp" />
+        </LinearLayout>
 
         <TextView
             android:id="@+id/textViewId"
@@ -38,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="MRC Identifier"
+            android:text="MRC Identifier (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
@@ -48,23 +83,24 @@
             android:layout_height="wrap_content"
             android:inputType="textPersonName" />
 
+
         <TextView
             android:id="@+id/textViewStatus"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Mrc Status"
+            android:text="Mrc Status (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
         <RadioGroup
-            android:id="@+id/radioGroup"
+            android:id="@+id/trapStatus"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content">
 
             <RadioButton
-                android:id="@+id/radioButton"
+                android:id="@+id/radioProposed"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:layout_marginTop="4dp"
@@ -73,7 +109,7 @@
                 android:textSize="17dp" />
 
             <RadioButton
-                android:id="@+id/radioButton2"
+                android:id="@+id/radioSet"
                 android:layout_width="wrap_content"
                 android:layout_height="25dp"
                 android:layout_marginTop="4dp"
@@ -83,31 +119,12 @@
         </RadioGroup>
 
         <TextView
-            android:id="@+id/textViewPosition"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@android:color/transparent"
-            android:text="Release Type"
-            android:textColor="#000000"
-            android:textSize="17dp" />
-
-        <Spinner
-            android:id="@+id/spinnerType"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:entries="@array/release_types"
-            android:paddingTop="13dp"
-            android:spinnerMode="dialog"
-            android:theme="@style/mySpinnerItemStyle" />
-
-        <TextView
             android:id="@+id/textViewRespondentName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Respondent Name"
+            android:text="Respondent Name (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
@@ -123,7 +140,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:background="@android:color/transparent"
-            android:text="Location Coordinates"
+            android:text="Location Coordinates (*)"
             android:textColor="#000000"
             android:textSize="17dp" />
 
@@ -131,7 +148,17 @@
             android:id="@+id/editTextLocation"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="textPersonName" />
+            android:inputType="textPersonName"
+            android:onClick="viewCoordinates"/>
+        <TextView
+            android:id="@+id/errorContainer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:background="@android:color/transparent"
+            android:textColor="#FF0000"
+            android:visibility="gone"
+            android:textSize="17dp" />
 
         <RelativeLayout
             android:layout_width="fill_parent"
@@ -151,6 +178,7 @@
                 android:paddingRight="50dp"
                 android:text="Back"
                 android:textColor="#ffffff"
+                android:onClick="goListView"
                 app:backgroundTint="@color/red" />
 
             <Button
